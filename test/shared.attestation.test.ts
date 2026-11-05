@@ -1,11 +1,12 @@
 // shared/ts/attestation.ts: termsHash, dataHash, magnitude and curve, acceptance rule, replay times, build + sign,
-// and the on-chain digest check against FaultlineTrigger.hashAttestation (pending until Part 2 adds the contract;
-// test/shared.eip712.test.ts checks the same digest off chain meanwhile).
+// and the on-chain digest check against FaultlineTrigger.hashAttestation.
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import {
   REPLAY_CHAIN_IDS,
   assertReplayAllowed,
+  attestationDigest,
   buildAttestation,
   checkAcceptance,
   dataHash,
@@ -15,6 +16,7 @@ import {
   lossBpsFor,
   magnitudeX100,
   observedAtOf,
+  signAttestation,
   termsHash,
   usgsUpdatedAtOf,
   type UsgsFeature,
@@ -22,6 +24,7 @@ import {
 import { canonicalize } from "../shared/ts/jcs";
 import { BHUJ_FILE, SYNTH_72_FILE, SYNTH_73_FILE, SYNTH_75_FILE, loadFeature } from "../scripts/lib/fixtures";
 import { ATTESTATION_SPEC } from "./helpers/eip712";
+import { CHAIN_ID, WINDOW, deployTriggerFixture } from "./helpers/trigger";
 
 const bhuj = () => loadFeature(BHUJ_FILE);
 const with_ = (f: UsgsFeature, p: Partial<UsgsFeature["properties"]>, coords?: [number, number, number]): UsgsFeature => ({
@@ -196,6 +199,19 @@ describe("shared/ts attestation — replay, build and sign", () => {
     expect(() => buildAttestation({ feature: with_(bhuj(), { status: "automatic" }), terms: t, chainId: 296n, nonce: 1n, deadline: 1n, nowSec: now })).to.throw("rejected: status");
   });
 
-  // Pending: needs FaultlineTrigger and test/helpers/trigger.ts (Part 2). Port the reference body then.
-  it("on chain: the signed digest == trigger.hashAttestation(att), and a trigger with these terms accepts the signature");
+  it("on chain: the signed digest == trigger.hashAttestation(att), and a trigger with these terms accepts the signature", async () => {
+    const f = await loadFixture(deployTriggerFixture);
+    const offset = Number(f.s.riskStart) + 3_600 - 980_479_000; // Bhuj lands 1 h into the risk period
+    const terms = kutchTerms("replay", offset);
+    const trigger = await ethers.deployContract("FaultlineTrigger", [await f.pool.getAddress(), termsHash(terms), WINDOW, f.oracle.address, f.admin.address, f.trustee.address]);
+    const addr = await trigger.getAddress();
+    const nowSec = Number(f.s.riskStart) + 3_600 + 21_600;
+    await ethers.provider.send("evm_setNextBlockTimestamp", [nowSec]);
+    await ethers.provider.send("evm_mine", []);
+    const att = buildAttestation({ feature: bhuj(), terms, chainId: CHAIN_ID, nonce: 1n, deadline: BigInt(nowSec + 86_400), nowSec });
+    expect(await trigger.hashAttestation(att)).to.equal(attestationDigest(att, CHAIN_ID, addr));
+    const sig = await signAttestation(f.oracle, att, CHAIN_ID, addr);
+    expect(ethers.verifyTypedData({ name: "FaultlineTrigger", version: "1", chainId: CHAIN_ID, verifyingContract: addr }, { Attestation: ATTESTATION_SPEC.types.Attestation }, att, sig)).to.equal(f.oracle.address);
+    await expect(trigger.connect(f.relayer).submit(att, sig)).to.emit(trigger, "AttestationSubmitted");
+  });
 });
