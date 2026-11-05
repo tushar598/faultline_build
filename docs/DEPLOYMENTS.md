@@ -129,6 +129,12 @@ Fuel: fUSD `0.0.11329874` from the smoke run (reused, no new token). Times are U
 | 3 | investor A pool.invest(300.000000) | investor A | 540,129 | 0.6698 | [`0x6f1080bc…2a612311`](https://hashscan.io/testnet/transaction/0x6f1080bcb1dddbc6dd1885a59c206dc90100f89b3a11491b754e41e12a612311) | 2026-11-05 21:47 |
 | 3 | investor B fUSD.approve(pool, 200.000000) | investor B | 727,020 | 0.9015 | [`0x4d819474…194efdc6`](https://hashscan.io/testnet/transaction/0x4d81947496d20e7f244aae785505c70122056861cc02b24a3b46f46a194efdc6) | 2026-11-05 21:48 |
 | 3 | investor B pool.invest(200.000000) | investor B | 471,729 | 0.5849 | [`0x5783b1bd…d4859ccf`](https://hashscan.io/testnet/transaction/0x5783b1bd0681181e11854b1e2531a0c6e1588299ad3d8e60cb821244d4859ccf) | 2026-11-05 21:48 |
+| 4 | HCS message 1 on topic 0.0.11330395: the oracle's SYNTHETIC attestation (707 bytes, EIP-712 signature in the payload; submit key = oracle) | relayer (SDK, oracle co-signs as submit key) | | 0.0100 | [`0.0.11329581-1793915875-100526920`](https://hashscan.io/testnet/transaction/1793915883.797929138) | 2026-11-05 21:58 |
+| 4 | `trigger.submit` SYNTHETIC synthetic-kutch-testnet-a (5,000 bps, nonce 1), by the real oracle CLI | relayer | 137,626 | 0.1707 | [`0xc9076911…a55dba38`](https://hashscan.io/testnet/transaction/0xc9076911ebaab2803b8eb9d37e0ff1408277b4000dc45690a1fb403fa55dba38) | 2026-11-05 21:58 |
+| 4 | `trigger.pause()` (presigned, broadcast when the oracle reported the submit mined; 114 s left in the 120 s window) | trustee | 30,379 | 0.0377 | [`0x9c19d11a…dc2ee171`](https://hashscan.io/testnet/transaction/0x9c19d11a28047f26bf62074f37817bfbbfd449f13fc250c20c6ccd1fdc2ee171) | 2026-11-05 21:58 |
+| 4 | `trigger.veto(synthetic-kutch-testnet-a)` while paused | trustee | 38,225 | 0.0474 | [`0x07e25a96…9d735caa`](https://hashscan.io/testnet/transaction/0x07e25a965ab8792e9c62948183217576d1ac24632a1cf50352bdd3b39d735caa) | 2026-11-05 21:58 |
+| 4 | `trigger.unpause()` (paused 45 s) | deployer (admin) | 53,038 | 0.0658 | [`0xa6f5ca69…a679e1da`](https://hashscan.io/testnet/transaction/0xa6f5ca6911b9321037fa382178991d81cbe3bdf7388b9003dd2070eaa679e1da) | 2026-11-05 21:59 |
+| 4 | same attestation + signature re-submitted: **CONTRACT_REVERT_EXECUTED `EventFinalised(eventId, 2)`**, sent on purpose (SEND_REVERT=1) as evidence | relayer | 39,252 | 0.0501 | [`0x12b9c4f7…52cdf066`](https://hashscan.io/testnet/transaction/0x12b9c4f7ef45bf60225d3cfdb68b846ae5a1692dd470ce0942c7e1ac52cdf066) | 2026-11-05 21:59 |
 
 After phase 2: every assertion passed (D4 roles, SEC-20 audit, wiring, termsHash, oracle, window 120 s, both trustees
 hold TRUSTEE_ROLE); the trigger admin's grant and revoke of TRUSTEE_ROLE were simulated only and refused (D17,
@@ -138,3 +144,12 @@ Bhuj replays to observedAt 1793915806, the SYNTHETIC Flow A record to 1793915866
 The web app's testnet entry (`web/src/config/networks.ts`) now points at this trigger, topic and terms.
 
 After phase 3: sponsor funded the 1 fUSD coupon reserve; A invested 300, B 200 (unitsIssued 500, read on chain).
+
+After phase 4 (Flow A, SYNTHETIC): eventId `0x7af3905781c899ce32c6facd77f0dddabe224e474da1071e0d43496da9231768` =
+keccak256("synthetic-kutch-testnet-a"). The window started at 1793915887; the pause landed at 1793915893 (114 s left).
+While paused, effectiveTime() stayed frozen at 1793915893, `submissionDeadline()` moved with the clock (1793917511 →
+1793917533 over 22 s), and `execute()` simulated to `IsPaused()`. The trustee vetoed while paused → **Vetoed**; the
+admin unpaused after 45 s (totalPausedSeconds 45; deadline now 1793917550). The re-submitted signature reverted
+`EventFinalised(eventId, 2)` on chain, and the oracle re-run on the same record decided "finalised" and published nothing.
+HCS: topic 0.0.11330395 sequence 1, consensus 1793915883.797929138, payer relayer, 707 bytes, in-payload signature =
+oracle.

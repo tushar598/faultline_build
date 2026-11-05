@@ -74,6 +74,11 @@ export const TESTNET_EVIDENCE = {
     { label: "Sponsor fundCoupons(1.000000)", hash: "0xcb41b35b0798b76b4754ac42815c3d5801d04c26f4383dfeb8d0e517ad8732f8" },
     { label: "Investor A invest(300.000000)", hash: "0x6f1080bcb1dddbc6dd1885a59c206dc90100f89b3a11491b754e41e12a612311" },
     { label: "Investor B invest(200.000000)", hash: "0x5783b1bd0681181e11854b1e2531a0c6e1588299ad3d8e60cb821244d4859ccf" },
+    { label: "Oracle submit, SYNTHETIC synthetic-kutch-testnet-a (5,000 bps)", hash: "0xc9076911ebaab2803b8eb9d37e0ff1408277b4000dc45690a1fb403fa55dba38" },
+    { label: "Trustee pause (114 s left in the 120 s window)", hash: "0x9c19d11a28047f26bf62074f37817bfbbfd449f13fc250c20c6ccd1fdc2ee171" },
+    { label: "Trustee veto of the SYNTHETIC event, while paused", hash: "0x07e25a965ab8792e9c62948183217576d1ac24632a1cf50352bdd3b39d735caa" },
+    { label: "Admin unpause (paused 45 s)", hash: "0xa6f5ca6911b9321037fa382178991d81cbe3bdf7388b9003dd2070eaa679e1da" },
+    { label: "Same signature re-submitted: reverts EventFinalised", hash: "0x12b9c4f7ef45bf60225d3cfdb68b846ae5a1692dd470ce0942c7e1ac52cdf066" },
   ],
 } as const;
 
