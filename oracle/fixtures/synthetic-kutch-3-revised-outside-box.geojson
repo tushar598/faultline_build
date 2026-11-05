@@ -1,0 +1,40 @@
+{
+  "type": "Feature",
+  "properties": {
+    "mag": 7.3,
+    "place": "SYNTHETIC revision of synthetic-kutch-3, relocated outside the Faultline Kutch box - not a real USGS event",
+    "time": 982639000500,
+    "updated": 985317400500,
+    "tz": null,
+    "url": "",
+    "felt": null,
+    "cdi": null,
+    "mmi": null,
+    "alert": null,
+    "status": "reviewed",
+    "tsunami": 0,
+    "sig": 0,
+    "net": "synthetic",
+    "code": "kutch-3",
+    "ids": ",synthetic-kutch-3,",
+    "sources": ",synthetic,",
+    "types": ",origin,",
+    "nst": null,
+    "dmin": null,
+    "rms": null,
+    "gap": null,
+    "magType": "mww",
+    "type": "earthquake",
+    "title": "SYNTHETIC M 7.3 - relocated outside the Kutch box (not a real USGS event)"
+  },
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      72.0,
+      23.1,
+      10
+    ]
+  },
+  "id": "synthetic-kutch-3",
+  "synthetic": "Written by hand for the oracle D15 test: a revision that moves a pending event out of the box. NOT a real USGS event."
+}

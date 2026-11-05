@@ -1,0 +1,40 @@
+{
+  "type": "Feature",
+  "properties": {
+    "mag": 7.6,
+    "place": "SYNTHETIC merge: synthetic-kutch-2 now preferred as synthetic-kutch-2b, magnitude revised to 7.6 - not a real USGS event",
+    "time": 982207000500,
+    "updated": 984885400500,
+    "tz": null,
+    "url": "",
+    "felt": null,
+    "cdi": null,
+    "mmi": null,
+    "alert": null,
+    "status": "reviewed",
+    "tsunami": 0,
+    "sig": 0,
+    "net": "synthetic",
+    "code": "kutch-2b",
+    "ids": ",synthetic-kutch-2,synthetic-kutch-2b,",
+    "sources": ",synthetic,",
+    "types": ",origin,",
+    "nst": null,
+    "dmin": null,
+    "rms": null,
+    "gap": null,
+    "magType": "mww",
+    "type": "earthquake",
+    "title": "SYNTHETIC M 7.6 - merged event, new preferred id (not a real USGS event)"
+  },
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      69.9,
+      23.6,
+      10
+    ]
+  },
+  "id": "synthetic-kutch-2b",
+  "synthetic": "Written by hand for the oracle D8 test: the same event under a new preferred id after a merge, with a revised magnitude. NOT a real USGS event."
+}

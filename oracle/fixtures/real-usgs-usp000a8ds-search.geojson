@@ -1,0 +1,53 @@
+{
+ "type": "FeatureCollection",
+ "metadata": {
+  "generated": 1792876379000,
+  "url": "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2001-01-25&endtime=2001-01-27&minmagnitude=7&minlatitude=20&maxlatitude=27&minlongitude=67&maxlongitude=73",
+  "title": "USGS Earthquakes",
+  "status": 200,
+  "api": "2.8.2",
+  "count": 1
+ },
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 7.7,
+    "place": "17 km NW of Bhach?u, India",
+    "time": 980479000500,
+    "updated": 1651259174319,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/usp000a8ds",
+    "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=usp000a8ds&format=geojson",
+    "felt": null,
+    "cdi": null,
+    "mmi": 9.422,
+    "alert": null,
+    "status": "reviewed",
+    "tsunami": 0,
+    "sig": 912,
+    "net": "us",
+    "code": "p000a8ds",
+    "ids": ",usp000a8ds,choy20010126031640,gcmtm012601a,gcmt20010126031640,duputel012601a,atlas20010126031640,iscgem1763683,",
+    "sources": ",us,choy,gcmt,gcmt,duputel,atlas,iscgem,",
+    "types": ",finite-fault,focal-mechanism,general-text,ground-failure,impact-text,moment-tensor,origin,phase-data,shakemap,trump-shakemap,",
+    "nst": 472,
+    "dmin": null,
+    "rms": 1.25,
+    "gap": null,
+    "magType": "mwc",
+    "type": "earthquake",
+    "title": "M 7.7 - 17 km NW of Bhach?u, India"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     70.232,
+     23.419,
+     16
+    ]
+   },
+   "id": "usp000a8ds"
+  }
+ ]
+}

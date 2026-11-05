@@ -1,0 +1,40 @@
+{
+  "type": "Feature",
+  "properties": {
+    "mag": 7.5,
+    "place": "SYNTHETIC testnet demo event inside the Faultline Kutch box - not a real USGS event",
+    "time": 980479060500,
+    "updated": 980565460500,
+    "tz": null,
+    "url": "",
+    "felt": null,
+    "cdi": null,
+    "mmi": null,
+    "alert": null,
+    "status": "reviewed",
+    "tsunami": 0,
+    "sig": 0,
+    "net": "synthetic",
+    "code": "kutch-testnet-a",
+    "ids": ",synthetic-kutch-testnet-a,",
+    "sources": ",synthetic,",
+    "types": ",origin,",
+    "nst": null,
+    "dmin": null,
+    "rms": null,
+    "gap": null,
+    "magType": "mww",
+    "type": "earthquake",
+    "title": "SYNTHETIC M 7.5 - Kutch box, testnet demo Flow A (not a real USGS event)"
+  },
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      70.4,
+      23.5,
+      12
+    ]
+  },
+  "id": "synthetic-kutch-testnet-a",
+  "synthetic": "Written by hand for the Faultline testnet demo (Flow A: veto). NOT a real USGS event; the id can never be a USGS id. Time = Bhuj origin + 60 s, so the demo's replay offset puts it 60 s after the replayed Bhuj record, inside the short testnet risk period."
+}
