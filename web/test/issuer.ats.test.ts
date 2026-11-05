@@ -15,15 +15,13 @@ const REPO = path.resolve(import.meta.dirname, "../..");
 const read = (p: string) => fs.readFileSync(path.join(REPO, p), "utf8");
 
 describe("ATS facts vs their sources", () => {
-  // PART 7: reads ops/ (common.ts, package.json), which the ops part adds; re-enable then.
-  it.skip("role ids equal contracts/interfaces/IAtsBond.sol (through test/helpers/roles) and the ops scripts", () => {
+  it("role ids equal contracts/interfaces/IAtsBond.sol (through test/helpers/roles) and the ops scripts", () => {
     for (const k of ["ISSUER", "CONTROLLER", "AGENT", "ADJUSTMENT_BALANCE", "KYC", "PAUSER", "DEFAULT_ADMIN"] as const) expect(ATS_ROLES[k]).toBe(TEST_ROLES[k]);
     const common = read("ops/scripts/lib/common.ts");
     for (const [k, v] of Object.entries(ATS_ROLES)) expect(common, k).toContain(`${k}: "${v}"`);
   });
 
-  // PART 7: reads ops/ (common.ts, package.json), which the ops part adds; re-enable then.
-  it.skip("factory, resolver and bond config id equal ops/scripts/lib/common.ts", () => {
+  it("factory, resolver and bond config id equal ops/scripts/lib/common.ts", () => {
     const common = read("ops/scripts/lib/common.ts");
     expect(common).toContain(`FACTORY = "${ATS_FACTORY}"`);
     expect(common).toContain(`BLR = "${ATS_BLR}"`);
@@ -109,8 +107,7 @@ describe("ops/ steps", () => {
     expect(kycCommand({ stablecoin: "0x0000000000000000000000000000000000aa9f0f", accounts: [], kycKeyHolder: trustee.address })).toBeNull();
   });
 
-  // PART 7: reads ops/ (common.ts, package.json), which the ops part adds; re-enable then.
-  it.skip("the npm scripts the commands name exist at the root and in ops/", () => {
+  it("the npm scripts the commands name exist at the root and in ops/", () => {
     const root = JSON.parse(read("package.json")).scripts;
     const ops = JSON.parse(read("ops/package.json")).scripts;
     expect(root["ops:issuer:topic"]).toBe("npm --prefix ops run issuer:topic");

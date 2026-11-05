@@ -1,0 +1,34 @@
+{
+  "name": "faultline-ops",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Hedera testnet operator scripts for Faultline (moved from faultline-spikes b527729). Hardhat 3 + global keystore; the repo root stays Hardhat 2.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "demo:0": "hardhat run --network testnetRead scripts/demo/demo-0-preflight.ts",
+    "demo:1": "hardhat run --network testnetRead scripts/demo/demo-1-bond-topic.ts",
+    "demo:2": "hardhat run --network testnetRead scripts/demo/demo-2-deploy.ts",
+    "demo:3": "hardhat run --network testnetRead scripts/demo/demo-3-subscribe.ts",
+    "demo:4": "hardhat run --network testnetRead scripts/demo/demo-4-flow-a.ts",
+    "demo:5": "hardhat run --network testnetRead scripts/demo/demo-5-flow-b.ts",
+    "demo:6": "hardhat run --network testnetRead scripts/demo/demo-6-settle.ts",
+    "demo:7": "hardhat run --network testnetRead scripts/demo/demo-7-verify.ts",
+    "demo:rt02": "hardhat run --network testnetRead scripts/demo/rt02-holder-burn.ts",
+    "issuer:topic": "hardhat run --network testnetRead scripts/issuer/hcs-topic.ts",
+    "issuer:kyc": "hardhat run --network testnetRead scripts/issuer/hts-kyc.ts"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "4.2.1",
+    "@nomicfoundation/hardhat-keystore": "3.1.2",
+    "@types/node": "22.20.5",
+    "ethers": "6.17.0",
+    "hardhat": "3.21.0",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  },
+  "dependencies": {
+    "@hashgraph/sdk": "2.81.0"
+  }
+}
