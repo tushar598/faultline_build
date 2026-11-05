@@ -77,10 +77,10 @@ After phase 4: bond totalSupply 1,000 == unitsIssued; A 600, B 400 FLSMK; coupon
 
 | What | Hedera id | EVM address | Created by | Date (UTC) | Tx |
 | --- | --- | --- | --- | --- | --- |
-| ATS demo bond | not created yet (demo-1) | | deployer | | |
-| HCS topic | not created yet (demo-1) | | relayer | | |
-| FaultlinePool | not created yet (demo-2) | | deployer | | |
-| FaultlineTrigger | not created yet (demo-2) | | deployer | | |
+| ATS v8 bond "Faultline Demo Bond" (FLDMO), ISIN `USFLS9147458`, 6 decimals, maturity 1793917445 | [`0.0.11330397`](https://hashscan.io/testnet/contract/0x4DdEBa59E3b8e5e62bD3f3872571EE4779C8f173) | `0x4DdEBa59E3b8e5e62bD3f3872571EE4779C8f173` | deployer (factory `deployBond`) | 2026-11-05 21:39 | [`0x0ba4aabf…2dfb557f`](https://hashscan.io/testnet/transaction/0x0ba4aabf40c251e821a4798375b1a4b8ca951953a082351e25f47b872dfb557f) |
+| HCS topic, memo `faultline-demo-testnet`: submit key = oracle (`032ceb0f8a…`), admin key = trustee (`023231a045…`), payer + auto-renew = relayer | [`0.0.11330395`](https://hashscan.io/testnet/topic/0.0.11330395) | | relayer (SDK, hollow payer completed; trustee co-signs as admin key) | 2026-11-05 21:39 | [`0.0.11329581@1793914738.864247226`](https://hashscan.io/testnet/transaction/1793914744.608192104) |
+| FaultlinePool (issuance 1793914966–1793915746, riskStart 1793915746, maturity 1793917325, grace 180 s, couponBps 600, cap 10,000, minTicket 100 fUSD) | [`0.0.11330416`](https://hashscan.io/testnet/contract/0x6d84cb8d063424850347eE1ebc1399885320597e) | `0x6d84cb8d063424850347eE1ebc1399885320597e` | deployer | 2026-11-05 21:41 | [`0xd68bee61…c4b0fd82`](https://hashscan.io/testnet/transaction/0xd68bee61777bb3f3e5c64ae07081b27826bc024c2236206f304a1198c4b0fd82) |
+| FaultlineTrigger (termsHash `0x76135117384c954cbeb10265dcd69ab06f489f3eff903f9b34cf939d387957e2` = `kutchTerms("replay", 813436806)`, window 120 s, oracle, admin deployer, trustee + backup trustee; deploy block 42712760) | [`0.0.11330420`](https://hashscan.io/testnet/contract/0xD51E0712C1849818c3919195034539E041b3405c) | `0xD51E0712C1849818c3919195034539E041b3405c` | deployer | 2026-11-05 21:41 | [`0x52ada01f…dd1af666`](https://hashscan.io/testnet/transaction/0x52ada01fab5c44790588dfe2d7bfa31025a8b3ae2923f008b2ea3716dd1af666) |
 
 After phase 5: the oracle (`0x90A59Def…bb5a76`) signed the Bhuj attestation built by shared/ts from the saved real USGS
 record: eventId `0xb5a233c15a3e5e02572f4178f0f99da17ab80c722586e2d52415236d5a4bb9b0` (keccak256("usp000a8ds")),
@@ -105,3 +105,28 @@ the reference repo's smoke run (L 7000; A 180, B 120, sponsor 700 + unused reser
 token, bond, pool and trigger. HBAR fees (mirror `charged_tx_fee`, summed from `ops/out/evidence.jsonl`):
 deployer 32.2921, sponsor 2.0286, investor A 2.9664, investor B 2.7759,
 trustee 0 → **40.0630 HBAR**. Investor A's balance also rose by the owner's 100 HBAR top-up during phase 1.
+
+### Full demo transactions
+
+Fuel: fUSD `0.0.11329874` from the smoke run (reused, no new token). Times are UTC.
+
+| Phase | What | Signer | Gas used | Fee (HBAR) | Tx | Date (UTC) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | TopicCreate "faultline-demo-testnet" (submit key = oracle, admin key = trustee, payer + auto-renew = relayer) | relayer (SDK) |  | 0.4406 | [`0.0.11329581@1793914738.864247226`](https://hashscan.io/testnet/transaction/1793914744.608192104) | 2026-11-05 21:39 |
+| 1 | deployBond ISIN USFLS9147458 (Faultline Demo Bond FLDMO) | deployer | 7,214,985 | 8.9466 | [`0x0ba4aabf…2dfb557f`](https://hashscan.io/testnet/transaction/0x0ba4aabf40c251e821a4798375b1a4b8ca951953a082351e25f47b872dfb557f) | 2026-11-05 21:39 |
+| 1 | addIssuer(deployer) — SSI issuer | deployer | 126,989 | 0.1575 | [`0xd809044b…48c0d9d7`](https://hashscan.io/testnet/transaction/0xd809044bba41344e29084260982e27d7d019528559b8cbf2531b4d7e48c0d9d7) | 2026-11-05 21:40 |
+| 1 | grantKyc(investor A, urn:faultline:demo:kyc:investor A) — opaque vcId, no VC document | deployer | 251,474 | 0.3118 | [`0xc72a1b84…907f595f`](https://hashscan.io/testnet/transaction/0xc72a1b8433bedfbc9fb77dbe31acdeae21b95dc27c958d5c6e7a05c6907f595f) | 2026-11-05 21:40 |
+| 1 | grantKyc(investor B, urn:faultline:demo:kyc:investor B) — opaque vcId, no VC document | deployer | 234,362 | 0.2906 | [`0xc55f0916…54b2d752`](https://hashscan.io/testnet/transaction/0xc55f091685e3b540b5dce888a6042ee269e63ebe562e8b44dc5a245654b2d752) | 2026-11-05 21:40 |
+| 2 | deploy FaultlinePool (D17 build a0b1dd5) | deployer | 2,283,913 | 2.8321 | [`0xd68bee61…c4b0fd82`](https://hashscan.io/testnet/transaction/0xd68bee61777bb3f3e5c64ae07081b27826bc024c2236206f304a1198c4b0fd82) | 2026-11-05 21:41 |
+| 2 | deploy FaultlineTrigger | deployer | 2,028,097 | 2.5148 | [`0x52ada01f…dd1af666`](https://hashscan.io/testnet/transaction/0x52ada01fab5c44790588dfe2d7bfa31025a8b3ae2923f008b2ea3716dd1af666) | 2026-11-05 21:41 |
+| 2 | pool.initialize(trigger) — D5; associates the pool with fUSD | deployer | 744,974 | 0.9238 | [`0x7fb36bfb…063bd6b9`](https://hashscan.io/testnet/transaction/0x7fb36bfb293f587e31918afb80d55e1072f3d507604f66e428deeb4e063bd6b9) | 2026-11-05 21:41 |
+| 2 | TokenGrantKyc(pool contract account) | deployer (SDK) |  | 0.0146 | [`0.0.11329142@1793914890.308081132`](https://hashscan.io/testnet/transaction/1793914896.727624967) | 2026-11-05 21:41 |
+| 2 | bond.applyRoles([ISSUER, CONTROLLER], [true, true], pool) | deployer | 321,620 | 0.3988 | [`0xceef28cf…1bd04bcf`](https://hashscan.io/testnet/transaction/0xceef28cfd3605eea53f6ba7ca1f60cfe5cb0df14c1874c566606c3c71bd04bcf) | 2026-11-05 21:41 |
+| 2 | trigger.grantRole(TRUSTEE_ROLE, backup trustee) — by the primary trustee (D17: TRUSTEE_ROLE administers itself) | trustee | 51,551 | 0.0639 | [`0x713de6da…3a5a20d6`](https://hashscan.io/testnet/transaction/0x713de6dadab43e396b7eb8ed971080450d3d322c4d68d5411cd838413a5a20d6) | 2026-11-05 21:42 |
+
+After phase 2: every assertion passed (D4 roles, SEC-20 audit, wiring, termsHash, oracle, window 120 s, both trustees
+hold TRUSTEE_ROLE); the trigger admin's grant and revoke of TRUSTEE_ROLE were simulated only and refused (D17,
+`adminCannotManageTrusteesAt`); the oracle's `verify-config` gate passed on `ops/out/demo/oracle.testnet.json` (real
+HCS, topic 0.0.11330395, payer = relayer). Build: commit `a0b1dd5` (same initcode keccaks as the smoke run).
+Bhuj replays to observedAt 1793915806, the SYNTHETIC Flow A record to 1793915866.
+The web app's testnet entry (`web/src/config/networks.ts`) now points at this trigger, topic and terms.

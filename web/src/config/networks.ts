@@ -1,8 +1,7 @@
 // Networks the dashboard can read. Only public data lives here: RPC URLs, contract addresses, topic ids. Local
 // addresses change on every deploy, so the local entry is completed at run time from oracle/config.local.json (read by
-// the /api/local/config route handler). Testnet entities come from docs/DEPLOYMENTS.md once the fresh testnet
-// deployment exists (Part 7); until then the testnet entry has no trigger, no topic and no terms, and the views say so.
-import { type Terms } from "@/lib/shared"; // Part 7 adds kutchTerms back for the testnet terms
+// the /api/local/config route handler). Testnet entities come from docs/DEPLOYMENTS.md ("Full demo").
+import { kutchTerms, type Terms } from "@/lib/shared";
 
 export type NetworkId = "local" | "testnet";
 
@@ -41,8 +40,8 @@ export const LOCAL_BASE: NetworkConfig = {
 
 const MIRROR = "https://testnet.mirrornode.hedera.com";
 
-/** The fresh testnet deployment (Part 7). NOT DEPLOYED YET: trigger, topic and terms are filled in from
- *  docs/DEPLOYMENTS.md after the owner runs the deploy scripts. Nothing from the old deployment is reused. */
+/** The full testnet demo bond of this repo (2026-11-05, docs/DEPLOYMENTS.md "Full demo"): D17 build, new FLH_* accounts,
+ *  Flow A (a SYNTHETIC event, paused and vetoed) and Flow B (the real Bhuj record, executed), read only. */
 export const TESTNET: NetworkConfig = {
   id: "testnet",
   label: "Hedera testnet",
@@ -51,39 +50,42 @@ export const TESTNET: NetworkConfig = {
   // NEXT_PUBLIC_TESTNET_RPC_URL puts another read-only relay first.
   rpcUrl: process.env.NEXT_PUBLIC_TESTNET_RPC_URL || "https://testnet.hashio.io/api",
   rpcFallbacks: ["https://testnet.hashio.io/api", "https://296.rpc.thirdweb.com"],
-  trigger: null, // Part 7
-  hcs: { mode: "mirror", topicId: "", mirrorUrl: MIRROR }, // topic id: Part 7
+  trigger: "0xD51E0712C1849818c3919195034539E041b3405c",
+  hcs: { mode: "mirror", topicId: "0.0.11330395", mirrorUrl: MIRROR },
   logs: { mode: "mirror", mirrorUrl: MIRROR },
-  terms: null, // kutchTerms("replay", <offset of the new deployment>): Part 7
+  terms: kutchTerms("replay", 813436806),
   explorer: { name: "HashScan", baseUrl: "https://hashscan.io/testnet" },
   pollMs: 8_000,
   nativeCurrency: { name: "HBAR", symbol: "HBAR", decimals: 18 },
 };
 
-/** Entities and transactions of the fresh testnet deployment, for the Evidence view. Empty until Part 7 records
- *  them in docs/DEPLOYMENTS.md. */
-export const TESTNET_EVIDENCE: {
-  title: string;
-  entities: readonly { label: string; id: string | null; evm: string | null; kind: "contract" | "token" | "topic" }[];
-  transactions: readonly { label: string; hash: string }[];
-} = {
-  title: "Testnet deployment (not deployed yet)",
-  entities: [],
-  transactions: [],
-};
+/** Entities and transactions recorded in docs/DEPLOYMENTS.md ("Full demo"), for the Evidence view. */
+export const TESTNET_EVIDENCE = {
+  title: "Testnet full demo (2026-11-05)",
+  entities: [
+    { label: "FaultlinePool", id: "0.0.11330416", evm: "0x6d84cb8d063424850347eE1ebc1399885320597e", kind: "contract" },
+    { label: "FaultlineTrigger", id: "0.0.11330420", evm: "0xD51E0712C1849818c3919195034539E041b3405c", kind: "contract" },
+    { label: "ATS v8 bond FLDMO (Faultline Demo Bond)", id: "0.0.11330397", evm: "0x4DdEBa59E3b8e5e62bD3f3872571EE4779C8f173", kind: "contract" },
+    { label: "HTS stablecoin fUSD (Faultline Test USD)", id: "0.0.11329874", evm: "0x0000000000000000000000000000000000aCe152", kind: "token" },
+    { label: "HCS topic (submit key oracle, admin key trustee, payer relayer)", id: "0.0.11330395", evm: null, kind: "topic" },
+  ],
+  transactions: [
+    { label: "Primary trustee grants TRUSTEE_ROLE to the backup trustee (D17)", hash: "0x713de6dadab43e396b7eb8ed971080450d3d322c4d68d5411cd838413a5a20d6" },
+  ],
+} as const;
 
 export function hashscan(net: NetworkConfig, kind: "contract" | "token" | "topic" | "transaction" | "account", id: string): string | null {
   return net.explorer ? `${net.explorer.baseUrl}/${kind}/${id}` : null;
 }
 
-/** Starting values of the issuer page on Hedera testnet: the new FLH_* accounts and the new stablecoin, filled in from
- *  docs/ACCOUNTS.md in Part 7. Public addresses only; every field stays editable. Empty until then. */
+/** Starting values of the issuer page on Hedera testnet: the FLH_* accounts and fUSD (docs/ACCOUNTS.md,
+ *  docs/DEPLOYMENTS.md). Public addresses only; every field stays editable. */
 export const TESTNET_ISSUER_DEFAULTS = {
-  sponsor: "",
-  oracle: "",
-  trustee: "",
-  stablecoin: "",
-  topicPayer: "",
-  kycKeyHolder: "",
-  backupTrustee: "",
+  sponsor: "0x457DC9004E8e68FFEbed749C18Ed27F94Ca66FE3",
+  oracle: "0x90A59Def9432C863A76F995Cd1eE57a881bb5a76",
+  trustee: "0x965eB9d778a912b23e467ba28490927b25E655ee",
+  stablecoin: "0x0000000000000000000000000000000000aCe152",
+  topicPayer: "0x2f9A68d7880c9052A7Dac59aFe5b8223CF2eD5Db",
+  kycKeyHolder: "0xbF89BCE061513D4763047D5F5A16846F149Ca248",
+  backupTrustee: "0xD66383855628a46A3E300ad889E9dF2eA9c5A0B0",
 } as const;

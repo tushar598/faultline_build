@@ -61,8 +61,7 @@ describe("HCS log: decode, filter by bond, verify the oracle's in-payload signat
 });
 
 describe("testnet config", () => {
-  // PART 7: pins the termsHash of the OLD testnet trigger; re-pin to the new deployment's termsHash and re-enable.
-  it.skip("terms hash to the full-demo trigger's termsHash (docs/TESTNET-EVIDENCE.md, step 9)", () => {
-    expect(termsHash(TESTNET.terms!)).toBe("0x79d1d0a6dbcef1b8e43ef20bf1cc7afa358eb0cb94f0b419821c5cc666ef5d69");
+  it("terms hash to the full-demo trigger's termsHash (docs/DEPLOYMENTS.md, full demo)", () => {
+    expect(termsHash(TESTNET.terms!)).toBe("0x76135117384c954cbeb10265dcd69ab06f489f3eff903f9b34cf939d387957e2");
   });
 });
