@@ -2,7 +2,7 @@
 // addresses change on every deploy, so the local entry is completed at run time from oracle/config.local.json (read by
 // the /api/local/config route handler). Testnet entities come from docs/DEPLOYMENTS.md once the fresh testnet
 // deployment exists (Part 7); until then the testnet entry has no trigger, no topic and no terms, and the views say so.
-import { kutchTerms, type Terms } from "@/lib/shared";
+import { type Terms } from "@/lib/shared"; // Part 7 adds kutchTerms back for the testnet terms
 
 export type NetworkId = "local" | "testnet";
 

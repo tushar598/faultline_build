@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+/* Faultline design tokens, taken from the ATS web app theme (apps/ats/web/src/theme): neutral scale, status colours,
+   Inter, small radii. The one accent is the ATS secondary blue. Light theme only, flat surfaces, no gradients. */
+@theme {
+  --font-sans: var(--font-inter), "Inter", "Open Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --color-white: #fdfdfd;
+  --color-neutral-50: #f8f7fc;
+  --color-neutral-100: #f3f1f7;
+  --color-neutral-200: #e4e2e9;
+  --color-neutral-300: #d6d3de;
+  --color-neutral-400: #c3becf;
+  --color-neutral-500: #a7a0b9;
+  --color-neutral-600: #958dab;
+  --color-neutral-700: #706789;
+  --color-neutral-800: #57506b;
+  --color-neutral-900: #332f3f;
+
+  --color-accent-50: #eaf3fd;
+  --color-accent-100: #e0edfc;
+  --color-accent-400: #bed9f9;
+  --color-accent-500: #2d84eb;
+  --color-accent-600: #2263b0;
+  --color-accent-800: #143b6a;
+
+  --color-success-50: #f3f9ed;
+  --color-success-100: #dbecc7;
+  --color-success-500: #8bc34a;
+  --color-success-700: #638a35;
+  --color-success-800: #4c6b29;
+  --color-error-50: #fae9e6;
+  --color-error-100: #eebab2;
+  --color-error-500: #c92008;
+  --color-error-700: #8f1706;
+  --color-error-800: #6f1204;
+  --color-warning-50: #fff5e6;
+  --color-warning-100: #ffdfb0;
+  --color-warning-500: #ff9800;
+  --color-warning-700: #b56c00;
+  --color-warning-800: #8c5400;
+  --color-info-50: #f3f7fb;
+  --color-info-100: #dae7f2;
+  --color-info-500: #89b0d4;
+  --color-info-700: #617d97;
+  --color-info-800: #4b6175;
+
+  --radius-sm: 4px;
+  --radius-md: 5px;
+  --shadow-card: 0px 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+html,
+body {
+  background: var(--color-white);
+  color: var(--color-neutral-900);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Amounts line up in columns everywhere. */
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-500);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
