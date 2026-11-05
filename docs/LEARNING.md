@@ -97,3 +97,22 @@ Result: 121 passing, 1 pending (the redemption-only griefing test); `tsc --noEmi
 | `docs/ARCHITECTURE.md`, `docs/reference/ats.md` | identical; needed by `interfaces.test.ts`. ARCHITECTURE §10 still quotes the old testnet evidence ids (spike bond, HCS topic); they will be replaced with new evidence in the docs part. The ATS factory/BLR ids in ats.md are Hashgraph's public contracts and stay |
 
 Result: 417 passing, 1 pending; `tsc --noEmit` clean.
+
+## Part 4: scripts (local only)
+
+### What the scripts do
+
+1. `scripts/lib/bondAudit.ts`: the pool cannot read the ATS role table, so a deploy script must. `auditBondRoles` reports every role that could move the supply, burn units or stop `controllerRedeem` (agent, balance adjustment, pauser, locker, clearing, freeze, ...). `handOverBondAdmin` moves the bond admin to a multisig: grant first, then revoke, because ATS refuses to let the last admin renounce.
+2. `scripts/lib/e2e.ts` + `scripts/e2e-local.ts`: the whole life of a bond on the in-process Hardhat chain, in three flows. A: Bhuj is vetoed while paused and the replay is rejected (0 % loss, full coupon). B: Bhuj 7000 bps + a SYNTHETIC M7.2 2000 bps in grace (L = 9000). C: three events pending at once, L capped at 10000 and the third `Superseded`. Every flow ends with `paid out == deposits + coupon reserve` and leftover 0.
+3. `scripts/lib/oracle-local.ts` + `scripts/deploy-local.ts`: the same world deployed on an HTTP Hardhat node, plus the two gitignored files the oracle reads (`oracle/config.local.json`, `oracle/terms/local.json`).
+4. `scripts/with-local-node.mjs`: reuses a node on :8545 or starts one, runs a command, and stops the node it started.
+
+### Comparison with the reference
+
+| File | vs reference |
+| --- | --- |
+| `scripts/lib/bondAudit.ts`, `e2e.ts`, `oracle-local.ts`, `fixtures.ts`; `scripts/e2e-local.ts`, `deploy-local.ts`, `with-local-node.mjs` | identical |
+| `test/deploy.bondaudit.test.ts`, `test/e2e.local.test.ts` | identical |
+| `scripts/dashboard-demo-local.ts`, `scripts/oracle-e2e-local.ts` | not yet: they run the oracle CLI, so they come with Part 5 |
+
+Checked: `npx hardhat run scripts/e2e-local.ts` (flows A/B/C, books closed), `deploy-local.ts` on a started-and-stopped local node, full suite 435 passing / 1 pending, `tsc --noEmit` clean.
