@@ -30,7 +30,7 @@ describe("FaultlineTrigger — griefing and lost keys (RT-07, characterisation)"
     expect(moved).to.equal(await f.trigger.totalPausedSeconds());
     expect(moved).to.be.gte(150n * DAY);
     expect(BigInt(await time.latest())).to.be.gt(start); // the original deadline passed long ago
-    // POOL PART (restore with the real pool): await expect(f.pool.connect(f.investor).redeem()).to.be.revertedWithCustomError(f.pool, "RedemptionNotOpen");
+    await expect(f.pool.connect(f.investor).redeem()).to.be.revertedWithCustomError(f.pool, "RedemptionNotOpen");
   });
 
   it("a rogue trustee can remove the backup; the admin cannot put it back (D17)", async () => {
@@ -68,8 +68,8 @@ describe("FaultlineTrigger — griefing and lost keys (RT-07, characterisation)"
     await f.trigger.connect(f.trustee).veto(EV_A);
     expect((await f.trigger.getEventRecord(EV_A)).status).to.equal(Status.Vetoed);
     await travelTo((await f.pool.maturity()) + 50n * YEAR);
-    // POOL PART (restore with the real pool): await expect(f.pool.connect(f.investor).redeem()).to.be.revertedWithCustomError(f.pool, "RedemptionNotOpen");
-    // POOL PART (restore with the real pool): await expect(f.pool.sweepExcess()).to.be.revertedWithCustomError(f.pool, "RedemptionNotOpen");
+    await expect(f.pool.connect(f.investor).redeem()).to.be.revertedWithCustomError(f.pool, "RedemptionNotOpen");
+    await expect(f.pool.sweepExcess()).to.be.revertedWithCustomError(f.pool, "RedemptionNotOpen");
   });
 
   it("the admin key is lost with an event pending past its window, during a pause: it can never execute or be vetoed, so EventPending blocks for ever, even for a pause begun after the deadline", async () => {
@@ -83,17 +83,16 @@ describe("FaultlineTrigger — griefing and lost keys (RT-07, characterisation)"
     await f.trigger.connect(f.admin).renounceRole(ethers.ZeroHash, f.admin.address);
     await expect(f.trigger.execute(EV_A)).to.be.revertedWithCustomError(f.trigger, "IsPaused");
     await expect(f.trigger.connect(f.trustee).veto(EV_A)).to.be.revertedWithCustomError(f.trigger, "WindowClosed");
-    // POOL PART (restore with the real pool): await expect(f.pool.connect(f.investor).redeem()).to.be.revertedWithCustomError(f.pool, "EventPending");
+    await expect(f.pool.connect(f.investor).redeem()).to.be.revertedWithCustomError(f.pool, "EventPending");
   });
 
-  // POOL PART: only checks redemption, so it waits for the real pool.
-  it.skip("a pause begun after the deadline with nothing pending does not stop redemption, however long it lasts", async () => {
+  it("a pause begun after the deadline with nothing pending does not stop redemption, however long it lasts", async () => {
     const f = await loadFixture(triggerFixture);
     await travelTo((await f.trigger.submissionDeadline()) + 1n);
     await f.trigger.connect(f.trustee).pause();
     await advance(5n * YEAR);
-    // POOL PART (restore with the real pool): await expect(f.pool.connect(f.investor).redeem()).to.emit(f.pool, "Redeemed");
-    // POOL PART (restore with the real pool): await expect(f.pool.sweepExcess()).to.emit(f.pool, "ExcessSwept");
+    await expect(f.pool.connect(f.investor).redeem()).to.emit(f.pool, "Redeemed");
+    await expect(f.pool.sweepExcess()).to.emit(f.pool, "ExcessSwept");
   });
 
   it("a trustee who vetoes every event blocks every payout to the sponsor: the veto is permanent even for a real quake", async () => {

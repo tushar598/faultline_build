@@ -148,7 +148,7 @@ describe("FaultlineTrigger — D2 submission deadline", () => {
     await f.trigger.connect(f.trustee).pause();
     await travelTo(D + 400n); // 500 s into the pause
     expect(await f.trigger.submissionDeadline()).to.equal(D + 500n);
-    // POOL PART (restore with the real pool): await expect(f.pool.connect(f.investor).redeem()).to.be.revertedWithCustomError(f.pool, "RedemptionNotOpen");
+    await expect(f.pool.connect(f.investor).redeem()).to.be.revertedWithCustomError(f.pool, "RedemptionNotOpen");
     await expect(submit(f, makeAtt(f))).to.be.revertedWithCustomError(f.trigger, "IsPaused");
     await travelTo(D + 500n); // the two reverted txs above mined blocks, so jump to an exact time
     expect(await f.trigger.submissionDeadline()).to.equal(D + 600n); // still moving
@@ -162,7 +162,7 @@ describe("FaultlineTrigger — D2 submission deadline", () => {
     await expect(submit(f, makeAtt(f, { observedAt: f.s.maturity }))).to.emit(f.trigger, "AttestationSubmitted");
     await expect(submit(f, makeAtt(f, { eventId: EV_B }))).to.be.revertedWithCustomError(f.trigger, "SubmissionClosed");
     // … and redemption waits for it.
-    // POOL PART (restore with the real pool): await expect(f.pool.connect(f.investor).redeem()).to.be.revertedWithCustomError(f.pool, "EventPending");
+    await expect(f.pool.connect(f.investor).redeem()).to.be.revertedWithCustomError(f.pool, "EventPending");
   });
 
   it("a pause that starts AFTER the deadline keeps it below now (during and after the pause): submit stays closed, redeem stays open", async () => {
@@ -177,7 +177,7 @@ describe("FaultlineTrigger — D2 submission deadline", () => {
       expect(deadline).to.equal(D + (t - P));
       expect(deadline < t).to.equal(true);
     }
-    // POOL PART (restore with the real pool): await expect(f.pool.connect(f.investor).redeem()).to.emit(f.pool, "Redeemed"); // open while paused
+    await expect(f.pool.connect(f.investor).redeem()).to.emit(f.pool, "Redeemed"); // open while paused
     await expect(submit(f, makeAtt(f))).to.be.revertedWithCustomError(f.trigger, "IsPaused");
     const U = P + 6_000n;
     await atTime(U);
@@ -186,6 +186,6 @@ describe("FaultlineTrigger — D2 submission deadline", () => {
     expect(deadline).to.equal(D + 6_000n);
     expect(deadline <= U).to.equal(true);
     await expect(submit(f, makeAtt(f))).to.be.revertedWithCustomError(f.trigger, "SubmissionClosed");
-    // POOL PART (restore with the real pool): await expect(f.pool.connect(f.investor2).redeem()).to.emit(f.pool, "Redeemed");
+    await expect(f.pool.connect(f.investor2).redeem()).to.emit(f.pool, "Redeemed");
   });
 });

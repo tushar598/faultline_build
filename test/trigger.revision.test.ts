@@ -83,7 +83,7 @@ describe("FaultlineTrigger — revision of a pending event at L = 10000 (RT-08)"
     await expect(f.trigger.execute(EV_B)).to.emit(f.trigger, "EventSuperseded").withArgs(EV_B, 2_000n);
     await expectStatuses(f.trigger, { [EV_A]: Status.Executed, [EV_B]: Status.Superseded });
     await travelTo((await f.trigger.submissionDeadline()) + 1n);
-    // POOL PART (restore with the real pool): await expect(f.pool.connect(f.investor).redeem()).to.emit(f.pool, "Redeemed");
+    await expect(f.pool.connect(f.investor).redeem()).to.emit(f.pool, "Redeemed");
   });
 
   it("the same pending event can also still be vetoed at L = 10000, inside its window", async () => {

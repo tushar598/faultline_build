@@ -1,11 +1,10 @@
-// FaultlineTrigger fixtures (PART 2: wired to MockPool; the pool part switches them back to the REAL FaultlinePool),
-// attestation building/signing with the shared EIP-712
+// FaultlineTrigger fixtures (wired to the REAL FaultlinePool), attestation building/signing with the shared EIP-712
 // spec, and a status model check (pendingCount == number of Pending events; terminal statuses never change).
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import type { Signer } from "ethers";
 import { attestationDomain, attestationTypes } from "./eip712";
-import { deployPoolFixture, wirePool } from "./pool";
+import { A_UNITS, B_UNITS, CAP, deployPoolFixture, wirePool } from "./pool";
 import { DAY, HOUR, travelTo } from "./time";
 import type { FaultlineTrigger } from "../../typechain-types";
 
@@ -29,11 +28,12 @@ export type Attestation = {
   deadline: bigint;
 };
 
-/** MockPool + real FaultlineTrigger, wired (D5: pool → trigger → initialize). Chain time is before issuanceStart. */
+/** Pool + real FaultlineTrigger, wired (D5: pool → trigger → initialize), reserve funded; chain time is riskStart. */
 export async function deployTriggerFixture() {
   const f = await deployPoolFixture();
   const signers = await ethers.getSigners();
   const [oracle, trustee, oracle2, relayer] = [signers[7], signers[8], signers[9], signers[10]];
+  const mockTrigger = f.trigger;
   const trigger = await ethers.deployContract("FaultlineTrigger", [
     await f.pool.getAddress(),
     TERMS,
@@ -43,13 +43,16 @@ export async function deployTriggerFixture() {
     trustee.address,
   ]);
   await wirePool(f, await trigger.getAddress());
-  return { ...f, trigger, oracle, trustee, oracle2, relayer };
+  await f.pool.connect(f.sponsor).fundCoupons(await f.pool.requiredReserve(CAP));
+  return { ...f, trigger, mockTrigger, oracle, trustee, oracle2, relayer };
 }
 
-/** Trigger fixture; chain time is riskStart + 1 day. (Reference: investor and investor2 also invest first; MockPool
- *  has U = A_UNITS + B_UNITS fixed instead.) */
+/** Trigger fixture + investor bought A_UNITS, investor2 B_UNITS; chain time is riskStart + 1 day. */
 export async function triggerFixture() {
   const f = await deployTriggerFixture();
+  await travelTo(f.s.issuanceStart);
+  await f.pool.connect(f.investor).invest(A_UNITS);
+  await f.pool.connect(f.investor2).invest(B_UNITS);
   await travelTo(f.s.riskStart + DAY);
   return f;
 }
