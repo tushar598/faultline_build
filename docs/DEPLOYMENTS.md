@@ -12,9 +12,9 @@ Public infrastructure used, not deployed by this repo (docs/reference/ats.md): A
 | What | Hedera id | EVM address | Created by | Date (UTC) | Tx |
 | --- | --- | --- | --- | --- | --- |
 | fUSD stablecoin "Faultline Test USD" (HTS, 6 decimals, 10,000 initial supply to the treasury; admin/supply/KYC key = deployer; no wipe/freeze/pause key) | [`0.0.11329874`](https://hashscan.io/testnet/token/0.0.11329874) | `0x0000000000000000000000000000000000aCe152` | deployer (SDK, hollow payer completed by this tx) | 2026-11-05 20:43 | [`0.0.11329142@1793911374.245778606`](https://hashscan.io/testnet/transaction/1793911378.334957104) |
-| ATS bond | not created yet (smoke-2) | | deployer | | |
-| FaultlinePool | not created yet (smoke-3) | | deployer | | |
-| FaultlineTrigger | not created yet (smoke-3) | | deployer | | |
+| ATS v8 bond "Faultline Smoke Bond" (FLSMK), ISIN `USFLS9115604`, 6 decimals, max supply 10,000, maturity 1793914260 (21:31:00 UTC) | [`0.0.11329898`](https://hashscan.io/testnet/contract/0xB26CDB984337E37F021e64CaEb02Fc4085131d6F) | `0xB26CDB984337E37F021e64CaEb02Fc4085131d6F` | deployer (factory `deployBond`) | 2026-11-05 20:46 | [`0x7689bf81…277317a2`](https://hashscan.io/testnet/transaction/0x7689bf81594a0a688cfffdafd9e81b1ae84759cef8a4b3f86992e2af277317a2) |
+| FaultlinePool (issuance 1793911744–1793912524, riskStart 1793912524, maturity 1793914140, grace 180 s, couponBps 600, cap 10,000, minTicket 100 fUSD) | [`0.0.11329910`](https://hashscan.io/testnet/contract/0xfF26af30416E7897A1a2a4d703dE05374E9c1359) | `0xfF26af30416E7897A1a2a4d703dE05374E9c1359` | deployer | 2026-11-05 20:47 | [`0xa8056cb4…4cdaf8cd`](https://hashscan.io/testnet/transaction/0xa8056cb4d7cbfa6d89e284fc0e0eeee341950d431b23c0423a4270954cdaf8cd) |
+| FaultlineTrigger (termsHash `0x40bec367c4db56a591c0f1b9fb93db6b31af97a8da59a153ac795866aad3e24c` = `kutchTerms("replay", 813433584)`, window 60 s, oracle, admin deployer, trustee) | [`0.0.11329911`](https://hashscan.io/testnet/contract/0x6455F6B7E140Cb273FA612f8091a6c8a5C2A20ab) | `0x6455F6B7E140Cb273FA612f8091a6c8a5C2A20ab` | deployer | 2026-11-05 20:47 | [`0xecd69895…ae41ff537`](https://hashscan.io/testnet/transaction/0xecd698953ef1bff820e7df8c8504238ce574d98cd0957d947be8e10ae41ff537) |
 
 ### Smoke run transactions
 
@@ -30,10 +30,23 @@ Times are UTC. Fee = the mirror node's `charged_tx_fee`.
 | 1 | TokenGrantKyc(investor A) | deployer (SDK) | | 0.0148 | [`0.0.11329142@1793911405.544088147`](https://hashscan.io/testnet/transaction/1793911411.300782447) | 2026-11-05 20:43 |
 | 1 | TokenGrantKyc(investor B) | deployer (SDK) | | 0.0148 | [`0.0.11329142@1793911407.690726424`](https://hashscan.io/testnet/transaction/1793911415.332350104) | 2026-11-05 20:43 |
 | 1 | TokenTransfer treasury → sponsor 10, investor A 1,000, investor B 1,000 fUSD | deployer (SDK) | | 0.0177 | [`0.0.11329142@1793911415.400397325`](https://hashscan.io/testnet/transaction/1793911419.795357034) | 2026-11-05 20:43 |
+| 2 | factory `deployBond` ISIN USFLS9115604 (Faultline Smoke Bond, FLSMK) | deployer | 7,214,839 | 9.0185 | [`0x7689bf81…277317a2`](https://hashscan.io/testnet/transaction/0x7689bf81594a0a688cfffdafd9e81b1ae84759cef8a4b3f86992e2af277317a2) | 2026-11-05 20:46 |
+| 2 | bond `addIssuer(deployer)` (SSI issuer) | deployer | 126,989 | 0.1587 | [`0x277f79bc…c6bc29`](https://hashscan.io/testnet/transaction/0x277f79bcf616c0e980d18a74289e96c1bc70d0d760cb1d6a04c2f9f5d0c6bc29) | 2026-11-05 20:46 |
+| 2 | bond `grantKyc(investor A, urn:faultline:smoke:kyc:investorA)` | deployer | 273,773 | 0.3422 | [`0x4bbe0d53…4d246ba0`](https://hashscan.io/testnet/transaction/0x4bbe0d532f57166f162b19226b7f74c610ab24ffacefd0abcb54ff3e4d246ba0) | 2026-11-05 20:46 |
+| 2 | bond `grantKyc(investor B, urn:faultline:smoke:kyc:investorB)` | deployer | 256,661 | 0.3208 | [`0x6d7e7327…7b02107a`](https://hashscan.io/testnet/transaction/0x6d7e73273c1984b5a954316b6a68a34d2dc7ccc4f8e39e30b3fb54e67b02107a) | 2026-11-05 20:46 |
+| 3 | deploy FaultlinePool → `0xfF26af30…9c1359` | deployer | 2,283,913 | 2.8549 | [`0xa8056cb4…4cdaf8cd`](https://hashscan.io/testnet/transaction/0xa8056cb4d7cbfa6d89e284fc0e0eeee341950d431b23c0423a4270954cdaf8cd) | 2026-11-05 20:47 |
+| 3 | deploy FaultlineTrigger → `0x6455F6B7…2A20ab` | deployer | 2,028,097 | 2.5351 | [`0xecd69895…ae41ff537`](https://hashscan.io/testnet/transaction/0xecd698953ef1bff820e7df8c8504238ce574d98cd0957d947be8e10ae41ff537) | 2026-11-05 20:47 |
+| 3 | `pool.initialize(trigger)` (D5; associates the pool with fUSD) | deployer | 744,974 | 0.9312 | [`0xc9663dd2…1a6753b`](https://hashscan.io/testnet/transaction/0xc9663dd21552853b683f1a147d841e33f62036d5156b1f05460d406bc1a6753b) | 2026-11-05 20:47 |
+| 3 | TokenGrantKyc(pool `0.0.11329910`) | deployer (SDK) | | 0.0148 | [`0.0.11329142@1793911658.221207697`](https://hashscan.io/testnet/transaction/1793911663.672576761) | 2026-11-05 20:47 |
+| 3 | bond `applyRoles([ISSUER, CONTROLLER], [true, true], pool)` | deployer | 321,620 | 0.4020 | [`0x5cfe348d…5ed723ac`](https://hashscan.io/testnet/transaction/0x5cfe348d375e0fb1802b3c198aae8760628fda13955de47a13b6577e5ed723ac) | 2026-11-05 20:47 |
 
 After phase 1 (mirror node): deployer (treasury) 7,990 fUSD, sponsor 10, investor A 1,000, investor B 1,000; all
 associated and KYC GRANTED. Deployer, sponsor, investor A and investor B are complete accounts (ECDSA) now. Investor A
 received 100 HBAR from the owner after the preflight baseline (15 → 115), so its "since preflight" figure is not a fee.
+
+After phase 3: all 15 assertions passed (D4 ROLE_ISSUER == ROLE_CONTROLLER == [pool], no AGENT/ADJUSTMENT_BALANCE,
+SEC-20 role audit clean, wiring, termsHash, oracle, window 60 s, TRUSTEE_ROLE, schedule, bond fits); the deployer never
+held ROLE_ISSUER. Build: commit `2a71b00`, pool initcode keccak `0x78712136…09563f6d`, trigger `0x3205b3ca…aa8fcf3`.
 
 ## Spike S7: HCS topic keys (ops/scripts/s7)
 
