@@ -47,6 +47,14 @@ Times are UTC. Fee = the mirror node's `charged_tx_fee`.
 | 4 | investor B pool.invest(400.000000) | investor B | 473,882 | 0.5924 | [`0x07ce32de…07bb600e`](https://hashscan.io/testnet/transaction/0x07ce32ded5a57fc54cc4e2e3828e18940374f509254211d7993b684307bb600e) | 2026-11-05 20:50 |
 | 5 | `trigger.submit(Bhuj usp000a8ds, 7000 bps, nonce 1)` with the oracle's EIP-712 signature (sent by the deployer) | deployer | 137,626 | 0.1707 | [`0xc0825cca…e71b76b1`](https://hashscan.io/testnet/transaction/0xc0825cca8ac2413eaa25187583f0cb8ba254315e6776a9bb6bf26725e71b76b1) | 2026-11-05 21:03 |
 | 5 | `trigger.execute(eventId)` after the 60 s window | deployer | 142,746 | 0.1770 | [`0x5f1a2e17…de73e488`](https://hashscan.io/testnet/transaction/0x5f1a2e17b7153dd6c0a29cbf9875e31d4d2bd6756fdb6f53927d9064de73e488) | 2026-11-05 21:04 |
+| 6 | investor A pool.redeem() — controllerRedeem of 600 units | investor A | 327,276 | 0.4058 | [`0xccbe96c7…3bc9b9ba`](https://hashscan.io/testnet/transaction/0xccbe96c7b9d60e9808331a49d48a76e25d255f81425e34bbc7a846673bc9b9ba) | 2026-11-05 21:33 |
+| 6 | investor A pool.claim() [claims 180.000674 fUSD] | investor A | 53,072 | 0.0658 | [`0x861963d3…0456f767`](https://hashscan.io/testnet/transaction/0x861963d3cd52cb7fade056c9cfb74a074f289ce7a376edcbba70d9870456f767) | 2026-11-05 21:33 |
+| 6 | investor B pool.redeem() — controllerRedeem of 400 units | investor B | 242,629 | 0.3009 | [`0xb0fac4e8…ceeec50e`](https://hashscan.io/testnet/transaction/0xb0fac4e82305f41c5ecef4995200613b0f0c2a9fd66d8d6d9544be3bceeec50e) | 2026-11-05 21:33 |
+| 6 | investor B pool.claim() [claims 120.000449 fUSD] | investor B | 53,072 | 0.0658 | [`0xf554de23…4cb1fe9f`](https://hashscan.io/testnet/transaction/0xf554de2311d3c732d37e79b6f2434f120eeaa42507c90c11bdd627e14cb1fe9f) | 2026-11-05 21:34 |
+| 6 | sponsor pool.claim() — write-down collateral [claims 700.000000 fUSD] | sponsor | 48,272 | 0.0599 | [`0xd6f94bb3…1daa7226`](https://hashscan.io/testnet/transaction/0xd6f94bb39f49ab8ebfad47d18022aa0807acc0fb5a2326642ee98dd61daa7226) | 2026-11-05 21:34 |
+| 6 | pool.sweepExcess() — anyone (D3) | deployer | 127,222 | 0.1578 | [`0x050b22bf…8d0d3472`](https://hashscan.io/testnet/transaction/0x050b22bf9a54558e43de84c650c028b494ac3a66ee661ef707c75bf78d0d3472) | 2026-11-05 21:34 |
+| 6 | pool.sweepDust() — anyone, bond supply 0 | deployer | 78,845 | 0.0978 | [`0x27bb079f…d1b681b8`](https://hashscan.io/testnet/transaction/0x27bb079f3601ef3f68550f5a4cec27e1a40ea92e993081e0e6be35ccd1b681b8) | 2026-11-05 21:34 |
+| 6 | sponsor pool.claim() — unused reserve + dust [claims 0.998877 fUSD] | sponsor | 48,272 | 0.0599 | [`0x3e9582fb…81a08218`](https://hashscan.io/testnet/transaction/0x3e9582fb37306b6b7342c6515ff1652522662e63c7767a8af2a236be81a08218) | 2026-11-05 21:34 |
 
 After phase 1 (mirror node): deployer (treasury) 7,990 fUSD, sponsor 10, investor A 1,000, investor B 1,000; all
 associated and KYC GRANTED. Deployer, sponsor, investor A and investor B are complete accounts (ECDSA) now. Investor A
@@ -82,3 +90,18 @@ dataHash `0xd604b4f7132c25556c5acda8c97ef967af9ce458b017144bac0741ff02672730`, d
 `0x4b148645b05953a648c50d46d42998174e714cc13a1f12a7bf37a993e65e69bc3246d3dbfe98bc115913a1357a6b062322cbca98d31237ed4a810829adda22881c`. After execute: appliedLossBps 7000, event Executed, pendingCount 0,
 sponsorCredited 700 = floor(1,000 × 7000 / 10000); ATS balances unchanged (A 600, B 400); effective principal A 180,
 B 120; invariants hold.
+
+After phase 6 (settlement after submissionDeadline 21:32:00 UTC): investor A claimed 180.000674 fUSD (principal 180 +
+coupon 0.000674), investor B 120.000449 (120 + 0.000449), sponsor 700.998877 (700 write-down collateral + 0.998877 unused
+reserve swept by `sweepExcess`; dust 0). **Total 1,001.000000 = deposits 1,000 + reserve 1; the pool ends at 0 fUSD**,
+bond totalSupply 0, unitsRedeemed == unitsIssued, totalClaimable 0, `isSolvent()` true. The bookkeeping form of
+invariant 1 is not asserted after `sweepExcess` (ARCHITECTURE §5); the always-true form and the supply guard held after
+every step.
+
+### Smoke run result
+
+**Testnet-verified 2026-11-05 (UTC), all 33 transactions SUCCESS, no reverted or rejected send.** Same end state as
+the reference repo's smoke run (L 7000; A 180, B 120, sponsor 700 + unused reserve; total 1,001), on new accounts, a new
+token, bond, pool and trigger. HBAR fees (mirror `charged_tx_fee`, summed from `ops/out/evidence.jsonl`):
+deployer 32.2921, sponsor 2.0286, investor A 2.9664, investor B 2.7759,
+trustee 0 → **40.0630 HBAR**. Investor A's balance also rose by the owner's 100 HBAR top-up during phase 1.
