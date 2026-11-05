@@ -55,7 +55,7 @@ Result: 35 passing, 1 pending; `tsc --noEmit` clean.
 7. Roles (D17): the admin unpauses and rotates the oracle, but cannot add or remove trustees. `TRUSTEE_ROLE` is its own admin, so trustees add a backup and remove each other.
 8. The trigger holds no HBAR: there is no `receive()` and nothing is payable.
 
-### How it is tested before the pool exists
+### How it was tested before the pool existed (Part 2 only; Part 3 removed MockPool)
 
 The reference trigger tests run on the real FaultlinePool. Here `contracts/mocks/MockPool.sol` (local tests only) stands in for it. It has the same schedule, the same `initialize`/`applyLoss` checks and the same sponsor-credit maths `floor(U * L / 10000)`; `test/mocks.pool.test.ts` pins them. Lines that need real redemption (`redeem`, `sweepExcess`) are commented as `POOL PART` and one redemption-only test is skipped. The pool part switches the helpers back to the real pool and restores them.
 
@@ -72,3 +72,28 @@ The reference trigger tests run on the real FaultlinePool. Here `contracts/mocks
 | `contracts/mocks/MockPool.sol`, `test/mocks.pool.test.ts` | new | local-only stand-in and its own test |
 
 Result: 121 passing, 1 pending (the redemption-only griefing test); `tsc --noEmit` clean. Nothing deployed: a testnet trigger needs a pool, so its deploy script comes with the pool part.
+
+## Part 3: FaultlinePool, mocks and the contract test suite
+
+### What the pool does
+
+1. The pool holds the stablecoin (HTS, 6 decimals) for one ATS bond (6 decimals, 1 unit = 1 USD) and is the only minter and burner of that bond (D4).
+2. Before `issuanceEnd`, the sponsor funds the full-term coupon reserve with `fundCoupons` (D6). Between `issuanceStart` and `issuanceEnd`, KYC'd investors `invest(units)`: the pool takes `units` of stablecoin and mints `units` bond tokens. `invest` needs a funded reserve and a cap that is not exceeded.
+3. The coupon accrues as `couponIndex` (per original unit, 1e18 scale) over `[riskStart, maturity]` and is reduced by the loss: `(10000 - L) * couponBps * dt / (10000 * 10000 * YEAR)`.
+4. `applyLoss` (trigger only, from `riskStart`, D12) raises `L`. The sponsor is credited `floor(U * L / 10000)` of the collateral; only the increase is credited each time.
+5. After `trigger.submissionDeadline()`, and with no pending event, holders `redeem()`: the bond is burned and the holder is credited `floor(b * (10000 - L) / 10000)` principal plus `floor(b * couponIndex / 1e18)` coupon. Rounding always goes against the holder.
+6. Payouts are pull-based: `claim()` pays out the `claimable` balance (CEI + `nonReentrant`) after a KYC pre-check (D11). `sweepExcess` (D3) and `sweepDust` return what is left over to the sponsor.
+7. Supply guard (D4, D18): if `bond.totalSupply() > unitsIssued - unitsRedeemed` (a foreign mint), payouts stop. A lower supply is allowed, because a holder may burn their own units through ATS.
+8. Mocks (local tests only): MockUSD (an HTS token with KYC, freeze and association), MockHTS at `0x167`, MockBond (the ATS bond surface), MockTrigger, and variants for reentrancy and false-return tokens.
+
+### Comparison with the reference
+
+| Area | vs reference |
+| --- | --- |
+| `contracts/` (2 contracts, 5 interfaces, 7 mocks) | identical; MockPool removed |
+| `test/helpers/` (9 files) | identical |
+| root tests ported (29 files) | identical, except `pause.emergency.test.ts`: the repo-wide "no bond pause" scan is skipped (`LATER PART`) until scripts, oracle and web exist (it needs more than 20 files there) |
+| `test/deploy.bondaudit.test.ts`, `test/e2e.local.test.ts` | not yet: they need `scripts/lib` (Part 4) |
+| `docs/ARCHITECTURE.md`, `docs/reference/ats.md` | identical; needed by `interfaces.test.ts`. ARCHITECTURE §10 still quotes the old testnet evidence ids (spike bond, HCS topic); they will be replaced with new evidence in the docs part. The ATS factory/BLR ids in ats.md are Hashgraph's public contracts and stay |
+
+Result: 417 passing, 1 pending; `tsc --noEmit` clean.
