@@ -138,3 +138,24 @@ Checked: `npx hardhat run scripts/e2e-local.ts` (flows A/B/C, books closed), `de
 | `test/pause.emergency.test.ts` | identical again: the repo-wide scan now finds 28 files (> 20), so it was re-enabled here and not after the web part |
 
 Checked: oracle vitest 83 passed / 1 skipped (the live USGS test, run only with `USGS_LIVE=1`); `npm run oracle:e2e:local` passed (L 7000 bps, 5 mock-HCS lines, D8 merge, SEC-08 lost ledger); `dashboard-demo-local.ts` ready (2 pending, D15 advisory published); root suite 436 passing, 0 pending; both typechecks clean.
+
+## Part 6: web dashboard (local only)
+
+### What the dashboard does
+
+1. A Next.js 16 app (`web/`) that reads the chain directly. The trigger address is the root: pool, bond, stablecoin and schedule are all read from it. HCS messages come from the mirror node on testnet, or from the oracle's mock file locally (`/api/local/hcs`).
+2. Views: overview (`/`), `/replay` (the timeline of one replayed event), `/trustee` (pending events, D15 advisories, veto, pause and execute through a wallet), `/investor` (ATS balance next to effective value), `/sponsor` (reserve, claimable), `/evidence` (HCS log with the oracle signature checked against `trigger.oracle()`), and `/issuer` (a wizard that launches a new bond).
+3. `lib/phase.ts` works out the bond phase from chain time and the trigger's pause clock (D2). `lib/gas.ts` sends every wallet transaction with gas = estimate × 1.3, because the bare estimate ran out of gas on Hedera.
+4. `config/networks.ts`: only public data. The local entry is completed at run time from `oracle/config.local.json`. **The testnet entry is empty until Part 7** (no trigger, topic, terms, evidence or issuer defaults), so the old deployment is never shown.
+
+### Comparison with the reference
+
+| File | vs reference | Reason |
+| --- | --- | --- |
+| every other file in `web/` (src, test, e2e, public, configs, AGENTS.md, README.md) | identical | |
+| `web/src/config/networks.ts` | testnet entry emptied | the reference points at the old trigger, topic, fUSD, accounts and transactions; Part 7 fills in the new ones |
+| `web/test/hcs.test.ts` | 1 test skipped (`PART 7`) | it pins the old trigger's termsHash; it gets re-pinned to the new one |
+| `web/test/issuer.ats.test.ts` | 3 tests skipped (`PART 7`) | they read `ops/scripts/lib/common.ts` and `ops/package.json`, which come with Part 7 |
+| `ops/abi/*.json` | identical | public ATS ABIs, needed by the issuer page |
+
+Checked: web vitest 95 passed / 4 skipped; lint 0 problems; `next build` (11 routes); typecheck clean; Playwright `npm run web:e2e` 11 passed on a local node (veto through the wallet, execute after the window, write-down, evidence, issuer launch with gas × 1.3).
