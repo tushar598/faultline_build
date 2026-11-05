@@ -71,6 +71,9 @@ export const TESTNET_EVIDENCE = {
   ],
   transactions: [
     { label: "Primary trustee grants TRUSTEE_ROLE to the backup trustee (D17)", hash: "0x713de6dadab43e396b7eb8ed971080450d3d322c4d68d5411cd838413a5a20d6" },
+    { label: "Sponsor fundCoupons(1.000000)", hash: "0xcb41b35b0798b76b4754ac42815c3d5801d04c26f4383dfeb8d0e517ad8732f8" },
+    { label: "Investor A invest(300.000000)", hash: "0x6f1080bcb1dddbc6dd1885a59c206dc90100f89b3a11491b754e41e12a612311" },
+    { label: "Investor B invest(200.000000)", hash: "0x5783b1bd0681181e11854b1e2531a0c6e1588299ad3d8e60cb821244d4859ccf" },
   ],
 } as const;
 

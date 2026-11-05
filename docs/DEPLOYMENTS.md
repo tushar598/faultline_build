@@ -123,6 +123,12 @@ Fuel: fUSD `0.0.11329874` from the smoke run (reused, no new token). Times are U
 | 2 | TokenGrantKyc(pool contract account) | deployer (SDK) |  | 0.0146 | [`0.0.11329142@1793914890.308081132`](https://hashscan.io/testnet/transaction/1793914896.727624967) | 2026-11-05 21:41 |
 | 2 | bond.applyRoles([ISSUER, CONTROLLER], [true, true], pool) | deployer | 321,620 | 0.3988 | [`0xceef28cf…1bd04bcf`](https://hashscan.io/testnet/transaction/0xceef28cfd3605eea53f6ba7ca1f60cfe5cb0df14c1874c566606c3c71bd04bcf) | 2026-11-05 21:41 |
 | 2 | trigger.grantRole(TRUSTEE_ROLE, backup trustee) — by the primary trustee (D17: TRUSTEE_ROLE administers itself) | trustee | 51,551 | 0.0639 | [`0x713de6da…3a5a20d6`](https://hashscan.io/testnet/transaction/0x713de6dadab43e396b7eb8ed971080450d3d322c4d68d5411cd838413a5a20d6) | 2026-11-05 21:42 |
+| 3 | sponsor fUSD.approve(pool, 1.000000) | sponsor | 727,020 | 0.9015 | [`0xd83e5936…e0353b90`](https://hashscan.io/testnet/transaction/0xd83e59365de719429f6ccccbd2409ff34922dbf2c35f336c33744758e0353b90) | 2026-11-05 21:47 |
+| 3 | sponsor pool.fundCoupons(1.000000) | sponsor | 73,582 | 0.0912 | [`0xcb41b35b…ad8732f8`](https://hashscan.io/testnet/transaction/0xcb41b35b0798b76b4754ac42815c3d5801d04c26f4383dfeb8d0e517ad8732f8) | 2026-11-05 21:47 |
+| 3 | investor A fUSD.approve(pool, 300.000000) | investor A | 727,020 | 0.9015 | [`0x27b874c9…e2eb9083`](https://hashscan.io/testnet/transaction/0x27b874c972d8818244e71d0902805880f5cf330c1a42fb14ab0425cbe2eb9083) | 2026-11-05 21:47 |
+| 3 | investor A pool.invest(300.000000) | investor A | 540,129 | 0.6698 | [`0x6f1080bc…2a612311`](https://hashscan.io/testnet/transaction/0x6f1080bcb1dddbc6dd1885a59c206dc90100f89b3a11491b754e41e12a612311) | 2026-11-05 21:47 |
+| 3 | investor B fUSD.approve(pool, 200.000000) | investor B | 727,020 | 0.9015 | [`0x4d819474…194efdc6`](https://hashscan.io/testnet/transaction/0x4d81947496d20e7f244aae785505c70122056861cc02b24a3b46f46a194efdc6) | 2026-11-05 21:48 |
+| 3 | investor B pool.invest(200.000000) | investor B | 471,729 | 0.5849 | [`0x5783b1bd…d4859ccf`](https://hashscan.io/testnet/transaction/0x5783b1bd0681181e11854b1e2531a0c6e1588299ad3d8e60cb821244d4859ccf) | 2026-11-05 21:48 |
 
 After phase 2: every assertion passed (D4 roles, SEC-20 audit, wiring, termsHash, oracle, window 120 s, both trustees
 hold TRUSTEE_ROLE); the trigger admin's grant and revoke of TRUSTEE_ROLE were simulated only and refused (D17,
@@ -130,3 +136,5 @@ hold TRUSTEE_ROLE); the trigger admin's grant and revoke of TRUSTEE_ROLE were si
 HCS, topic 0.0.11330395, payer = relayer). Build: commit `a0b1dd5` (same initcode keccaks as the smoke run).
 Bhuj replays to observedAt 1793915806, the SYNTHETIC Flow A record to 1793915866.
 The web app's testnet entry (`web/src/config/networks.ts`) now points at this trigger, topic and terms.
+
+After phase 3: sponsor funded the 1 fUSD coupon reserve; A invested 300, B 200 (unitsIssued 500, read on chain).
