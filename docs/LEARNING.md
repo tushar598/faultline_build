@@ -35,9 +35,40 @@ Same behaviour and the same hashes. Computed with both repos' code: live Kutch t
 | `test/shared.jcs.test.ts`, `test/helpers/eip712.ts`, `scripts/lib/fixtures.ts` | identical | |
 | `oracle/fixtures/*.geojson` (4 files) | identical | only the 4 fixtures Part 1 tests need |
 | `oracle/fixtures/README.md` | shorter | lists only the 4 copied files |
-| `test/shared.attestation.test.ts` | one test pending | the on-chain `hashAttestation` check needs FaultlineTrigger (Part 2) |
+| `test/shared.attestation.test.ts` | identical since Part 2 | in Part 1 the on-chain `hashAttestation` test was pending; Part 2 enabled it |
 | `test/shared.terms.test.ts` | new | pins the termsHash values |
 | `test/shared.eip712.test.ts` | new | rebuilds the EIP-712 digest by hand, off chain |
 | `test/shared.hcs.test.ts` | new | HCS message tests; the reference has them in `oracle/test/hcs.test.ts` (vitest, with the publishers) |
 
 Result: 35 passing, 1 pending; `tsc --noEmit` clean.
+
+## Part 2: FaultlineTrigger
+
+### What the trigger does
+
+1. One trigger serves one pool. It stores `termsHash`, the `challengeWindow` (1 s to 30 days, D17), the oracle address, and copies `riskStart`, `maturity` and `grace` from the pool (D5).
+2. `submit(att, sig)`: anyone may relay. The checks run in a fixed order: not paused → before `submissionDeadline()` → signature recovers to the oracle (EIP-712, low-s, 65 bytes) → not expired → `riskStart <= observedAt <= min(now, maturity)` → termsHash matches → `1 <= lossBps <= 10000` → status → pool not at 10000.
+3. A new event goes `None → Pending`. A pending event can be revised, but only with a higher nonce AND a newer `usgsUpdatedAt`; a revision may lower the loss and restarts the window.
+4. `Vetoed`, `Executed` and `Superseded` are final, so a public signature can never be replayed (`EventFinalised`).
+5. The trustee may `veto` inside the window, even while paused. After the window anyone may `execute`: the pool's loss becomes `min(10000, L + lossBps)` (D1, each event carries only its own loss). If L is already 10000 the event becomes `Superseded`, with no revert, so it never blocks redemption.
+6. Pause clock (D2): `effectiveTime()` stops while paused, so a pause never eats the window. `submissionDeadline() = maturity + grace + paused time`, so a pause never cuts off a real quake. Only the trustee pauses; only the admin unpauses.
+7. Roles (D17): the admin unpauses and rotates the oracle, but cannot add or remove trustees. `TRUSTEE_ROLE` is its own admin, so trustees add a backup and remove each other.
+8. The trigger holds no HBAR: there is no `receive()` and nothing is payable.
+
+### How it is tested before the pool exists
+
+The reference trigger tests run on the real FaultlinePool. Here `contracts/mocks/MockPool.sol` (local tests only) stands in for it. It has the same schedule, the same `initialize`/`applyLoss` checks and the same sponsor-credit maths `floor(U * L / 10000)`; `test/mocks.pool.test.ts` pins them. Lines that need real redemption (`redeem`, `sweepExcess`) are commented as `POOL PART` and one redemption-only test is skipped. The pool part switches the helpers back to the real pool and restores them.
+
+### Comparison with the reference
+
+| File | vs reference | Reason |
+| --- | --- | --- |
+| `contracts/FaultlineTrigger.sol`, `contracts/interfaces/*.sol` (3) | identical | |
+| `test/trigger.setup`, `trigger.submit`, `trigger.execute`, `attestation.binding`, `shared.attestation` tests | identical | |
+| `test/helpers/time.ts`, `roles.ts`, `eip712.ts` | identical | |
+| `test/helpers/trigger.ts` | fixture uses MockPool | no `fundCoupons` / `invest` yet; U is fixed in MockPool instead |
+| `test/helpers/pool.ts` | stand-in | MockPool fixture with the reference schedule and signer layout; replaced in the pool part |
+| `test/trigger.pause`, `trigger.revision`, `trigger.griefing` tests | `POOL PART` lines | 11 redeem/sweep assertions commented out, 1 test skipped |
+| `contracts/mocks/MockPool.sol`, `test/mocks.pool.test.ts` | new | local-only stand-in and its own test |
+
+Result: 121 passing, 1 pending (the redemption-only griefing test); `tsc --noEmit` clean. Nothing deployed: a testnet trigger needs a pool, so its deploy script comes with the pool part.
