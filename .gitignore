@@ -1,0 +1,46 @@
+# Secrets: never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+keystore*/
+**/keystore.json
+**/keystore*.json
+*.keystore
+*.vc
+.envrc
+
+# Dependencies
+node_modules/
+
+# Hardhat build output
+artifacts/
+cache/
+typechain-types/
+coverage/
+coverage.json
+gas-report.txt
+
+# Testnet operator scripts (ops/): run state, oracle config/ledger copies and evidence logs stay local
+ops/out/
+ops/types/
+
+# Oracle
+oracle/dist/
+oracle/out/
+oracle/.hcs-mock/
+
+# Next.js
+.next/
+web/out/
+web/next-env.d.ts
+*.tsbuildinfo
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.log
+oracle/config.local.json
+oracle/terms/local.json
