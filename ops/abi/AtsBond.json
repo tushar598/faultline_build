@@ -1,0 +1,2419 @@
+[
+ {
+  "inputs": [],
+  "name": "InvalidKycStatus",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "InvalidZeroAddress",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "KycIsNotGranted",
+  "type": "error"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "operator",
+    "type": "address"
+   },
+   {
+    "indexed": false,
+    "internalType": "bool",
+    "name": "activated",
+    "type": "bool"
+   }
+  ],
+  "name": "InternalKycStatusUpdated",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "issuer",
+    "type": "address"
+   }
+  ],
+  "name": "KycGranted",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": false,
+    "internalType": "bool",
+    "name": "internalKycActivated",
+    "type": "bool"
+   }
+  ],
+  "name": "KycInitialized",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "issuer",
+    "type": "address"
+   }
+  ],
+  "name": "KycRevoked",
+  "type": "event"
+ },
+ {
+  "inputs": [],
+  "name": "activateInternalKyc",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "success_",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "deactivateInternalKyc",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "success_",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "enum IKyc.KycStatus",
+    "name": "_kycStatus",
+    "type": "uint8"
+   }
+  ],
+  "name": "getKycAccountsCount",
+  "outputs": [
+   {
+    "internalType": "uint256",
+    "name": "kycAccountsCount_",
+    "type": "uint256"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "enum IKyc.KycStatus",
+    "name": "_kycStatus",
+    "type": "uint8"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_pageIndex",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_pageLength",
+    "type": "uint256"
+   }
+  ],
+  "name": "getKycAccountsData",
+  "outputs": [
+   {
+    "internalType": "address[]",
+    "name": "accounts_",
+    "type": "address[]"
+   },
+   {
+    "components": [
+     {
+      "internalType": "uint256",
+      "name": "validFrom",
+      "type": "uint256"
+     },
+     {
+      "internalType": "uint256",
+      "name": "validTo",
+      "type": "uint256"
+     },
+     {
+      "internalType": "string",
+      "name": "vcId",
+      "type": "string"
+     },
+     {
+      "internalType": "address",
+      "name": "issuer",
+      "type": "address"
+     },
+     {
+      "internalType": "enum IKyc.KycStatus",
+      "name": "status",
+      "type": "uint8"
+     }
+    ],
+    "internalType": "struct IKyc.KycData[]",
+    "name": "kycData_",
+    "type": "tuple[]"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_account",
+    "type": "address"
+   }
+  ],
+  "name": "getKycFor",
+  "outputs": [
+   {
+    "components": [
+     {
+      "internalType": "uint256",
+      "name": "validFrom",
+      "type": "uint256"
+     },
+     {
+      "internalType": "uint256",
+      "name": "validTo",
+      "type": "uint256"
+     },
+     {
+      "internalType": "string",
+      "name": "vcId",
+      "type": "string"
+     },
+     {
+      "internalType": "address",
+      "name": "issuer",
+      "type": "address"
+     },
+     {
+      "internalType": "enum IKyc.KycStatus",
+      "name": "status",
+      "type": "uint8"
+     }
+    ],
+    "internalType": "struct IKyc.KycData",
+    "name": "kyc_",
+    "type": "tuple"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_account",
+    "type": "address"
+   }
+  ],
+  "name": "getKycStatusFor",
+  "outputs": [
+   {
+    "internalType": "enum IKyc.KycStatus",
+    "name": "kycStatus_",
+    "type": "uint8"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_account",
+    "type": "address"
+   },
+   {
+    "internalType": "string",
+    "name": "_vcId",
+    "type": "string"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_validFrom",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_validTo",
+    "type": "uint256"
+   },
+   {
+    "internalType": "address",
+    "name": "_issuer",
+    "type": "address"
+   }
+  ],
+  "name": "grantKyc",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "success_",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bool",
+    "name": "_activateInternalKyc",
+    "type": "bool"
+   }
+  ],
+  "name": "initializeInternalKyc",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "isInternalKycActivated",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_account",
+    "type": "address"
+   }
+  ],
+  "name": "revokeKyc",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "success_",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "issuer",
+    "type": "address"
+   }
+  ],
+  "name": "AccountIsNotIssuer",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "issuer",
+    "type": "address"
+   }
+  ],
+  "name": "ListedIssuer",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "issuer",
+    "type": "address"
+   }
+  ],
+  "name": "UnlistedIssuer",
+  "type": "error"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "operator",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "issuer",
+    "type": "address"
+   }
+  ],
+  "name": "AddedToIssuerList",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "operator",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "issuer",
+    "type": "address"
+   }
+  ],
+  "name": "RemovedFromIssuerList",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "oldRegistryAddress",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "newRegistryAddress",
+    "type": "address"
+   }
+  ],
+  "name": "RevocationRegistryUpdated",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [],
+  "name": "SsiManagementInitialized",
+  "type": "event"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_issuer",
+    "type": "address"
+   }
+  ],
+  "name": "addIssuer",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "success_",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "getIssuerListCount",
+  "outputs": [
+   {
+    "internalType": "uint256",
+    "name": "issuerListCount_",
+    "type": "uint256"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "_pageIndex",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_pageLength",
+    "type": "uint256"
+   }
+  ],
+  "name": "getIssuerListMembers",
+  "outputs": [
+   {
+    "internalType": "address[]",
+    "name": "members_",
+    "type": "address[]"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "getRevocationRegistryAddress",
+  "outputs": [
+   {
+    "internalType": "address",
+    "name": "revocationRegistryAddress_",
+    "type": "address"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "initializeSsiManagement",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_issuer",
+    "type": "address"
+   }
+  ],
+  "name": "isIssuer",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_issuer",
+    "type": "address"
+   }
+  ],
+  "name": "removeIssuer",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "success_",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_revocationRegistryAddress",
+    "type": "address"
+   }
+  ],
+  "name": "setRevocationRegistryAddress",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "success_",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "role",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   }
+  ],
+  "name": "AccountAssignedToRole",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   },
+   {
+    "internalType": "bytes32",
+    "name": "role",
+    "type": "bytes32"
+   }
+  ],
+  "name": "AccountHasNoRole",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   },
+   {
+    "internalType": "bytes32[]",
+    "name": "roles",
+    "type": "bytes32[]"
+   }
+  ],
+  "name": "AccountHasNoRoles",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "role",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   }
+  ],
+  "name": "AccountNotAssignedToRole",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "CannotRenounceSoleAdmin",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "rolesLength",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "activesLength",
+    "type": "uint256"
+   }
+  ],
+  "name": "RolesAndActivesLengthMismatch",
+  "type": "error"
+ },
+ {
+  "anonymous": false,
+  "inputs": [],
+  "name": "AccessControlInitialized",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": false,
+    "internalType": "bytes32[]",
+    "name": "roles",
+    "type": "bytes32[]"
+   },
+   {
+    "indexed": false,
+    "internalType": "bool[]",
+    "name": "actives",
+    "type": "bool[]"
+   }
+  ],
+  "name": "EffectivelyRolesApplied",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "operator",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "bytes32",
+    "name": "role",
+    "type": "bytes32"
+   }
+  ],
+  "name": "RoleGranted",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "bytes32",
+    "name": "role",
+    "type": "bytes32"
+   }
+  ],
+  "name": "RoleRenounced",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "operator",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "bytes32",
+    "name": "role",
+    "type": "bytes32"
+   }
+  ],
+  "name": "RoleRevoked",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": false,
+    "internalType": "bytes32[]",
+    "name": "roles",
+    "type": "bytes32[]"
+   },
+   {
+    "indexed": false,
+    "internalType": "bool[]",
+    "name": "actives",
+    "type": "bool[]"
+   },
+   {
+    "indexed": false,
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   }
+  ],
+  "name": "RolesApplied",
+  "type": "event"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32[]",
+    "name": "_roles",
+    "type": "bytes32[]"
+   },
+   {
+    "internalType": "bool[]",
+    "name": "_actives",
+    "type": "bool[]"
+   },
+   {
+    "internalType": "address",
+    "name": "_account",
+    "type": "address"
+   }
+  ],
+  "name": "applyRoles",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_account",
+    "type": "address"
+   }
+  ],
+  "name": "getRoleCountFor",
+  "outputs": [
+   {
+    "internalType": "uint256",
+    "name": "roleCount_",
+    "type": "uint256"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "_role",
+    "type": "bytes32"
+   }
+  ],
+  "name": "getRoleMemberCount",
+  "outputs": [
+   {
+    "internalType": "uint256",
+    "name": "memberCount_",
+    "type": "uint256"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "_role",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_pageIndex",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_pageLength",
+    "type": "uint256"
+   }
+  ],
+  "name": "getRoleMembers",
+  "outputs": [
+   {
+    "internalType": "address[]",
+    "name": "members_",
+    "type": "address[]"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_account",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_pageIndex",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_pageLength",
+    "type": "uint256"
+   }
+  ],
+  "name": "getRolesFor",
+  "outputs": [
+   {
+    "internalType": "bytes32[]",
+    "name": "roles_",
+    "type": "bytes32[]"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "_role",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "address",
+    "name": "_account",
+    "type": "address"
+   }
+  ],
+  "name": "grantRole",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "success_",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "_role",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "address",
+    "name": "_account",
+    "type": "address"
+   }
+  ],
+  "name": "hasRole",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "initializeAccessControl",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "_role",
+    "type": "bytes32"
+   }
+  ],
+  "name": "renounceRole",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "success_",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "_role",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "address",
+    "name": "_account",
+    "type": "address"
+   }
+  ],
+  "name": "revokeRole",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "success_",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "anonymous": false,
+  "inputs": [],
+  "name": "ERC1594Initialized",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "_operator",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "_to",
+    "type": "address"
+   },
+   {
+    "indexed": false,
+    "internalType": "uint256",
+    "name": "_value",
+    "type": "uint256"
+   },
+   {
+    "indexed": false,
+    "internalType": "bytes",
+    "name": "_data",
+    "type": "bytes"
+   }
+  ],
+  "name": "Issued",
+  "type": "event"
+ },
+ {
+  "inputs": [],
+  "name": "initializeERC1594",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "isIssuable",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "issuable_",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_tokenHolder",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_value",
+    "type": "uint256"
+   },
+   {
+    "internalType": "bytes",
+    "name": "_data",
+    "type": "bytes"
+   }
+  ],
+  "name": "issue",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_to",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_amount",
+    "type": "uint256"
+   }
+  ],
+  "name": "mint",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "AddressNotVerified",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "CannotRecoverWallet",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "ComplianceCallFailed",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "ComplianceNotAllowed",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "IdentityRegistryCallFailed",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "InputAmountsArrayLengthMismatch",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "InputBoolArrayLengthMismatch",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "user",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "requestedUnfreeze",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "availableFrozen",
+    "type": "uint256"
+   },
+   {
+    "internalType": "bytes32",
+    "name": "partition",
+    "type": "bytes32"
+   }
+  ],
+  "name": "InsufficientFrozenBalance",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "TokenIsNotControllable",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "WalletRecovered",
+  "type": "error"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "_agent",
+    "type": "address"
+   }
+  ],
+  "name": "AgentAdded",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "_agent",
+    "type": "address"
+   }
+  ],
+  "name": "AgentRemoved",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "compliance",
+    "type": "address"
+   }
+  ],
+  "name": "ComplianceAdded",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": false,
+    "internalType": "bool",
+    "name": "controllable",
+    "type": "bool"
+   }
+  ],
+  "name": "ControllerInitialized",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": false,
+    "internalType": "address",
+    "name": "_controller",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "_tokenHolder",
+    "type": "address"
+   },
+   {
+    "indexed": false,
+    "internalType": "uint256",
+    "name": "_value",
+    "type": "uint256"
+   },
+   {
+    "indexed": false,
+    "internalType": "bytes",
+    "name": "_data",
+    "type": "bytes"
+   },
+   {
+    "indexed": false,
+    "internalType": "bytes",
+    "name": "_operatorData",
+    "type": "bytes"
+   }
+  ],
+  "name": "ControllerRedemption",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": false,
+    "internalType": "address",
+    "name": "_controller",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "_from",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "_to",
+    "type": "address"
+   },
+   {
+    "indexed": false,
+    "internalType": "uint256",
+    "name": "_value",
+    "type": "uint256"
+   },
+   {
+    "indexed": false,
+    "internalType": "bytes",
+    "name": "_data",
+    "type": "bytes"
+   },
+   {
+    "indexed": false,
+    "internalType": "bytes",
+    "name": "_operatorData",
+    "type": "bytes"
+   }
+  ],
+  "name": "ControllerTransfer",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": false,
+    "internalType": "address",
+    "name": "operator",
+    "type": "address"
+   }
+  ],
+  "name": "FinalizedControllerFeature",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "identityRegistry",
+    "type": "address"
+   }
+  ],
+  "name": "IdentityRegistryAdded",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": false,
+    "internalType": "address",
+    "name": "_lostWallet",
+    "type": "address"
+   },
+   {
+    "indexed": false,
+    "internalType": "address",
+    "name": "_newWallet",
+    "type": "address"
+   },
+   {
+    "indexed": false,
+    "internalType": "address",
+    "name": "_investorOnchainID",
+    "type": "address"
+   }
+  ],
+  "name": "RecoverySuccess",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "string",
+    "name": "newName",
+    "type": "string"
+   },
+   {
+    "indexed": true,
+    "internalType": "string",
+    "name": "newSymbol",
+    "type": "string"
+   },
+   {
+    "indexed": false,
+    "internalType": "uint8",
+    "name": "newDecimals",
+    "type": "uint8"
+   },
+   {
+    "indexed": false,
+    "internalType": "string",
+    "name": "newVersion",
+    "type": "string"
+   },
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "newOnchainID",
+    "type": "address"
+   }
+  ],
+  "name": "UpdatedTokenInformation",
+  "type": "event"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_agent",
+    "type": "address"
+   }
+  ],
+  "name": "addAgent",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_tokenHolder",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_value",
+    "type": "uint256"
+   },
+   {
+    "internalType": "bytes",
+    "name": "_data",
+    "type": "bytes"
+   },
+   {
+    "internalType": "bytes",
+    "name": "_operatorData",
+    "type": "bytes"
+   }
+  ],
+  "name": "controllerRedeem",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_from",
+    "type": "address"
+   },
+   {
+    "internalType": "address",
+    "name": "_to",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_value",
+    "type": "uint256"
+   },
+   {
+    "internalType": "bytes",
+    "name": "_data",
+    "type": "bytes"
+   },
+   {
+    "internalType": "bytes",
+    "name": "_operatorData",
+    "type": "bytes"
+   }
+  ],
+  "name": "controllerTransfer",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "finalizeControllable",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_from",
+    "type": "address"
+   },
+   {
+    "internalType": "address",
+    "name": "_to",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_amount",
+    "type": "uint256"
+   }
+  ],
+  "name": "forcedTransfer",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bool",
+    "name": "_isControllable",
+    "type": "bool"
+   }
+  ],
+  "name": "initializeController",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_agent",
+    "type": "address"
+   }
+  ],
+  "name": "isAgent",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "isControllable",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_agent",
+    "type": "address"
+   }
+  ],
+  "name": "removeAgent",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "IsPaused",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "IsUnpaused",
+  "type": "error"
+ },
+ {
+  "anonymous": false,
+  "inputs": [],
+  "name": "PauseInitialized",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "operator",
+    "type": "address"
+   }
+  ],
+  "name": "Paused",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "operator",
+    "type": "address"
+   }
+  ],
+  "name": "Unpaused",
+  "type": "event"
+ },
+ {
+  "inputs": [],
+  "name": "initializePause",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "pause",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "success_",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "paused",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "unpause",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "success_",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "anonymous": false,
+  "inputs": [],
+  "name": "BalanceTrackerInitialized",
+  "type": "event"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_tokenHolder",
+    "type": "address"
+   }
+  ],
+  "name": "balanceOf",
+  "outputs": [
+   {
+    "internalType": "uint256",
+    "name": "",
+    "type": "uint256"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_account",
+    "type": "address"
+   }
+  ],
+  "name": "getTotalBalanceFor",
+  "outputs": [
+   {
+    "internalType": "uint256",
+    "name": "",
+    "type": "uint256"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "initializeBalanceTracker",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "totalSupply",
+  "outputs": [
+   {
+    "internalType": "uint256",
+    "name": "",
+    "type": "uint256"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "components": [
+     {
+      "components": [
+       {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "internalType": "string",
+        "name": "symbol",
+        "type": "string"
+       },
+       {
+        "internalType": "string",
+        "name": "isin",
+        "type": "string"
+       },
+       {
+        "internalType": "uint8",
+        "name": "decimals",
+        "type": "uint8"
+       }
+      ],
+      "internalType": "struct ICore.ERC20MetadataInfo",
+      "name": "info",
+      "type": "tuple"
+     },
+     {
+      "internalType": "enum IFactory.SecurityType",
+      "name": "securityType",
+      "type": "uint8"
+     }
+    ],
+    "indexed": false,
+    "internalType": "struct ICore.ERC20Metadata",
+    "name": "metadata",
+    "type": "tuple"
+   }
+  ],
+  "name": "CoreInitialized",
+  "type": "event"
+ },
+ {
+  "inputs": [],
+  "name": "decimals",
+  "outputs": [
+   {
+    "internalType": "uint8",
+    "name": "",
+    "type": "uint8"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "getERC20Metadata",
+  "outputs": [
+   {
+    "components": [
+     {
+      "components": [
+       {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "internalType": "string",
+        "name": "symbol",
+        "type": "string"
+       },
+       {
+        "internalType": "string",
+        "name": "isin",
+        "type": "string"
+       },
+       {
+        "internalType": "uint8",
+        "name": "decimals",
+        "type": "uint8"
+       }
+      ],
+      "internalType": "struct ICore.ERC20MetadataInfo",
+      "name": "info",
+      "type": "tuple"
+     },
+     {
+      "internalType": "enum IFactory.SecurityType",
+      "name": "securityType",
+      "type": "uint8"
+     }
+    ],
+    "internalType": "struct ICore.ERC20Metadata",
+    "name": "",
+    "type": "tuple"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "components": [
+     {
+      "components": [
+       {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "internalType": "string",
+        "name": "symbol",
+        "type": "string"
+       },
+       {
+        "internalType": "string",
+        "name": "isin",
+        "type": "string"
+       },
+       {
+        "internalType": "uint8",
+        "name": "decimals",
+        "type": "uint8"
+       }
+      ],
+      "internalType": "struct ICore.ERC20MetadataInfo",
+      "name": "info",
+      "type": "tuple"
+     },
+     {
+      "internalType": "enum IFactory.SecurityType",
+      "name": "securityType",
+      "type": "uint8"
+     }
+    ],
+    "internalType": "struct ICore.ERC20Metadata",
+    "name": "metadata",
+    "type": "tuple"
+   }
+  ],
+  "name": "initializeCore",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "name",
+  "outputs": [
+   {
+    "internalType": "string",
+    "name": "",
+    "type": "string"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "string",
+    "name": "_name",
+    "type": "string"
+   }
+  ],
+  "name": "setName",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "string",
+    "name": "_symbol",
+    "type": "string"
+   }
+  ],
+  "name": "setSymbol",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "symbol",
+  "outputs": [
+   {
+    "internalType": "string",
+    "name": "",
+    "type": "string"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "version",
+  "outputs": [
+   {
+    "internalType": "string",
+    "name": "",
+    "type": "string"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "balance",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "value",
+    "type": "uint256"
+   },
+   {
+    "internalType": "bytes32",
+    "name": "partition",
+    "type": "bytes32"
+   }
+  ],
+  "name": "InsufficientBalance",
+  "type": "error"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "from",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "to",
+    "type": "address"
+   },
+   {
+    "indexed": false,
+    "internalType": "uint256",
+    "name": "value",
+    "type": "uint256"
+   }
+  ],
+  "name": "Transfer",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "sender",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "from",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "to",
+    "type": "address"
+   },
+   {
+    "indexed": false,
+    "internalType": "uint256",
+    "name": "amount",
+    "type": "uint256"
+   },
+   {
+    "indexed": false,
+    "internalType": "bytes",
+    "name": "data",
+    "type": "bytes"
+   }
+  ],
+  "name": "TransferFromWithData",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [],
+  "name": "TransferInitialized",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "sender",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "to",
+    "type": "address"
+   },
+   {
+    "indexed": false,
+    "internalType": "uint256",
+    "name": "amount",
+    "type": "uint256"
+   },
+   {
+    "indexed": false,
+    "internalType": "bytes",
+    "name": "data",
+    "type": "bytes"
+   }
+  ],
+  "name": "TransferWithData",
+  "type": "event"
+ },
+ {
+  "inputs": [],
+  "name": "initializeTransfer",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "to",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "amount",
+    "type": "uint256"
+   }
+  ],
+  "name": "transfer",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "from",
+    "type": "address"
+   },
+   {
+    "internalType": "address",
+    "name": "to",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "amount",
+    "type": "uint256"
+   }
+  ],
+  "name": "transferFrom",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_from",
+    "type": "address"
+   },
+   {
+    "internalType": "address",
+    "name": "_to",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_value",
+    "type": "uint256"
+   },
+   {
+    "internalType": "bytes",
+    "name": "_data",
+    "type": "bytes"
+   }
+  ],
+  "name": "transferFromWithData",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_to",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_value",
+    "type": "uint256"
+   },
+   {
+    "internalType": "bytes",
+    "name": "_data",
+    "type": "bytes"
+   }
+  ],
+  "name": "transferWithData",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "operator",
+    "type": "address"
+   },
+   {
+    "indexed": false,
+    "internalType": "bytes3",
+    "name": "nominalValueCurrency",
+    "type": "bytes3"
+   }
+  ],
+  "name": "NominalValueCurrencySet",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": false,
+    "internalType": "uint256",
+    "name": "nominalValue",
+    "type": "uint256"
+   },
+   {
+    "indexed": false,
+    "internalType": "uint8",
+    "name": "nominalValueDecimals",
+    "type": "uint8"
+   },
+   {
+    "indexed": false,
+    "internalType": "bytes3",
+    "name": "nominalValueCurrency",
+    "type": "bytes3"
+   }
+  ],
+  "name": "NominalValueInitialized",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "operator",
+    "type": "address"
+   },
+   {
+    "indexed": false,
+    "internalType": "uint256",
+    "name": "nominalValue",
+    "type": "uint256"
+   },
+   {
+    "indexed": false,
+    "internalType": "uint8",
+    "name": "nominalValueDecimals",
+    "type": "uint8"
+   }
+  ],
+  "name": "NominalValueSet",
+  "type": "event"
+ },
+ {
+  "inputs": [],
+  "name": "getNominalValue",
+  "outputs": [
+   {
+    "internalType": "uint256",
+    "name": "",
+    "type": "uint256"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "getNominalValueCurrency",
+  "outputs": [
+   {
+    "internalType": "bytes3",
+    "name": "",
+    "type": "bytes3"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "getNominalValueDecimals",
+  "outputs": [
+   {
+    "internalType": "uint8",
+    "name": "",
+    "type": "uint8"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "_nominalValue",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint8",
+    "name": "_nominalValueDecimals",
+    "type": "uint8"
+   },
+   {
+    "internalType": "bytes3",
+    "name": "_nominalValueCurrency",
+    "type": "bytes3"
+   }
+  ],
+  "name": "initializeNominalValue",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "_nominalValue",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint8",
+    "name": "_nominalValueDecimals",
+    "type": "uint8"
+   }
+  ],
+  "name": "setNominalValue",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes3",
+    "name": "_nominalValueCurrency",
+    "type": "bytes3"
+   }
+  ],
+  "name": "setNominalValueCurrency",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "MaturityDateInvalid",
+  "type": "error"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "address",
+    "name": "tokenId",
+    "type": "address"
+   },
+   {
+    "indexed": true,
+    "internalType": "uint256",
+    "name": "maturityDate",
+    "type": "uint256"
+   },
+   {
+    "indexed": true,
+    "internalType": "uint256",
+    "name": "previousMaturityDate",
+    "type": "uint256"
+   }
+  ],
+  "name": "MaturityDateUpdated",
+  "type": "event"
+ },
+ {
+  "anonymous": false,
+  "inputs": [
+   {
+    "indexed": true,
+    "internalType": "uint256",
+    "name": "maturityDate",
+    "type": "uint256"
+   }
+  ],
+  "name": "MaturityInitialized",
+  "type": "event"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_tokenHolder",
+    "type": "address"
+   }
+  ],
+  "name": "fullRedeemAtMaturity",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [],
+  "name": "getMaturityDate",
+  "outputs": [
+   {
+    "internalType": "uint256",
+    "name": "maturityDate_",
+    "type": "uint256"
+   }
+  ],
+  "stateMutability": "view",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "_maturityDate",
+    "type": "uint256"
+   }
+  ],
+  "name": "initializeMaturity",
+  "outputs": [],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "_newMaturityDate",
+    "type": "uint256"
+   }
+  ],
+  "name": "updateMaturityDate",
+  "outputs": [
+   {
+    "internalType": "bool",
+    "name": "success_",
+    "type": "bool"
+   }
+  ],
+  "stateMutability": "nonpayable",
+  "type": "function"
+ }
+]

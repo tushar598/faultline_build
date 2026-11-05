@@ -1,0 +1,1988 @@
+[
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "role",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "address",
+    "name": "sender",
+    "type": "address"
+   }
+  ],
+  "name": "AccessControlRequired",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "IsPaused",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "IsUnpaused",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   },
+   {
+    "internalType": "bytes32",
+    "name": "role",
+    "type": "bytes32"
+   }
+  ],
+  "name": "AccountHasNoRole",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "configId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "versionId",
+    "type": "uint256"
+   }
+  ],
+  "name": "AssetNotOperational",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "Deactivated",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "facetId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "lastVersion",
+    "type": "uint256"
+   }
+  ],
+  "name": "FacetAlreadyRegistered",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "InputAmountsArrayLengthMismatch",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "NotAllowedInMultiPartitionMode",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   },
+   {
+    "internalType": "bytes32",
+    "name": "role",
+    "type": "bytes32"
+   }
+  ],
+  "name": "PartitionsAreProtectedAndNoRole",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   },
+   {
+    "internalType": "bytes32[]",
+    "name": "roles",
+    "type": "bytes32[]"
+   }
+  ],
+  "name": "AccountHasNoRoles",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   },
+   {
+    "internalType": "bytes32",
+    "name": "partition",
+    "type": "bytes32"
+   }
+  ],
+  "name": "InvalidPartition",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "partition",
+    "type": "bytes32"
+   }
+  ],
+  "name": "PartitionNotAllowedInSinglePartitionMode",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "tokenHolder",
+    "type": "address"
+   }
+  ],
+  "name": "TokenHolderNotFound",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "TokenIsNotControllable",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "operator",
+    "type": "address"
+   },
+   {
+    "internalType": "address",
+    "name": "tokenHolder",
+    "type": "address"
+   },
+   {
+    "internalType": "bytes32",
+    "name": "partition",
+    "type": "bytes32"
+   }
+  ],
+  "name": "Unauthorized",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "ZeroPartition",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "ZeroValue",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "DecimalsOverflow",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "FactorIsZero",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "FactorOverflow",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "TotalSupplyOverflow",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "spender",
+    "type": "address"
+   },
+   {
+    "internalType": "address",
+    "name": "from",
+    "type": "address"
+   }
+  ],
+  "name": "InsufficientAllowance",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "SpenderWithZeroAddress",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "ZeroOwnerAddress",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "snapshotId",
+    "type": "uint256"
+   }
+  ],
+  "name": "SnapshotIdDoesNotExists",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "SnapshotIdNull",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "facetId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "lastVersion",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256[]",
+    "name": "expectedVersions",
+    "type": "uint256[]"
+   }
+  ],
+  "name": "FacetPreviousVersionNotAccepted",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "facetId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "versionId",
+    "type": "uint256"
+   }
+  ],
+  "name": "FacetReady",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "ZeroValueNotAllowed",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "balance",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "value",
+    "type": "uint256"
+   },
+   {
+    "internalType": "bytes32",
+    "name": "partition",
+    "type": "bytes32"
+   }
+  ],
+  "name": "InsufficientBalance",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "InvalidLockAmount",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "WrongExpirationTimestamp",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "index",
+    "type": "uint256"
+   },
+   {
+    "internalType": "bytes32",
+    "name": "actionType",
+    "type": "bytes32"
+   }
+  ],
+  "name": "WrongIndexForAction",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "ClearingIsActivated",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "ClearingIsDisabled",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "ExpirationDateNotReached",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "ExpirationDateReached",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "InvalidClearingAmount",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "WalletRecovered",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "WrongClearingId",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "ZeroAddressNotAllowed",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "name",
+    "type": "bytes32"
+   }
+  ],
+  "name": "DocumentDoesNotExist",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "EmptyHASH",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "EmptyName",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "EmptyURI",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "couponID",
+    "type": "uint256"
+   }
+  ],
+  "name": "CouponNotFound",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint8",
+    "name": "currentDecimals",
+    "type": "uint8"
+   },
+   {
+    "internalType": "uint8",
+    "name": "newDecimals",
+    "type": "uint8"
+   }
+  ],
+  "name": "DecimalsTooLarge",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "exponent",
+    "type": "uint256"
+   }
+  ],
+  "name": "ExponentOverflow",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "amount",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint8",
+    "name": "decimals",
+    "type": "uint8"
+   }
+  ],
+  "name": "GreaterThanMaxUint256",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes4",
+    "name": "_errorId",
+    "type": "bytes4"
+   }
+  ],
+  "name": "UnexpectedError",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "enum IInterestRate.RateType",
+    "name": "rateType",
+    "type": "uint8"
+   }
+  ],
+  "name": "InvalidRateType",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "blockNumber",
+    "type": "uint256"
+   }
+  ],
+  "name": "AbafChangeForBlockForbidden",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "user",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "requestedUnfreeze",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "availableFrozen",
+    "type": "uint256"
+   },
+   {
+    "internalType": "bytes32",
+    "name": "partition",
+    "type": "bytes32"
+   }
+  ],
+  "name": "InsufficientFrozenBalance",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "InvalidFreezeAmount",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   }
+  ],
+  "name": "AccountIsBlocked",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "AlreadyInitialized",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "lowerIndex",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "upperIndex",
+    "type": "uint256"
+   }
+  ],
+  "name": "ContradictoryValuesInArray",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "corporateActionId",
+    "type": "bytes32"
+   }
+  ],
+  "name": "CorporateActionAlreadyDisabled",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "corporateActionId",
+    "type": "bytes32"
+   }
+  ],
+  "name": "CorporateActionNotFound",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "actionType",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "bytes",
+    "name": "data",
+    "type": "bytes"
+   }
+  ],
+  "name": "DuplicatedCorporateAction",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "deadline",
+    "type": "uint256"
+   }
+  ],
+  "name": "ExpiredDeadline",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "InvalidDates",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "InvalidTimestamp",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "max",
+    "type": "uint256"
+   }
+  ],
+  "name": "MaxExternalListSizeReached",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "firstDate",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "secondDate",
+    "type": "uint256"
+   }
+  ],
+  "name": "WrongDates",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "nonce",
+    "type": "uint256"
+   },
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   }
+  ],
+  "name": "WrongNonce",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "WrongSignature",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "WrongSignatureLength",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "maxSupply",
+    "type": "uint256"
+   }
+  ],
+  "name": "MaxSupplyReached",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "partition",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "maxSupply",
+    "type": "uint256"
+   }
+  ],
+  "name": "MaxSupplyReachedForPartition",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "issuer",
+    "type": "address"
+   }
+  ],
+  "name": "AccountIsNotIssuer",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "InvalidKycStatus",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "InvalidZeroAddress",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "KycIsNotGranted",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "PartitionsAreUnProtected",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "partition",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "address",
+    "name": "sender",
+    "type": "address"
+   }
+  ],
+  "name": "ProtectedPartitionRoleRequired",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "role",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   }
+  ],
+  "name": "AccountAssignedToRole",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "role",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   }
+  ],
+  "name": "AccountNotAssignedToRole",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "CannotRenounceSoleAdmin",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "rolesLength",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "activesLength",
+    "type": "uint256"
+   }
+  ],
+  "name": "RolesAndActivesLengthMismatch",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "AddressNotVerified",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "CannotRecoverWallet",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "ComplianceCallFailed",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "ComplianceNotAllowed",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "IdentityRegistryCallFailed",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "InputBoolArrayLengthMismatch",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "NewMaxSupplyCannotBeZero",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "partition",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "maxSupply",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "totalSupply",
+    "type": "uint256"
+   }
+  ],
+  "name": "NewMaxSupplyForPartitionTooLow",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "corporateActionId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "voteId",
+    "type": "uint256"
+   }
+  ],
+  "name": "VotingAlreadyRecorded",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "VotingRightsCreationFailed",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "MaturityDateInvalid",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "corporateActionId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "balanceAdjustmentId",
+    "type": "uint256"
+   }
+  ],
+  "name": "BalanceAdjustmentAlreadyExecuted",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "BalanceAdjustmentCreationFailed",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "proceedRecipient",
+    "type": "address"
+   }
+  ],
+  "name": "ProceedRecipientAlreadyExists",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "proceedRecipient",
+    "type": "address"
+   }
+  ],
+  "name": "ProceedRecipientNotFound",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "HoldExpirationNotReached",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "HoldExpirationReached",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "holdAmount",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "amount",
+    "type": "uint256"
+   }
+  ],
+  "name": "InsufficientHoldBalance",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "holdDestination",
+    "type": "address"
+   },
+   {
+    "internalType": "address",
+    "name": "to",
+    "type": "address"
+   }
+  ],
+  "name": "InvalidDestinationAddress",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "InvalidHoldAmount",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "IsNotEscrow",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "WrongHoldId",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "LockExpirationNotReached",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "WrongLockId",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "BrokenClockMode",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "timepoint",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "currentClock",
+    "type": "uint256"
+   }
+  ],
+  "name": "FutureLookup",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "issuer",
+    "type": "address"
+   }
+  ],
+  "name": "ListedIssuer",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "issuer",
+    "type": "address"
+   }
+  ],
+  "name": "UnlistedIssuer",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "PartitionsAreProtected",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "corporateActionId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "couponId",
+    "type": "uint256"
+   }
+  ],
+  "name": "CouponAlreadyExecuted",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "CouponCreationFailed",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "InterestRateIsFixed",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "InterestRateIsKpiLinked",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "InterestRateIsStandard",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address[]",
+    "name": "pauses",
+    "type": "address[]"
+   },
+   {
+    "internalType": "bool[]",
+    "name": "actives",
+    "type": "bool[]"
+   }
+  ],
+  "name": "ExternalPausesNotUpdated",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "pause",
+    "type": "address"
+   }
+  ],
+  "name": "ListedPause",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "pause",
+    "type": "address"
+   }
+  ],
+  "name": "UnlistedPause",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "deadline",
+    "type": "uint256"
+   }
+  ],
+  "name": "ERC2612ExpiredSignature",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "signer",
+    "type": "address"
+   },
+   {
+    "internalType": "address",
+    "name": "owner",
+    "type": "address"
+   }
+  ],
+  "name": "ERC2612InvalidSigner",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "maxSupply",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "totalSupply",
+    "type": "uint256"
+   }
+  ],
+  "name": "NewMaxSupplyTooLow",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "corporateActionId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "dividendId",
+    "type": "uint256"
+   }
+  ],
+  "name": "DividendAlreadyExecuted",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "DividendCreationFailed",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "corporateActionId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "amortizationId",
+    "type": "uint256"
+   }
+  ],
+  "name": "AmortizationAlreadyExecuted",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "AmortizationCreationFailed",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "corporateActionId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "amortizationID",
+    "type": "uint256"
+   }
+  ],
+  "name": "AmortizationHasActiveHolds",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "corporateActionId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "amortizationID",
+    "type": "uint256"
+   }
+  ],
+  "name": "AmortizationHoldFailed",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "corporateActionId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "amortizationID",
+    "type": "uint256"
+   },
+   {
+    "internalType": "address",
+    "name": "tokenHolder",
+    "type": "address"
+   }
+  ],
+  "name": "AmortizationHoldNotActive",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "corporateActionId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "amortizationID",
+    "type": "uint256"
+   }
+  ],
+  "name": "AmortizationNotActive",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "amortizationID",
+    "type": "uint256"
+   }
+  ],
+  "name": "InvalidAmortizationHoldAmount",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   }
+  ],
+  "name": "ListedAccount",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   }
+  ],
+  "name": "UnlistedAccount",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "providedDate",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "minDate",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "maxDate",
+    "type": "uint256"
+   }
+  ],
+  "name": "InvalidDate",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "fromDate",
+    "type": "uint256"
+   },
+   {
+    "internalType": "uint256",
+    "name": "toDate",
+    "type": "uint256"
+   }
+  ],
+  "name": "InvalidDateRange",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "date",
+    "type": "uint256"
+   }
+  ],
+  "name": "KpiDataAlreadyExists",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address[]",
+    "name": "kycList",
+    "type": "address[]"
+   },
+   {
+    "internalType": "bool[]",
+    "name": "actives",
+    "type": "bool[]"
+   }
+  ],
+  "name": "ExternalKycListsNotUpdated",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "kycList",
+    "type": "address"
+   }
+  ],
+  "name": "ListedKycList",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "kycList",
+    "type": "address"
+   }
+  ],
+  "name": "UnlistedKycList",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address[]",
+    "name": "controlLista",
+    "type": "address[]"
+   },
+   {
+    "internalType": "bool[]",
+    "name": "actives",
+    "type": "bool[]"
+   }
+  ],
+  "name": "ExternalControlListsNotUpdated",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "controlList",
+    "type": "address"
+   }
+  ],
+  "name": "ListedControlList",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "controlList",
+    "type": "address"
+   }
+  ],
+  "name": "UnlistedControlList",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "components": [
+     {
+      "internalType": "uint256",
+      "name": "maxDeviationCap",
+      "type": "uint256"
+     },
+     {
+      "internalType": "uint256",
+      "name": "baseLine",
+      "type": "uint256"
+     },
+     {
+      "internalType": "uint256",
+      "name": "maxDeviationFloor",
+      "type": "uint256"
+     },
+     {
+      "internalType": "uint8",
+      "name": "impactDataDecimals",
+      "type": "uint8"
+     },
+     {
+      "internalType": "uint256",
+      "name": "adjustmentPrecision",
+      "type": "uint256"
+     }
+    ],
+    "internalType": "struct IKpiLinkedRate.ImpactData",
+    "name": "impactData",
+    "type": "tuple"
+   }
+  ],
+  "name": "WrongImpactDataValues",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "components": [
+     {
+      "internalType": "uint256",
+      "name": "maxRate",
+      "type": "uint256"
+     },
+     {
+      "internalType": "uint256",
+      "name": "baseRate",
+      "type": "uint256"
+     },
+     {
+      "internalType": "uint256",
+      "name": "minRate",
+      "type": "uint256"
+     },
+     {
+      "internalType": "uint256",
+      "name": "startPeriod",
+      "type": "uint256"
+     },
+     {
+      "internalType": "uint256",
+      "name": "startRate",
+      "type": "uint256"
+     },
+     {
+      "internalType": "uint256",
+      "name": "missedPenalty",
+      "type": "uint256"
+     },
+     {
+      "internalType": "uint256",
+      "name": "reportPeriod",
+      "type": "uint256"
+     },
+     {
+      "internalType": "uint8",
+      "name": "rateDecimals",
+      "type": "uint8"
+     }
+    ],
+    "internalType": "struct IKpiLinkedRate.InterestRate",
+    "name": "interestRate",
+    "type": "tuple"
+   }
+  ],
+  "name": "WrongInterestRateValues",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "assetAddress",
+    "type": "address"
+   }
+  ],
+  "name": "HoldingAssetNotFound",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "assetAddress",
+    "type": "address"
+   }
+  ],
+  "name": "HoldingsAssetAlreadyExists",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint8",
+    "name": "holdingsAssetType",
+    "type": "uint8"
+   }
+  ],
+  "name": "HoldingsAssetTypeNotSupported",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "newSystemNumber",
+    "type": "uint256"
+   }
+  ],
+  "name": "InvalidBlocknumber",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "WrongChainId",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "contract IBusinessLogicResolver",
+    "name": "resolver",
+    "type": "address"
+   }
+  ],
+  "name": "EmptyResolver",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "NoInitialAdmins",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "enum RegulationType",
+    "name": "regulationType",
+    "type": "uint8"
+   },
+   {
+    "internalType": "enum RegulationSubType",
+    "name": "regulationSubType",
+    "type": "uint8"
+   }
+  ],
+  "name": "RegulationTypeAndSubTypeForbidden",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "string",
+    "name": "isin",
+    "type": "string"
+   }
+  ],
+  "name": "WrongISIN",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "string",
+    "name": "isin",
+    "type": "string"
+   }
+  ],
+  "name": "WrongISINChecksum",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "timeStamp",
+    "type": "uint256"
+   }
+  ],
+  "name": "WrongTimestamp",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_userAddress",
+    "type": "address"
+   }
+  ],
+  "name": "MockErrorVerified",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "MockTaskExecutionFailed",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "AlreadyInitializedV2",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "AlreadyBound",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "NotBound",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_from",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_amount",
+    "type": "uint256"
+   }
+  ],
+  "name": "MockErrorBurn",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_from",
+    "type": "address"
+   },
+   {
+    "internalType": "address",
+    "name": "_to",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_amount",
+    "type": "uint256"
+   }
+  ],
+  "name": "MockErrorCanTransfer",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_to",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_amount",
+    "type": "uint256"
+   }
+  ],
+  "name": "MockErrorMint",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "_from",
+    "type": "address"
+   },
+   {
+    "internalType": "address",
+    "name": "_to",
+    "type": "address"
+   },
+   {
+    "internalType": "uint256",
+    "name": "_amount",
+    "type": "uint256"
+   }
+  ],
+  "name": "MockErrorTransfer",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "businessLogicKey",
+    "type": "bytes32"
+   }
+  ],
+  "name": "BusinessLogicKeyDuplicated",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "address",
+    "name": "implementation",
+    "type": "address"
+   },
+   {
+    "internalType": "bytes32",
+    "name": "actualKey",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "bytes32",
+    "name": "expectedKey",
+    "type": "bytes32"
+   }
+  ],
+  "name": "BusinessLogicKeyMismatch",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "version",
+    "type": "uint256"
+   }
+  ],
+  "name": "BusinessLogicVersionDoesNotExist",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "DefaultValueForConfigurationIdNotPermitted",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "facetId",
+    "type": "bytes32"
+   }
+  ],
+  "name": "DuplicatedFacetInConfiguration",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "configurationId",
+    "type": "bytes32"
+   }
+  ],
+  "name": "EmptyFacetConfigurationNotPermitted",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "configurationId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "bytes32",
+    "name": "facetId",
+    "type": "bytes32"
+   }
+  ],
+  "name": "FacetIdNotRegistered",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "configId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "address",
+    "name": "sender",
+    "type": "address"
+   },
+   {
+    "internalType": "address",
+    "name": "owner",
+    "type": "address"
+   }
+  ],
+  "name": "NotOwner",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "configId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "address",
+    "name": "sender",
+    "type": "address"
+   },
+   {
+    "internalType": "address",
+    "name": "pendingOwner",
+    "type": "address"
+   }
+  ],
+  "name": "NotPendingOwner",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "configurationId",
+    "type": "bytes32"
+   }
+  ],
+  "name": "OngoingBatchConfigurationNotPermitted",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "resolverProxyConfigurationId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "version",
+    "type": "uint256"
+   }
+  ],
+  "name": "ResolverProxyConfigurationNoRegistered",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "configurationId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "uint256",
+    "name": "version",
+    "type": "uint256"
+   },
+   {
+    "internalType": "bytes32",
+    "name": "facetId",
+    "type": "bytes32"
+   },
+   {
+    "internalType": "bytes4",
+    "name": "selector",
+    "type": "bytes4"
+   }
+  ],
+  "name": "SelectorAlreadyRegistered",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes4",
+    "name": "selector",
+    "type": "bytes4"
+   }
+  ],
+  "name": "SelectorBlacklisted",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "Unimplemented",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32",
+    "name": "configurationId",
+    "type": "bytes32"
+   }
+  ],
+  "name": "VersionZero",
+  "type": "error"
+ },
+ {
+  "inputs": [],
+  "name": "ZeroKeyNotValidForBusinessLogic",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes4",
+    "name": "_functionSelector",
+    "type": "bytes4"
+   }
+  ],
+  "name": "FunctionNotFound",
+  "type": "error"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "bytes32[]",
+    "name": "roles",
+    "type": "bytes32[]"
+   },
+   {
+    "internalType": "bool[]",
+    "name": "actives",
+    "type": "bool[]"
+   },
+   {
+    "internalType": "address",
+    "name": "account",
+    "type": "address"
+   }
+  ],
+  "name": "RolesNotApplied",
+  "type": "error"
+ }
+]
