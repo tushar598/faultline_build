@@ -45,6 +45,8 @@ Times are UTC. Fee = the mirror node's `charged_tx_fee`.
 | 4 | investor A pool.invest(600.000000) | investor A | 542,282 | 0.6779 | [`0x06db1aa0…a1b0f74c`](https://hashscan.io/testnet/transaction/0x06db1aa05dcea264253ea226c6148ba62ff0de0033c0b58d0a2786b7a1b0f74c) | 2026-11-05 20:50 |
 | 4 | investor B fUSD.approve(pool, 400.000000) | investor B | 727,020 | 0.9088 | [`0x080fc12d…3581a049`](https://hashscan.io/testnet/transaction/0x080fc12d0e9eff3adf62019744969f33b15272455617080e4de952da3581a049) | 2026-11-05 20:50 |
 | 4 | investor B pool.invest(400.000000) | investor B | 473,882 | 0.5924 | [`0x07ce32de…07bb600e`](https://hashscan.io/testnet/transaction/0x07ce32ded5a57fc54cc4e2e3828e18940374f509254211d7993b684307bb600e) | 2026-11-05 20:50 |
+| 5 | `trigger.submit(Bhuj usp000a8ds, 7000 bps, nonce 1)` with the oracle's EIP-712 signature (sent by the deployer) | deployer | 137,626 | 0.1707 | [`0xc0825cca…e71b76b1`](https://hashscan.io/testnet/transaction/0xc0825cca8ac2413eaa25187583f0cb8ba254315e6776a9bb6bf26725e71b76b1) | 2026-11-05 21:03 |
+| 5 | `trigger.execute(eventId)` after the 60 s window | deployer | 142,746 | 0.1770 | [`0x5f1a2e17…de73e488`](https://hashscan.io/testnet/transaction/0x5f1a2e17b7153dd6c0a29cbf9875e31d4d2bd6756fdb6f53927d9064de73e488) | 2026-11-05 21:04 |
 
 After phase 1 (mirror node): deployer (treasury) 7,990 fUSD, sponsor 10, investor A 1,000, investor B 1,000; all
 associated and KYC GRANTED. Deployer, sponsor, investor A and investor B are complete accounts (ECDSA) now. Investor A
@@ -71,3 +73,12 @@ After phase 4: bond totalSupply 1,000 == unitsIssued; A 600, B 400 FLSMK; coupon
 | HCS topic | not created yet (demo-1) | | relayer | | |
 | FaultlinePool | not created yet (demo-2) | | deployer | | |
 | FaultlineTrigger | not created yet (demo-2) | | deployer | | |
+
+After phase 5: the oracle (`0x90A59Def…bb5a76`) signed the Bhuj attestation built by shared/ts from the saved real USGS
+record: eventId `0xb5a233c15a3e5e02572f4178f0f99da17ab80c722586e2d52415236d5a4bb9b0` (keccak256("usp000a8ds")),
+lossBps 7000, magnitudeX100 770, observedAt 1793912584 (replay offset 813433584), usgsUpdatedAt 2464692758, nonce 1,
+dataHash `0xd604b4f7132c25556c5acda8c97ef967af9ce458b017144bac0741ff02672730`, deadline 1793916189; on-chain
+`hashAttestation` = local digest `0xc5eec891d6ef743939c0e9179b0af7f3e9d51ae54a0391ca7b9f3a6a41277c40`; signature
+`0x4b148645b05953a648c50d46d42998174e714cc13a1f12a7bf37a993e65e69bc3246d3dbfe98bc115913a1357a6b062322cbca98d31237ed4a810829adda22881c`. After execute: appliedLossBps 7000, event Executed, pendingCount 0,
+sponsorCredited 700 = floor(1,000 × 7000 / 10000); ATS balances unchanged (A 600, B 400); effective principal A 180,
+B 120; invariants hold.
