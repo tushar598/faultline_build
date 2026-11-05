@@ -79,6 +79,8 @@ export const TESTNET_EVIDENCE = {
     { label: "Trustee veto of the SYNTHETIC event, while paused", hash: "0x07e25a965ab8792e9c62948183217576d1ac24632a1cf50352bdd3b39d735caa" },
     { label: "Admin unpause (paused 45 s)", hash: "0xa6f5ca6911b9321037fa382178991d81cbe3bdf7388b9003dd2070eaa679e1da" },
     { label: "Same signature re-submitted: reverts EventFinalised", hash: "0x12b9c4f7ef45bf60225d3cfdb68b846ae5a1692dd470ce0942c7e1ac52cdf066" },
+    { label: "Oracle submit, Bhuj usp000a8ds live record (7,000 bps)", hash: "0x3da26e2aacb38f009b244dfebe34fddcde87924f749fa447203d80fd1e58d0ae" },
+    { label: "Oracle keeper execute (L 0 to 7,000 bps)", hash: "0x010bf61d17e0ae07b80e29d6d2fb71d4c0b96c462939713e249df40fe435ac5c" },
   ],
 } as const;
 

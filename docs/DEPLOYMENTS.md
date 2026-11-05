@@ -135,6 +135,9 @@ Fuel: fUSD `0.0.11329874` from the smoke run (reused, no new token). Times are U
 | 4 | `trigger.veto(synthetic-kutch-testnet-a)` while paused | trustee | 38,225 | 0.0474 | [`0x07e25a96…9d735caa`](https://hashscan.io/testnet/transaction/0x07e25a965ab8792e9c62948183217576d1ac24632a1cf50352bdd3b39d735caa) | 2026-11-05 21:58 |
 | 4 | `trigger.unpause()` (paused 45 s) | deployer (admin) | 53,038 | 0.0658 | [`0xa6f5ca69…a679e1da`](https://hashscan.io/testnet/transaction/0xa6f5ca6911b9321037fa382178991d81cbe3bdf7388b9003dd2070eaa679e1da) | 2026-11-05 21:59 |
 | 4 | same attestation + signature re-submitted: **CONTRACT_REVERT_EXECUTED `EventFinalised(eventId, 2)`**, sent on purpose (SEND_REVERT=1) as evidence | relayer | 39,252 | 0.0501 | [`0x12b9c4f7…52cdf066`](https://hashscan.io/testnet/transaction/0x12b9c4f7ef45bf60225d3cfdb68b846ae5a1692dd470ce0942c7e1ac52cdf066) | 2026-11-05 21:59 |
+| 5 | HCS message 2 on topic 0.0.11330395: the oracle's Bhuj usp000a8ds attestation, built from the LIVE USGS record (692 bytes, signature in the payload) | relayer (SDK, oracle co-signs as submit key) | | 0.0099 | [`0.0.11329581-1793916195-900235745`](https://hashscan.io/testnet/transaction/1793916201.234434551) | 2026-11-05 22:03 |
+| 5 | `trigger.submit` Bhuj usp000a8ds (7,000 bps, nonce 1), by the real oracle CLI | relayer | 137,626 | 0.1720 | [`0x3da26e2a…1e58d0ae`](https://hashscan.io/testnet/transaction/0x3da26e2aacb38f009b244dfebe34fddcde87924f749fa447203d80fd1e58d0ae) | 2026-11-05 22:03 |
+| 5 | `trigger.execute` by the oracle keeper after the 120 s window (L 0 → 7,000) | relayer | 142,746 | 0.1784 | [`0x010bf61d…e435ac5c`](https://hashscan.io/testnet/transaction/0x010bf61d17e0ae07b80e29d6d2fb71d4c0b96c462939713e249df40fe435ac5c) | 2026-11-05 22:05 |
 
 After phase 2: every assertion passed (D4 roles, SEC-20 audit, wiring, termsHash, oracle, window 120 s, both trustees
 hold TRUSTEE_ROLE); the trigger admin's grant and revoke of TRUSTEE_ROLE were simulated only and refused (D17,
@@ -153,3 +156,9 @@ admin unpaused after 45 s (totalPausedSeconds 45; deadline now 1793917550). The 
 `EventFinalised(eventId, 2)` on chain, and the oracle re-run on the same record decided "finalised" and published nothing.
 HCS: topic 0.0.11330395 sequence 1, consensus 1793915883.797929138, payer relayer, 707 bytes, in-payload signature =
 oracle.
+
+After phase 5 (Flow B, real Bhuj): the oracle fetched usp000a8ds live from USGS, published HCS sequence 2 (consensus
+1793916201.234434551, payer relayer, 692 bytes), submitted through the relayer, and its keeper executed after the 120 s
+window. appliedLossBps 7000; Bhuj **Executed**, SYNTHETIC still **Vetoed**, pendingCount 0; sponsorCredited =
+claimable(sponsor) = 350 = floor(500 × 7000 / 10000); ATS balances unchanged (A 300, B 200); effective principal
+A 90, B 60; invariants hold. submissionDeadline 1793917550 (22:25:50 UTC, moved 45 s by the Flow A pause).
