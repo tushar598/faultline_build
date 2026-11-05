@@ -1,0 +1,40 @@
+{
+  "type": "Feature",
+  "properties": {
+    "mag": 7.3,
+    "place": "SYNTHETIC test event inside the Faultline Kutch box - not a real USGS event",
+    "time": 982639000500,
+    "updated": 985231000500,
+    "tz": null,
+    "url": "",
+    "felt": null,
+    "cdi": null,
+    "mmi": null,
+    "alert": null,
+    "status": "reviewed",
+    "tsunami": 0,
+    "sig": 0,
+    "net": "synthetic",
+    "code": "kutch-3",
+    "ids": ",synthetic-kutch-3,",
+    "sources": ",synthetic,",
+    "types": ",origin,",
+    "nst": null,
+    "dmin": null,
+    "rms": null,
+    "gap": null,
+    "magType": "mww",
+    "type": "earthquake",
+    "title": "SYNTHETIC M 7.3 - Kutch box (not a real USGS event)"
+  },
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      70.8,
+      23.1,
+      10
+    ]
+  },
+  "id": "synthetic-kutch-3",
+  "synthetic": "Written by hand for Faultline local tests. NOT a real USGS event; the id can never be a USGS id."
+}
