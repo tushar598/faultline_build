@@ -116,3 +116,25 @@ Result: 417 passing, 1 pending; `tsc --noEmit` clean.
 | `scripts/dashboard-demo-local.ts`, `scripts/oracle-e2e-local.ts` | not yet: they run the oracle CLI, so they come with Part 5 |
 
 Checked: `npx hardhat run scripts/e2e-local.ts` (flows A/B/C, books closed), `deploy-local.ts` on a started-and-stopped local node, full suite 435 passing / 1 pending, `tsc --noEmit` clean.
+
+## Part 5: oracle (local only)
+
+### What the oracle does
+
+1. The oracle is the calculation agent: a Node ESM package (`oracle/`) that imports `shared/ts`, so its hashes and EIP-712 digests are exactly the ones the contracts and tests use.
+2. `usgs.ts` reads USGS ComCat (live or saved fixtures). `rule.ts` applies the §6.2 acceptance rule. `decision.ts` decides per record: submit a new event, revise a pending one (higher nonce and newer `updated`), publish an advisory, or do nothing because the event is final on chain.
+3. `ledger.ts` remembers which USGS ids map to which eventId (D8). When USGS merges an event under a new preferred id, the oracle revises the ORIGINAL eventId. Even if the ledger file is lost, it finds the event on chain (SEC-08).
+4. D15: if a pending event later fails the rule (moved outside the box, deleted, ...), the oracle cannot revise it to 0. It publishes a signed advisory on HCS ("trustee should veto") and submits nothing.
+5. `hcs.ts` publishes `utf8(JCS(message))` to the topic, using a file mock locally and the Hedera SDK on testnet. The oracle key signs inside the payload; the relayer pays (D16).
+6. `submit.ts`, `hederaEvm.ts` and `chain.ts` send `submit(att, sig)` through the relayer. `keeper.ts` executes events whose window is over. `service.ts` runs the watch/replay loop; `cli.ts` has `verify-config`, `replay`, `watch`, `keeper` and `status`.
+7. `keys.ts`: keys come only from the terminal environment (`read -s ORACLE_PRIVATE_KEY && export ORACLE_PRIVATE_KEY`, the same for `RELAYER_PRIVATE_KEY`). On 31337 Hardhat test accounts may be picked by index; any Hardhat test key is refused on every other chain.
+
+### Comparison with the reference
+
+| Area | vs reference |
+| --- | --- |
+| `oracle/` (package files, 17 src, 14 tests, 9 fixtures + README) | identical |
+| `scripts/oracle-e2e-local.ts`, `scripts/dashboard-demo-local.ts` | identical |
+| `test/pause.emergency.test.ts` | identical again: the repo-wide scan now finds 28 files (> 20), so it was re-enabled here and not after the web part |
+
+Checked: oracle vitest 83 passed / 1 skipped (the live USGS test, run only with `USGS_LIVE=1`); `npm run oracle:e2e:local` passed (L 7000 bps, 5 mock-HCS lines, D8 merge, SEC-08 lost ledger); `dashboard-demo-local.ts` ready (2 pending, D15 advisory published); root suite 436 passing, 0 pending; both typechecks clean.
