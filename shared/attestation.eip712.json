@@ -1,0 +1,17 @@
+{
+  "domain": { "name": "FaultlineTrigger", "version": "1" },
+  "primaryType": "Attestation",
+  "types": {
+    "Attestation": [
+      { "name": "eventId", "type": "bytes32" },
+      { "name": "lossBps", "type": "uint16" },
+      { "name": "magnitudeX100", "type": "uint16" },
+      { "name": "observedAt", "type": "uint64" },
+      { "name": "usgsUpdatedAt", "type": "uint64" },
+      { "name": "nonce", "type": "uint64" },
+      { "name": "termsHash", "type": "bytes32" },
+      { "name": "dataHash", "type": "bytes32" },
+      { "name": "deadline", "type": "uint64" }
+    ]
+  }
+}
