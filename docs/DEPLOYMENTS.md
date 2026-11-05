@@ -39,6 +39,12 @@ Times are UTC. Fee = the mirror node's `charged_tx_fee`.
 | 3 | `pool.initialize(trigger)` (D5; associates the pool with fUSD) | deployer | 744,974 | 0.9312 | [`0xc9663dd2…1a6753b`](https://hashscan.io/testnet/transaction/0xc9663dd21552853b683f1a147d841e33f62036d5156b1f05460d406bc1a6753b) | 2026-11-05 20:47 |
 | 3 | TokenGrantKyc(pool `0.0.11329910`) | deployer (SDK) | | 0.0148 | [`0.0.11329142@1793911658.221207697`](https://hashscan.io/testnet/transaction/1793911663.672576761) | 2026-11-05 20:47 |
 | 3 | bond `applyRoles([ISSUER, CONTROLLER], [true, true], pool)` | deployer | 321,620 | 0.4020 | [`0x5cfe348d…5ed723ac`](https://hashscan.io/testnet/transaction/0x5cfe348d375e0fb1802b3c198aae8760628fda13955de47a13b6577e5ed723ac) | 2026-11-05 20:47 |
+| 4 | sponsor fUSD.approve(pool, 1.000000) | sponsor | 727,020 | 0.9088 | [`0xadb81937…ce88983d`](https://hashscan.io/testnet/transaction/0xadb819375a3184edb010e6bc955c0fcd0386816972e4b2a2dbee1450ce88983d) | 2026-11-05 20:50 |
+| 4 | sponsor pool.fundCoupons(1.000000) | sponsor | 73,582 | 0.0920 | [`0xc7534715…5298943c`](https://hashscan.io/testnet/transaction/0xc7534715aed0372b975a2f5decd6eb3aa727aa460d4cc9d5534dca225298943c) | 2026-11-05 20:50 |
+| 4 | investor A fUSD.approve(pool, 600.000000) | investor A | 727,020 | 0.9088 | [`0x2791a68e…83b52e2d`](https://hashscan.io/testnet/transaction/0x2791a68eac8460e80ea7580f3c64762a7b97b9607c68f07afd76de3883b52e2d) | 2026-11-05 20:50 |
+| 4 | investor A pool.invest(600.000000) | investor A | 542,282 | 0.6779 | [`0x06db1aa0…a1b0f74c`](https://hashscan.io/testnet/transaction/0x06db1aa05dcea264253ea226c6148ba62ff0de0033c0b58d0a2786b7a1b0f74c) | 2026-11-05 20:50 |
+| 4 | investor B fUSD.approve(pool, 400.000000) | investor B | 727,020 | 0.9088 | [`0x080fc12d…3581a049`](https://hashscan.io/testnet/transaction/0x080fc12d0e9eff3adf62019744969f33b15272455617080e4de952da3581a049) | 2026-11-05 20:50 |
+| 4 | investor B pool.invest(400.000000) | investor B | 473,882 | 0.5924 | [`0x07ce32de…07bb600e`](https://hashscan.io/testnet/transaction/0x07ce32ded5a57fc54cc4e2e3828e18940374f509254211d7993b684307bb600e) | 2026-11-05 20:50 |
 
 After phase 1 (mirror node): deployer (treasury) 7,990 fUSD, sponsor 10, investor A 1,000, investor B 1,000; all
 associated and KYC GRANTED. Deployer, sponsor, investor A and investor B are complete accounts (ECDSA) now. Investor A
@@ -47,6 +53,9 @@ received 100 HBAR from the owner after the preflight baseline (15 → 115), so i
 After phase 3: all 15 assertions passed (D4 ROLE_ISSUER == ROLE_CONTROLLER == [pool], no AGENT/ADJUSTMENT_BALANCE,
 SEC-20 role audit clean, wiring, termsHash, oracle, window 60 s, TRUSTEE_ROLE, schedule, bond fits); the deployer never
 held ROLE_ISSUER. Build: commit `2a71b00`, pool initcode keccak `0x78712136…09563f6d`, trigger `0x3205b3ca…aa8fcf3`.
+
+After phase 4: bond totalSupply 1,000 == unitsIssued; A 600, B 400 FLSMK; couponReserve 1 fUSD (requiredReserve(1,000)
+= 0.003075); pool holds 1,001 fUSD; invariants and the supply guard hold.
 
 ## Spike S7: HCS topic keys (ops/scripts/s7)
 
