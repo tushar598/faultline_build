@@ -237,8 +237,7 @@ describe("Pause and emergency (task 2E)", () => {
       expect(await ethers.provider.getCode(await f.pool.getAddress())).to.not.include(pauseSelector);
       expect(fs.readFileSync(path.join(ROOT, "contracts", "FaultlineTrigger.sol"), "utf8")).to.not.include("IAtsBond");
     });
-    // LATER PART: needs scripts/, oracle/src and web/src (> 20 files); re-enable (it, not it.skip) after the web part.
-    it.skip("no script, oracle or web module calls pause on a bond; the trigger's own pause is the only caller in the repo", async () => {
+    it("no script, oracle or web module calls pause on a bond; the trigger's own pause is the only caller in the repo", async () => {
       const roots = ["scripts", "oracle/src", "web/src", "shared/ts"];
       const files: string[] = [];
       const walk = (d: string) => {
