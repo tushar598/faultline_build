@@ -1,0 +1,39 @@
+{
+  "name": "@faultline/oracle",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Faultline calculation agent: USGS reader, trigger rule, EIP-712 signer, HCS publisher, replay CLI",
+  "type": "module",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:live": "USGS_LIVE=1 vitest run test/usgs.live.test.ts",
+    "cli": "tsx src/cli.ts",
+    "verify-config": "tsx src/cli.ts verify-config",
+    "replay": "tsx src/cli.ts replay",
+    "watch": "tsx src/cli.ts watch",
+    "keeper": "tsx src/cli.ts keeper",
+    "status": "tsx src/cli.ts status"
+  },
+  "dependencies": {
+    "@hashgraph/sdk": "2.81.0",
+    "ethers": "6.17.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vitest": "5.0.5"
+  },
+  "overrides": {
+    "protobufjs@^7": "7.6.6",
+    "protobufjs@^8": "8.6.6",
+    "@grpc/grpc-js": "1.13.7"
+  }
+}
