@@ -27,5 +27,9 @@ Differences from the reference repo's account set: the oracle signer also has a 
 reference's had none). No script pays from it; the preflights only report it.
 
 HBAR budget: the reference's deployer spent about 28.3 HBAR in the smoke run and 14.9 in the full demo (its
-docs/TESTNET-EVIDENCE.md). The deployer here starts with 40, so it needs a top-up from the faucet before the demo; the
-demo preflight (`ops:demo:0`) checks the budget per account and requires the deployer to keep at least 10 HBAR.
+docs/TESTNET-EVIDENCE.md). The owner topped the accounts up the same day; balances before the smoke run (mirror node,
+2026-11-06): deployer 140, trustee 130, backup trustee 70, sponsor 120, investor A 15, investor B 75, oracle 40,
+relayer 150 HBAR. The smoke preflight estimates 31.5 HBAR for the deployer; the demo preflight (`ops:demo:0`) checks
+the budget per account and requires the deployer to keep at least 10 HBAR.
+
+All eight keystore names are set (`npx hardhat keystore list` in ops/, names only, 2026-11-06).
