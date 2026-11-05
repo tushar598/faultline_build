@@ -23,9 +23,9 @@ export const loadDemo = loadSmoke;
 
 // ---------------------------------------------------------------- owner decisions for this step (2026-10-27)
 
-/** fUSD from this repo's smoke run (smoke-1: deployer = treasury + admin/supply/KYC key); reused, no new token. Empty
- *  until smoke-1 has created it; then filled from docs/DEPLOYMENTS.md. */
-export const FUSD: { readonly id: string; readonly evm: string } = { id: "", evm: "" };
+/** fUSD from this repo's smoke run (smoke-1, 2026-11-05; deployer = treasury + admin/supply/KYC key; docs/DEPLOYMENTS.md);
+ *  reused, no new token. */
+export const FUSD: { readonly id: string; readonly evm: string } = { id: "0.0.11329874", evm: "0x0000000000000000000000000000000000aCe152" };
 /** Investments (within the fUSD the smoke run leaves: about A 580, B 720) and the coupon reserve the sponsor funds. */
 export const TICKET = { investorA: USD(300n), investorB: USD(200n) } as const;
 export const TOTAL_UNITS = TICKET.investorA + TICKET.investorB;
