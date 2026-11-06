@@ -310,7 +310,7 @@ npx hardhat test test/security.contracts.test.ts   # PoCs for the open findings 
 SECURITY_VERBOSE=1 npx hardhat test test/security.contracts.test.ts   # prints why each open finding reproduces
 ```
 
-## 11. Full testnet demo (HANDOVER §10 step 9; phases 0–5 testnet-verified 2026-11-05)
+## 11. Full testnet demo (HANDOVER §10 step 9; phases 0–6 testnet-verified 2026-11-05/06)
 
 Runs from `ops/` against the root build, `shared/ts` and the real `oracle/` CLI. Every script is a **dry run** unless
 `EXECUTE=1`; only the owner runs `EXECUTE=1`, and each run asks for the keystore password once. State:
@@ -363,8 +363,7 @@ cd ~/Desktop/faultline-hedera/faultline && npm run web:build && npm --prefix web
    Default Ethereum wallet → "Extensions (no fallback)".
 3. Open Investor, press "Sign in with wallet", press Redeem, then Claim. B receives 60 fUSD plus its coupon (about 0.0003).
 
-State of the 2026-11-05 run: phases 0–5 done (Flow A vetoed, Flow B executed, L = 7000; 33 transactions and two HCS
-messages, docs/DEPLOYMENTS.md). Expected end after settlement: A claims 90 + coupon, B 60 + coupon, sponsor 350 +
-unused reserve; total 501.000000 = 500 deposits + 1 reserve; pool fUSD 0, bond supply 0, `totalClaimable` 0,
-`isSolvent()` true; both contracts `exact_match` on Sourcify. If a transaction fails: stop, do not retry, read the
-mirror node.
+Result of the 2026-11-05/06 run: L = 7000; A claimed 90.000506, B 60.000337 (through the dashboard), sponsor 350.999157;
+total 501.000000 = 500 deposits + 1 reserve; pool fUSD 0, bond supply 0, `totalClaimable` 0, `isSolvent()` true; 34
+transactions and two HCS messages, ≈ 22.9 HBAR (docs/TESTNET-EVIDENCE.md). Phase 7 (Sourcify) is the last step. If a
+transaction fails: stop, do not retry, read the mirror node.

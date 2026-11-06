@@ -97,7 +97,7 @@ A 180, B 120, sponsor 700 + unused reserve; total 1,001. HBAR fees (mirror `char
 deployer 32.2921, sponsor 2.0286, investor A 2.9664, investor B 2.7759,
 trustee 0 → **40.0630 HBAR**. Investor A's balance also rose by the owner's 100 HBAR top-up during phase 1.
 
-## Full demo (HANDOVER §10 step 9, 2026-11-05) — phases 0–5 testnet-verified
+## Full demo (HANDOVER §10 step 9, 2026-11-05/06) — phases 0–6 testnet-verified
 
 `ops/scripts/demo`, owner-run with `EXECUTE=1`, build `a0b1dd5` (same initcode keccaks as the smoke run). fUSD reused
 from the smoke run; new HCS topic `0.0.11330395`, ATS bond FLDMO `0.0.11330397`, pool `0.0.11330416`, trigger

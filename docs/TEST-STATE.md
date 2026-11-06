@@ -4,8 +4,8 @@ Continuation note for the four-session assessment. Update at the end of every se
 
 Last update: 2026-11-06. Branch `main`, pushed to `origin` (tushar598/faultline_build). The operator scripts live in
 `ops/`; they ran on Hedera testnet on 2026-11-05 with the FLH_* accounts (docs/ACCOUNTS.md): the smoke run complete
-(33/33 transactions SUCCESS) and the full demo phases 0–5 (Flow A vetoed, Flow B executed, L = 7000), on the D18 build.
-Settlement (phase 6), the dashboard redeem and Sourcify (phase 7) are still to run. Ids and hashes: docs/DEPLOYMENTS.md.
+(33/33 transactions SUCCESS) and the full demo phases 0–6 (Flow A vetoed, Flow B executed, L = 7000, settled at
+501 = 500 + 1 with investor B's redeem through the dashboard), on the D18 build. Sourcify (phase 7) is the last step. Ids and hashes: docs/DEPLOYMENTS.md.
 The dashboard issuer page is local mock-tested; the testnet issuer flow is not testnet-verified (RT-29).
 
 ## Session 3: done
@@ -61,7 +61,7 @@ Critical: 0. High: 0 open. SEC-02, SEC-06, SEC-07 accepted. SEC-15 fixed, not pr
 
 | Item | Why |
 | --- | --- |
-| Demo phases 6–7, RT-02 (mined burn), RT-11 | Owner runs `EXECUTE=1` later |
+| Demo phase 7 (Sourcify), RT-02 (mined burn), RT-11 | Owner runs `EXECUTE=1` later |
 | RT-20 ten consecutive runs | About 20 minutes, not done since `4a0ac09` |
 | RT-12, RT-13, RT-15, RT-16, RT-28 decision | Not reached |
 | Full mutation tool run (RT-24) | Hand-picked sets only |
@@ -85,4 +85,4 @@ FC_SEED=20261031 FC_RUNS=400 FC_OPS=30 npx hardhat test test/invariants.fuzz.tes
 
 1. Read this file, run `git status`, run `npm run check` to detect drift.
 2. RT-12, RT-13, RT-15, RT-16, the ten runs of RT-20, RT-28, then session 4.
-3. Finish the demo (phases 6–7), then RT-02 and RT-11, with every result in `docs/TESTNET-EVIDENCE.md`.
+3. Finish the demo (phase 7, Sourcify), then RT-02 and RT-11, with every result in `docs/TESTNET-EVIDENCE.md`.
