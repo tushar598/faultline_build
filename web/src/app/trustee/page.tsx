@@ -4,6 +4,7 @@ import { AdvisoryAlert } from "@/components/bond/AdvisoryAlert";
 import { ActionRow } from "@/components/bond/ActionRow";
 import { EventDetails } from "@/components/bond/EventDetails";
 import { PageHeading } from "@/components/bond/PageHeading";
+import { OracleStepCard } from "@/components/issuer/OracleStep";
 import { SimulatedTimeNote } from "@/components/bond/SimulatedTimeNote";
 import { CountdownRing } from "@/components/motion/CountdownRing";
 import { DataGate } from "@/components/shell/DataGate";
@@ -141,6 +142,7 @@ function Trustee({ d }: { d: DashboardData }) {
           pending.map((i) => <PendingEvent key={i.record.eventId} info={i} d={d} />)
         )}
       </div>
+      {state.deployment && <OracleStepCard className="mt-5" deployment={state.deployment} oracle={s.addresses.oracle} oracleHref={hashscan(state.net, "account", s.addresses.oracle)} />}
       <Card title="All events" subtitle="Every eventId the trigger has seen" className="mt-5">
         {infos.length === 0 ? (
           <EmptyState>No attestation has been submitted to this trigger.</EmptyState>

@@ -25,6 +25,7 @@ import { useNetwork } from "@/state/network";
 import { useWallet } from "@/state/wallet";
 import { CodeBlock } from "./Field";
 import { LaunchSection, type StepView } from "./LaunchSection";
+import { OracleStepCard } from "./OracleStep";
 import { PartiesSection, investorsOf, type FormParties } from "./PartiesSection";
 import { ScheduleSection } from "./ScheduleSection";
 import { TermsSection } from "./TermsSection";
@@ -346,6 +347,7 @@ export function IssuerView() {
             </div>
           </Card>
         )}
+        {result && <OracleStepCard deployment={result} />}
 
         <Card title="My deployments" subtitle="Bonds launched from this browser on this network. The header's Bond selector switches every view; the built-in bond stays the default.">
           {mine.length === 0 ? (

@@ -54,6 +54,11 @@ steps and the ATS bond must exist before issuance opens.
 
 ## Steps
 
+The oracle commands of steps 4 and 5 are also on the website, filled in for the bond: the "Oracle step" box at the end of
+the issuer page and on `/trustee` while an issuer-page bond is selected. It saves the entry as
+`ops/out/issuer/bond-<trigger>.json` (one file per bond) and prints the dry run and the send line of each event. Only the
+holder of the bond's oracle key can send; anyone can read the commands and run the dry run.
+
 1. **Launch: `/issuer`, deployer wallet.**
    1. Parties: keep the defaults. Investors A and B are already filled in under "Investors to KYC".
    2. Schedule: keep the defaults (above). If the page was open for a while, press "Restart from chain time" first.
