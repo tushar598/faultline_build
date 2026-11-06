@@ -27,6 +27,7 @@ import {
   ACCOUNTS, BOND, EXECUTE, MIN, P, balances, bondAt, bondAudit, buildInfo, clientOf, contractIdOf, deploy, eventually, iso, latestTs, loadDemo, poolAt, printHbar,
   printInvariants, printTimeline, provider, report, runOracle, saveSmoke, scheduleFor, termsFor, triggerAt, tx, untilSimulates, useFaultlineErrors, usd,
   writeOracleConfig, type Schedule,
+  STATE_NAME,
 } from "./lib.js";
 
 const PHASE = "demo-2";
@@ -56,7 +57,7 @@ const token = String(st.tokenAddress);
 const demoBond = st.bond as string | undefined;
 const topicId = st.topicId as string | undefined;
 if (EXECUTE) {
-  if (!demoBond) throw new Error("EXECUTE needs the phase-1 bond in out/demo-state.json; none found — nothing sent");
+  if (!demoBond) throw new Error(`EXECUTE needs the phase-1 bond in out/${STATE_NAME}; none found — nothing sent`);
   if (SMOKE_BOND && demoBond.toLowerCase() === SMOKE_BOND.toLowerCase()) throw new Error("state points at the smoke-run bond — refusing to EXECUTE on it");
   if (!topicId || !st.topicVerifiedAt) throw new Error("EXECUTE needs the phase-1 topic (created and mirror-verified) — nothing sent");
   if (!st.keysCheckedAt) throw new Error("run phase 0 with CHECK_KEYS=1 first — nothing sent");
@@ -84,7 +85,7 @@ if (!schedule) {
   }
   schedule = s;
 } else {
-  console.log("\ntimeline (pool deployed; from out/demo-state.json):");
+  console.log(`\ntimeline (pool deployed; from out/${STATE_NAME}):`);
   printTimeline(Number(st.poolDeployedAt), schedule, termsFor(schedule, chainId).observedAt, { start: bondStart, maturity: bondMaturity });
 }
 const t0 = termsFor(schedule, chainId);

@@ -15,7 +15,14 @@ import { ROOT, privateKeyFor, record, rpcUrl, signerFor } from "../lib/common.js
 import { mirror } from "../lib/hedera.js";
 import { ACCOUNTS, BHUJ_ID, FAULTLINE, USD, bhujFixture, configureRun, feeOf, loadSmoke, provider, requireShared, sharedTs, type Role, type UsgsFeature } from "../smoke/lib.js";
 
-configureRun({ stateFile: "demo-state.json", payingRoles: ["deployer", "trustee", "trusteeBackup", "sponsor", "investorA", "investorB", "relayer"] });
+/** A second full run (e.g. for the demo video) without touching the first: DEMO_RUN=<name> gives it its own state file
+ *  out/demo-<name>-state.json, its own folder out/demo-<name>/ (oracle config, terms, ledger), bond symbol and topic memo.
+ *  Unset = the original run (out/demo-state.json, FLDMO), unchanged. */
+export const DEMO_RUN = (process.env.DEMO_RUN ?? "").trim();
+if (DEMO_RUN && !/^[a-z0-9-]{1,20}$/.test(DEMO_RUN)) throw new Error(`DEMO_RUN must be 1-20 of a-z, 0-9, - (got ${DEMO_RUN})`);
+export const STATE_NAME = DEMO_RUN ? `demo-${DEMO_RUN}-state.json` : "demo-state.json";
+
+configureRun({ stateFile: STATE_NAME, payingRoles: ["deployer", "trustee", "trusteeBackup", "sponsor", "investorA", "investorB", "relayer"] });
 
 export * from "../smoke/lib.js";
 export const loadDemo = loadSmoke;
@@ -32,8 +39,13 @@ export const RESERVE = USD(1n);
 /** Bhuj and the synthetic Flow A event are 7.7 and 7.5 on the 7.0 → 8.0 curve. */
 export const LOSS = { bhuj: 7000n, synthetic: 5000n } as const;
 
-export const BOND = { name: "Faultline Demo Bond", symbol: "FLDMO", info: "Faultline full testnet demo (testnet only)", maturityMin: Number(process.env.BOND_MATURITY_MIN ?? "45") };
-export const TOPIC_MEMO = "faultline-demo-testnet";
+export const BOND = {
+  name: process.env.BOND_NAME ?? (DEMO_RUN ? "Faultline Kutch Bond" : "Faultline Demo Bond"),
+  symbol: process.env.BOND_SYMBOL ?? (DEMO_RUN ? `FL${DEMO_RUN.replace(/-/g, "").slice(0, 3).toUpperCase()}` : "FLDMO"),
+  info: "Faultline full testnet demo (testnet only)",
+  maturityMin: Number(process.env.BOND_MATURITY_MIN ?? "45"),
+};
+export const TOPIC_MEMO = DEMO_RUN ? `faultline-demo-${DEMO_RUN}` : "faultline-demo-testnet";
 
 // Testnet demo profile (ARCHITECTURE §12.1, demo-only): 120 s window (owner 2026-10-27; the smoke run used 60 s),
 // 13 min issuance, >= 20 min risk, 3 min grace. Production stays 48–72 h.
@@ -117,7 +129,7 @@ export function printTimeline(t: number, s: Schedule, observedAt: { bhuj: number
 
 // ---------------------------------------------------------------- the oracle (real main-repo CLI, child process)
 
-export const DEMO_DIR = path.join(ROOT, "out", "demo");
+export const DEMO_DIR = path.join(ROOT, "out", DEMO_RUN ? `demo-${DEMO_RUN}` : "demo");
 export const ORACLE_CONFIG = path.join(DEMO_DIR, "oracle.testnet.json");
 export const ORACLE_STATE_DIR = path.join(DEMO_DIR, "oracle-state");
 

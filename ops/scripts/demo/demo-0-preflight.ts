@@ -22,6 +22,7 @@ import { mirror, usdPerHbar } from "../lib/hedera.js";
 import {
   ACCOUNTS, BHUJ_ID, BOND, FAULTLINE, FUSD, LOSS, MIN, P, PAYING_ROLES, RESERVE, SYNTHETIC_FIXTURE, TICKET, bhujFixture, buildInfo, loadDemo, mirrorAccount,
   printTimeline, provider, runOracle, saveSmoke, scheduleFor, sharedTs, syntheticFixture, termsFor, usd, type Role,
+  STATE_NAME,
 } from "./lib.js";
 
 let failed = false;
@@ -234,5 +235,5 @@ if (failed) {
     preflightAt: new Date().toISOString(),
     ...(process.env.CHECK_KEYS === "1" ? { keysCheckedAt: new Date().toISOString() } : {}),
   });
-  console.log(`\nPREFLIGHT OK${process.env.CHECK_KEYS === "1" ? "" : " (except the key check: CHECK_KEYS=1)"} — state in out/demo-state.json`);
+  console.log(`\nPREFLIGHT OK${process.env.CHECK_KEYS === "1" ? "" : " (except the key check: CHECK_KEYS=1)"} — state in out/${STATE_NAME}`);
 }
