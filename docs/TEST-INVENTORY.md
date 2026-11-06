@@ -236,7 +236,7 @@ It is scheduled for session 4 with an explicit exclusion.
 | Web Vitest | stubbed provider | no | no | no |
 | Playwright | test wallet, mock tokens | yes | no | no |
 | Smoke run (`ops/scripts/smoke`) | none | no | no | **yes, D18 build `2a71b00`, 2026-11-05** |
-| Full demo (`ops/scripts/demo`) | none | no | no | **yes, D18 build `a0b1dd5`, 2026-11-05/06 (phases 0–6)** |
+| Full demo (`ops/scripts/demo`) | none | no | no | **yes, D18 build `a0b1dd5`, 2026-11-05/06 (all phases)** |
 
 Fork tests do not exist. NOT IMPLEMENTED.
 
@@ -318,7 +318,7 @@ Testnet evidence has two runs, both on 2026-11-05 (UTC), both from `ops/` on the
 | Run | Build | Contracts on testnet | What it proves | What it does not prove |
 | --- | --- | --- | --- | --- |
 | Smoke run | `2a71b00`, D18 | pool `0xfF26…1359`, trigger `0x6455…20ab` | Happy path on real ATS, HTS, `0x167`, signed by a script; settlement to the base unit | Pause, veto, oracle CLI, HCS |
-| Full demo | `a0b1dd5`, D18 | pool `0x6d84…597e`, trigger `0xD51E…405c` | Pause, veto, replay revert, real oracle CLI, HCS, keeper, redeem, sweeps, one dashboard write (MetaMask) | Sourcify (phase 7 not run yet); revisions, two events, cap, Superseded, D15, D11 failures, post-deadline pause |
+| Full demo | `a0b1dd5`, D18 | pool `0x6d84…597e`, trigger `0xD51E…405c` | Pause, veto, replay revert, real oracle CLI, HCS, keeper, redeem, sweeps, one dashboard write (MetaMask) | revisions, two events, cap, Superseded, D15, D11 failures, post-deadline pause |
 
 ### 7.1 Mirror-node spot check
 
@@ -338,7 +338,7 @@ Checked while recording the runs (read-only: mirror node REST and `eth_call`).
 | Subscription | 500 issued, reserve 1 | `unitsIssued` 500,000,000, `couponReserve` 1,000,000 | PASS — TESTNET |
 | Final books | L 7000, 500 issued and redeemed, claimable 0, solvent | `unitsRedeemed` 500,000,000, `totalClaimable` 0, `isSolvent()` true | PASS — TESTNET |
 | Dashboard write | investor B's redeem and claim through MetaMask | `from` = investor B, both `SUCCESS`, redeem gas limit 405,177 | PASS — TESTNET |
-| Sourcify | `exact_match` | not run yet | NOT RUN |
+| Sourcify | `exact_match` | both contracts: match, creation and runtime all `exact_match` | PASS — TESTNET |
 
 ### 7.2 README claim table
 

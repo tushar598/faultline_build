@@ -375,7 +375,7 @@ approval, and the owner runs `EXECUTE=1` for every testnet transaction after a d
 
 > **Status 2026-11-05 (UTC): run from `ops/` on the FLH_* accounts.** The smoke run is complete
 > (33/33 transactions SUCCESS), and the full demo ran phases 0–6 (Flow A vetoed, Flow B executed, L = 7000, settled at
-> 501 = 500 + 1, investor B through the dashboard), on the D18 build (commit `a0b1dd5`). Sourcify (phase 7) is the last step. Ids and
+> 501 = 500 + 1, investor B through the dashboard), on the D18 build (commit `a0b1dd5`), and both contracts are `exact_match` on Sourcify. **Done.** Ids and
 > hashes: docs/DEPLOYMENTS.md and docs/TESTNET-EVIDENCE.md. The text below is the original plan.
 
 - **Why it matters:** the scripts moved from the spikes repo on 2026-11-03. Their dry runs match the spikes copy, but no transaction

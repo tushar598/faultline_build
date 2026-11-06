@@ -716,7 +716,9 @@ TokenCreate and deployBond are 60 % of the run.
 Evidence: docs/TESTNET-EVIDENCE.md "Full demo". Phases 0–5 ran on 2026-11-05 between 21:38 and 22:06 UTC; settlement
 (phase 6 and the dashboard step) on 2026-11-06 after a break of several hours, which the schedule allows: nothing after
 `submissionDeadline()` has a time limit. 34 transactions (31 EVM, 3 SDK) and two HCS messages, ≈ 22.9 HBAR. No contract
-change, no script change, no failed transaction; the only revert is the deliberate replay rejection.
+change, no script change, no failed transaction; the only revert is the deliberate replay rejection. Phase 7
+published the source to Sourcify: both contracts `exact_match`. It refused at first with "expected one build-info file,
+found 3": incremental compiles leave old build-info files, so `npx hardhat clean && npx hardhat compile` comes first.
 
 ### Estimate vs actual per phase (script-sent transactions)
 

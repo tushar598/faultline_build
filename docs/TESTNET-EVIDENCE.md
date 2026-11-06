@@ -97,7 +97,7 @@ A 180, B 120, sponsor 700 + unused reserve; total 1,001. HBAR fees (mirror `char
 deployer 32.2921, sponsor 2.0286, investor A 2.9664, investor B 2.7759,
 trustee 0 → **40.0630 HBAR**. Investor A's balance also rose by the owner's 100 HBAR top-up during phase 1.
 
-## Full demo (HANDOVER §10 step 9, 2026-11-05/06) — phases 0–6 testnet-verified
+## Full demo (HANDOVER §10 step 9, 2026-11-05/06) — testnet-verified
 
 `ops/scripts/demo`, owner-run with `EXECUTE=1`, build `a0b1dd5` (same initcode keccaks as the smoke run). fUSD reused
 from the smoke run; new HCS topic `0.0.11330395`, ATS bond FLDMO `0.0.11330397`, pool `0.0.11330416`, trigger
@@ -196,6 +196,15 @@ Fees (mirror `charged_tx_fee`) of every demo transaction, script-sent, oracle (r
 (phase 1 10.147, phase 2 6.748, phase 3 4.051, phases 4–5 0.906, phase 6 and the dashboard 1.229). `ops/out/evidence.jsonl`
 holds only what the scripts sent; the oracle's and MetaMask's transactions were added from the mirror node.
 
-### Still to run
+### Sourcify (phase 7, 2026-11-06)
 
-Phase 7: Sourcify verification of the pool and the trigger (no Hedera transaction).
+Source published to Sourcify v2 from `artifacts/build-info` (43 sources, solc 0.8.28+commit.7893614a, cancun, optimizer
+200), after a publication gate (no key material, keystore reference, local path, e-mail or personal name; OpenZeppelin
+files unmodified). No Hedera transaction. HashScan shows the verified source.
+
+| Contract | Address | Match | Creation | Runtime | Match id | Verified at (UTC) |
+| --- | --- | --- | --- | --- | --- | --- |
+| FaultlinePool | [`0x6d84cb8d063424850347eE1ebc1399885320597e`](https://hashscan.io/testnet/contract/0x6d84cb8d063424850347eE1ebc1399885320597e) | `exact_match` | `exact_match` | `exact_match` | 58588033 | 2026-11-06 04:47:22 |
+| FaultlineTrigger | [`0xD51E0712C1849818c3919195034539E041b3405c`](https://hashscan.io/testnet/contract/0xD51E0712C1849818c3919195034539E041b3405c) | `exact_match` | `exact_match` | `exact_match` | 58588069 | 2026-11-06 04:47:40 |
+
+The full demo is complete: every phase testnet-verified.

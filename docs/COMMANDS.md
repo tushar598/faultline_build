@@ -310,7 +310,7 @@ npx hardhat test test/security.contracts.test.ts   # PoCs for the open findings 
 SECURITY_VERBOSE=1 npx hardhat test test/security.contracts.test.ts   # prints why each open finding reproduces
 ```
 
-## 11. Full testnet demo (HANDOVER §10 step 9; phases 0–6 testnet-verified 2026-11-05/06)
+## 11. Full testnet demo (HANDOVER §10 step 9; testnet-verified 2026-11-05/06)
 
 Runs from `ops/` against the root build, `shared/ts` and the real `oracle/` CLI. Every script is a **dry run** unless
 `EXECUTE=1`; only the owner runs `EXECUTE=1`, and each run asks for the keystore password once. State:
@@ -365,5 +365,6 @@ cd ~/Desktop/faultline-hedera/faultline && npm run web:build && npm --prefix web
 
 Result of the 2026-11-05/06 run: L = 7000; A claimed 90.000506, B 60.000337 (through the dashboard), sponsor 350.999157;
 total 501.000000 = 500 deposits + 1 reserve; pool fUSD 0, bond supply 0, `totalClaimable` 0, `isSolvent()` true; 34
-transactions and two HCS messages, ≈ 22.9 HBAR (docs/TESTNET-EVIDENCE.md). Phase 7 (Sourcify) is the last step. If a
+transactions and two HCS messages, ≈ 22.9 HBAR (docs/TESTNET-EVIDENCE.md); both contracts `exact_match` on Sourcify. Phase 7 needs exactly one file in
+`artifacts/build-info`: after several incremental compiles run `npx hardhat clean && npx hardhat compile` first. If a
 transaction fails: stop, do not retry, read the mirror node.

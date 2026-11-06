@@ -13,7 +13,7 @@ import {
 
 /// @title MockBond
 /// @notice LOCAL TESTS ONLY. Stand-in for the ATS v8 bond diamond (6 decimals, single partition, internal KYC),
-///         modelled on the spike-S1 bond `0.0.11165702`. Error names and argument types are copied from the
+///         modelled on the spike-S1 bond. Error names and argument types are copied from the
 ///         ATS v8.0.0 source so selectors match the ones seen on testnet.
 /// @dev Labels used below: "testnet-verified (S1/S2, tx in TESTNET-EVIDENCE.md)", "testnet-simulated (mirror-node
 ///      eth_call)", "not testnet-verified (mirrors ATS v8 source)". Guard order follows the ATS modifiers
