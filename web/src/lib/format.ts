@@ -1,5 +1,5 @@
 // Display formatting. Every amount is a bigint in base units; nothing here rounds a value the user acts on.
-// Units are always shown (USD, bps, HBAR); timestamps are UTC with the local time available on hover.
+// Units are always shown (USD, bps, HBAR); timestamps are India Standard Time in 12-hour form, with UTC on hover.
 
 /** Base units of the stablecoin and the bond (both 6 decimals, 1 unit = 1 USD base unit). */
 export const DECIMALS = 6;
@@ -66,6 +66,19 @@ export function formatUtc(unixSec: number | bigint): string {
   const d = new Date(Number(unixSec) * 1000);
   if (Number.isNaN(d.getTime())) return "Invalid time";
   return `${d.toISOString().slice(0, 19).replace("T", " ")} UTC`;
+}
+
+/** The dashboard's display time zone: India Standard Time, UTC+05:30, no daylight saving. */
+export const DISPLAY_TZ = "Asia/Kolkata";
+export const DISPLAY_TZ_LABEL = "IST";
+const IST = new Intl.DateTimeFormat("en-GB", { timeZone: DISPLAY_TZ, day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true });
+
+/** Unix seconds → "06 Nov 2026, 04:25:10 PM IST". */
+export function formatIst(unixSec: number | bigint): string {
+  const d = new Date(Number(unixSec) * 1000);
+  if (Number.isNaN(d.getTime())) return "Invalid time";
+  const p = Object.fromEntries(IST.formatToParts(d).map((x) => [x.type, x.value])) as Record<string, string>;
+  return `${p.day} ${p.month} ${p.year}, ${p.hour}:${p.minute}:${p.second} ${String(p.dayPeriod ?? "").toUpperCase()} ${DISPLAY_TZ_LABEL}`;
 }
 
 /** Unix seconds → the viewer's local time with zone, for the hover title. */

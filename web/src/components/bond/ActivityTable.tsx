@@ -14,7 +14,7 @@ export function ActivityTable({ logs, net, names, limit = 12, filter }: { logs: 
       <table className="w-full min-w-[640px] text-left text-sm">
         <thead className="border-b border-neutral-200 text-xs text-neutral-700">
           <tr>
-            <th scope="col" className="px-5 py-2 font-medium">Time (UTC)</th>
+            <th scope="col" className="px-5 py-2 font-medium">Time (IST)</th>
             <th scope="col" className="px-3 py-2 font-medium">Event</th>
             <th scope="col" className="px-3 py-2 font-medium">Details</th>
             <th scope="col" className="px-5 py-2 font-medium">Transaction</th>

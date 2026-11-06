@@ -15,7 +15,7 @@ export function HcsLogTable({ entries, source }: { entries: HcsEntry[]; source: 
         <thead className="border-b border-neutral-200 text-xs text-neutral-700">
           <tr>
             <th scope="col" className="px-5 py-2 text-right font-medium">Seq</th>
-            <th scope="col" className="px-3 py-2 text-left font-medium">Consensus time (UTC)</th>
+            <th scope="col" className="px-3 py-2 text-left font-medium">Consensus time (IST)</th>
             <th scope="col" className="px-3 py-2 text-left font-medium">Kind</th>
             <th scope="col" className="px-3 py-2 text-left font-medium">Content</th>
             <th scope="col" className="px-5 py-2 text-left font-medium">Signature</th>

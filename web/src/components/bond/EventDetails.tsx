@@ -1,6 +1,6 @@
 import { hashscan, type NetworkConfig } from "@/config/networks";
 import { realTimeOf, type EventInfo } from "@/lib/eventInfo";
-import { formatBps, formatMagnitude, formatUtc } from "@/lib/format";
+import { formatBps, formatIst, formatMagnitude } from "@/lib/format";
 import { DefinitionList } from "../ui/DefinitionList";
 import { Hex } from "../ui/Hex";
 import { Tag } from "../ui/Tag";
@@ -56,7 +56,7 @@ export function EventDetails({ info, net }: { info: EventInfo; net: NetworkConfi
           value:
             updated !== null ? (
               <span>
-                {formatUtc(updated)} <span className="text-xs text-neutral-700">{info.mode === "replay" ? "(real update time of the record)" : ""}</span>
+                {formatIst(updated)} <span className="text-xs text-neutral-700">{info.mode === "replay" ? "(real update time of the record)" : ""}</span>
               </span>
             ) : (
               <span className="text-xs text-neutral-700" title={`Raw on-chain usgsUpdatedAt (seconds): ${r.usgsUpdatedAt}`}>

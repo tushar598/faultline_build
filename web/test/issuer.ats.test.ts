@@ -146,3 +146,12 @@ describe("UTC date fields", () => {
     expect(fromUtcInput("")).toBeNaN();
   });
 });
+
+describe("IST date fields", () => {
+  it("round-trip in IST (UTC+05:30)", async () => {
+    const { fromIstInput, toIstInput } = await import("@/lib/issuer/time");
+    expect(toIstInput(1_793_962_510)).toBe("2026-11-06T16:25:10");
+    expect(fromIstInput("2026-11-06T16:25:10")).toBe(1_793_962_510);
+    expect(fromIstInput("2026-02-30T00:00")).toBeNaN();
+  });
+});

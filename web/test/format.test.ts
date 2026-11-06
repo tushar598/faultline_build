@@ -45,3 +45,12 @@ describe("bps, magnitude, durations, time", () => {
     expect(shortHex("0xA4C8f56FA4De893dA948952223a0783923647cCc")).toBe("0xA4C8…7cCc");
   });
 });
+
+describe("IST display (12-hour)", () => {
+  it("shows India Standard Time with AM/PM", async () => {
+    const { formatIst } = await import("@/lib/format");
+    expect(formatIst(1_793_962_510)).toBe("06 Nov 2026, 04:25:10 PM IST"); // 10:55:10 UTC
+    expect(formatIst(980_478_999)).toBe("26 Jan 2001, 08:46:39 AM IST"); // 03:16:39 UTC
+    expect(formatIst(Number.NaN)).toBe("Invalid time");
+  });
+});

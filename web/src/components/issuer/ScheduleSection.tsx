@@ -5,7 +5,8 @@ import { Stat } from "@/components/ui/Stat";
 import { Tag } from "@/components/ui/Tag";
 import { formatAmount, formatBps, formatDuration } from "@/lib/format";
 import { scheduleWarnings, validateSchedule, type ScheduleDraft } from "@/lib/issuer/schedule";
-import { fromUtcInput, toUtcInput } from "@/lib/issuer/time";
+import { fromIstInput, toIstInput } from "@/lib/issuer/time";
+import { formatIst } from "@/lib/format";
 import { Field } from "./Field";
 
 /** Step b: schedule and economics, with the constructor rules enforced and the reserve the sponsor must fund. */
@@ -15,7 +16,7 @@ export function ScheduleSection({ draft, onChange, chainNow, mode, locked, onRes
   const warnings = v.ok ? scheduleWarnings(v.value, chainNow, mode) : [];
   const set = (patch: Partial<ScheduleDraft>) => onChange({ ...draft, ...patch });
   const time = (f: "issuanceStart" | "issuanceEnd" | "riskStart" | "maturity", label: string) => (
-    <Field id={`s-${f}`} type="datetime-local" label={`${label} (UTC)`} value={toUtcInput(draft[f])} onChange={(x) => set({ [f]: fromUtcInput(x) } as Partial<ScheduleDraft>)} error={errors[f]} />
+    <Field id={`s-${f}`} type="datetime-local" label={`${label} (IST)`} value={toIstInput(draft[f])} onChange={(x) => set({ [f]: fromIstInput(x) } as Partial<ScheduleDraft>)} error={errors[f]} hint={Number.isFinite(draft[f]) ? formatIst(draft[f]) : undefined} />
   );
   const secs = (f: "graceSec" | "challengeWindowSec", label: string, hint: string) => (
     <Field
@@ -31,7 +32,7 @@ export function ScheduleSection({ draft, onChange, chainNow, mode, locked, onRes
   return (
     <Card
       title="b. Schedule and economics"
-      subtitle={`Checked against the FaultlinePool and FaultlineTrigger constructors before anything is sent. Chain time now: ${toUtcInput(chainNow).replace("T", " ")} UTC.`}
+      subtitle={`Checked against the FaultlinePool and FaultlineTrigger constructors before anything is sent. Chain time now: ${formatIst(chainNow)}.`}
       action={
         <div className="flex items-center gap-2">
           {!locked && (
@@ -62,7 +63,7 @@ export function ScheduleSection({ draft, onChange, chainNow, mode, locked, onRes
           <div className="grid gap-5 rounded-md border border-neutral-200 bg-neutral-50 p-4 sm:grid-cols-3">
             <Stat label="Required coupon reserve for the full cap" value={formatAmount(v.requiredReserve)} unit="USD" emphasis hint="pool.requiredReserve(cap), rounded up; the sponsor funds it before anyone can invest" />
             <Stat label="Risk period" value={formatDuration(Number(v.value.maturity - v.value.riskStart))} hint={`${formatBps(v.value.couponBps)} a year on the original notional`} />
-            <Stat label="Submission deadline without pauses" value={toUtcInput(Number(v.value.maturity + v.value.grace)).replace("T", " ")} hint="UTC; a trigger pause moves it later (D2)" />
+            <Stat label="Submission deadline without pauses" value={formatIst(Number(v.value.maturity + v.value.grace))} hint="A trigger pause moves it later (D2)" />
           </div>
         )}
         {warnings.map((w) => (

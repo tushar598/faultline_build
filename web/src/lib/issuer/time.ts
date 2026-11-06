@@ -1,4 +1,5 @@
-// The issuer form shows every date in UTC (the chain's clock has no time zone), in the browser's datetime-local field.
+// The issuer form shows every date in IST (UTC+05:30, no daylight saving) in the browser's datetime-local field; the chain's
+// clock itself has no time zone. The UTC helpers stay for tests and conversions.
 
 /** Unix seconds → "YYYY-MM-DDTHH:MM:SS" in UTC, the value format of <input type="datetime-local" step="1">. */
 export function toUtcInput(sec: number): string {
@@ -19,3 +20,11 @@ export function fromUtcInput(v: string): number {
   if (back.getUTCFullYear() !== y || back.getUTCMonth() !== mo - 1 || back.getUTCDate() !== d) return NaN;
   return ms / 1000;
 }
+
+const IST_OFFSET_SEC = 5 * 3600 + 30 * 60;
+
+/** Unix seconds → "YYYY-MM-DDTHH:MM:SS" in IST, for <input type="datetime-local" step="1">. */
+export const toIstInput = (sec: number): string => (Number.isFinite(sec) ? toUtcInput(sec + IST_OFFSET_SEC) : "");
+
+/** "YYYY-MM-DDTHH:MM[:SS]" read as IST → unix seconds; NaN for anything else. */
+export const fromIstInput = (v: string): number => fromUtcInput(v) - IST_OFFSET_SEC;
