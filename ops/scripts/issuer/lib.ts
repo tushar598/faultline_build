@@ -46,7 +46,7 @@ export async function hederaIdOf(evm: string): Promise<{ id: string; kind: "acco
   return c?.contract_id ? { id: c.contract_id, kind: "contract" } : undefined;
 }
 
-/** `0.0.x` or a long-zero EVM address (`0x000…00aa9f0f`) → `0.0.x`. */
+/** `0.0.x` or a long-zero EVM address (`0x000…00ace152`) → `0.0.x`. */
 export function tokenIdOf(v: string): string {
   if (/^0\.0\.\d+$/.test(v)) return v;
   if (isAddress(v) && /^0x0{24}/i.test(v)) return `0.0.${BigInt(v)}`;
