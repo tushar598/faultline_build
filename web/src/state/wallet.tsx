@@ -1,12 +1,12 @@
 "use client";
 // The user's own wallet (EIP-1193, e.g. MetaMask). Every write is signed there; the dashboard never sees a key.
-// Before a transaction is sent, the same call runs as a staticCall so a revert is shown in plain words and nothing
-// doomed reaches the chain.
+// Before a transaction is sent, the same call is simulated on the dashboard's read RPC so a revert is shown in plain words
+// and nothing doomed reaches the chain; the wallet only signs and sends (src/lib/send.ts).
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
-import { BrowserProvider, Contract, getAddress, type InterfaceAbi, type JsonRpcSigner } from "ethers";
+import { Interface, getAddress, type InterfaceAbi } from "ethers";
 import type { NetworkConfig } from "@/config/networks";
 import { plainError } from "@/lib/errors";
-import { gasLimitFor } from "@/lib/gas";
+import { sendTx, type TxPhase } from "@/lib/send";
 import { browserStore, isSignedOut, revokeWallet, setSignedOut } from "@/lib/walletSession";
 import { useNetwork } from "./network";
 
@@ -127,25 +127,16 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       if (!eth || netState.status !== "ready") return false;
       const hashes: string[] = [];
       try {
-        const browser = new BrowserProvider(eth);
-        const signer: JsonRpcSigner = await browser.getSigner();
         const want = netState.net.chainId;
         for (const [i, s] of steps.entries()) {
-          // SEC-11: the wallet may have switched chains since the page rendered; never send to the same address elsewhere.
-          const have = Number(await eth.request({ method: "eth_chainId" }));
-          if (have !== want) throw new Error(`The wallet is on chain ${have}, not ${want}. Switch the wallet to this dashboard's network.`);
-          const c = new Contract(s.address, s.abi, signer);
-          setTx({ phase: "checking", label: s.label, step: i + 1, steps: steps.length });
-          const fn = c.getFunction(s.method);
-          await fn.staticCall(...s.args);
-          // The wallet's own limit equals the estimate, which can run out of gas on Hedera (src/lib/gas.ts).
-          const gasLimit = gasLimitFor(await fn.estimateGas(...s.args));
-          setTx({ phase: "signing", label: s.label, step: i + 1, steps: steps.length });
-          const sent = await fn(...s.args, { gasLimit });
-          setTx({ phase: "pending", label: s.label, step: i + 1, steps: steps.length });
-          const receipt = await sent.wait();
-          if (!receipt || receipt.status !== 1) throw new Error(`${s.label}: the transaction failed on chain.`);
-          hashes.push(receipt.hash);
+          // src/lib/send.ts: SEC-11 chain check, simulation and gas = estimate x 1.3 (the wallet's own limit equals the
+          // estimate, which can run out of gas on Hedera) on the dashboard's read RPC; the wallet only signs and sends.
+          const data = new Interface(s.abi).encodeFunctionData(s.method, s.args);
+          const phase = (p: TxPhase) => setTx({ phase: p, label: s.label, step: i + 1, steps: steps.length });
+          const r = await sendTx(eth, want, { to: s.address, data }, { reader: netState.provider, onPhase: phase }).catch((e: unknown) => {
+            throw e instanceof Error && e.message === "The transaction failed on chain." ? new Error(`${s.label}: the transaction failed on chain.`) : e;
+          });
+          hashes.push(r.hash);
           onMined?.();
         }
         setTx({ phase: "done", label, hashes });

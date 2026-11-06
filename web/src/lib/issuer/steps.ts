@@ -41,7 +41,7 @@ export function launchInputs(state: WizardState): { schedule: Schedule; termsHas
 const latestTs = async (p: JsonRpcProvider) => Number((await viaRpc("dashboard", () => p.getBlock("latest")))!.timestamp);
 
 async function call(ctx: StepContext, label: string, address: string, abi: readonly (string | object)[], method: string, args: readonly unknown[]): Promise<string> {
-  const r = await sendCall(ctx.eth, ctx.chainId, { address, abi: abi as never, method, args }, (p) => ctx.onPhase?.(label, p));
+  const r = await sendCall(ctx.eth, ctx.chainId, { address, abi: abi as never, method, args }, (p) => ctx.onPhase?.(label, p), ctx.provider);
   return r.hash;
 }
 
@@ -66,14 +66,14 @@ export async function runStep(id: StepId, state: WizardState, ctx: StepContext, 
     case "bond": {
       if (o.bond) return { passed: true, note: "bond already deployed" };
       if (local) {
-        const r = await sendDeploy(ctx.eth, chainId, { abi: ctx.build.mockBond.abi, bytecode: ctx.build.mockBond.bytecode, args: [ctx.wallet, schedule.cap, true] }, (ph) => ctx.onPhase?.("Deploy MockBond", ph));
+        const r = await sendDeploy(ctx.eth, chainId, { abi: ctx.build.mockBond.abi, bytecode: ctx.build.mockBond.bytecode, args: [ctx.wallet, schedule.cap, true] }, (ph) => ctx.onPhase?.("Deploy MockBond", ph), ctx.provider);
         return { passed: true, txs: [r.hash], out: { bond: r.address, initcodeKeccak: { bond: await sentInitcodeKeccak(ctx.provider, r.hash, ctx.build.mockBond.bytes) } } };
       }
       const now = await latestTs(ctx.provider);
       const dates = atsBondDates(schedule, now);
       if (dates.problems.length) throw new Error(dates.problems.join(" "));
       const { args, isin } = atsBondArgs({ name: p.bondName, symbol: p.bondSymbol, info: "Faultline bond launched from the issuer page (testnet only)", admin: ctx.wallet, cap: schedule.cap, startingDate: dates.startingDate, maturityDate: dates.maturityDate, isinSeed: now });
-      const r = await sendCall(ctx.eth, chainId, { address: ATS_FACTORY, abi: ATS_FACTORY_ABI as never, method: "deployBond", args }, (ph) => ctx.onPhase?.("Deploy the ATS bond", ph));
+      const r = await sendCall(ctx.eth, chainId, { address: ATS_FACTORY, abi: ATS_FACTORY_ABI as never, method: "deployBond", args }, (ph) => ctx.onPhase?.("Deploy the ATS bond", ph), ctx.provider);
       const iface = new Interface(ATS_FACTORY_ABI as never);
       const ev = r.receipt.logs.map((l) => { try { return iface.parseLog(l); } catch { return null; } }).find((x) => x?.name === "BondDeployed");
       if (!ev) throw new Error("BondDeployed was not found in the receipt; check the transaction on HashScan before running this step again.");
@@ -106,13 +106,13 @@ export async function runStep(id: StepId, state: WizardState, ctx: StepContext, 
         issuanceStart: schedule.issuanceStart, issuanceEnd: schedule.issuanceEnd, riskStart: schedule.riskStart, maturity: schedule.maturity,
         grace: schedule.grace, couponBps: schedule.couponBps, cap: schedule.cap, minTicket: schedule.minTicket,
       };
-      const r = await sendDeploy(ctx.eth, chainId, { abi: ctx.build.pool.abi, bytecode: ctx.build.pool.bytecode, args: [params] }, (ph) => ctx.onPhase?.("Deploy FaultlinePool", ph));
+      const r = await sendDeploy(ctx.eth, chainId, { abi: ctx.build.pool.abi, bytecode: ctx.build.pool.bytecode, args: [params] }, (ph) => ctx.onPhase?.("Deploy FaultlinePool", ph), ctx.provider);
       return { passed: true, txs: [r.hash], out: { pool: r.address, initcodeKeccak: { pool: await sentInitcodeKeccak(ctx.provider, r.hash, ctx.build.pool.bytes) } } };
     }
 
     case "trigger": {
       if (o.trigger) return { passed: true, note: "trigger already deployed" };
-      const r = await sendDeploy(ctx.eth, chainId, { abi: ctx.build.trigger.abi, bytecode: ctx.build.trigger.bytecode, args: [o.pool!, termsHash, schedule.challengeWindow, p.oracle, p.admin, p.trustee] }, (ph) => ctx.onPhase?.("Deploy FaultlineTrigger", ph));
+      const r = await sendDeploy(ctx.eth, chainId, { abi: ctx.build.trigger.abi, bytecode: ctx.build.trigger.bytecode, args: [o.pool!, termsHash, schedule.challengeWindow, p.oracle, p.admin, p.trustee] }, (ph) => ctx.onPhase?.("Deploy FaultlineTrigger", ph), ctx.provider);
       return { passed: true, txs: [r.hash], out: { trigger: r.address, termsHash, fromBlock: r.receipt.blockNumber, initcodeKeccak: { trigger: await sentInitcodeKeccak(ctx.provider, r.hash, ctx.build.trigger.bytes) } } };
     }
 
