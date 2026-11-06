@@ -1,5 +1,6 @@
 "use client";
 import { Activity, FileCheck2, FilePlus2, LayoutDashboard, ShieldCheck, Wallet, Landmark } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NetworkSwitch } from "./NetworkSwitch";
@@ -20,10 +21,7 @@ export function Sidebar() {
   return (
     <aside className="flex w-full flex-col border-b border-neutral-200 bg-neutral-50 md:sticky md:top-0 md:h-screen md:w-56 md:shrink-0 md:border-r md:border-b-0">
       <div className="flex h-16 items-center gap-2.5 border-b border-neutral-200 px-5">
-        <svg aria-hidden viewBox="0 0 24 24" className="size-6 text-accent-600" fill="none" stroke="currentColor" strokeWidth="1.75">
-          <rect x="3" y="3" width="18" height="18" rx="2" />
-          <path d="M3 14h5l2-4 3 7 2-3h6" />
-        </svg>
+        <Image src="/logo-mark.png" alt="" aria-hidden width={32} height={32} priority className="size-8 shrink-0" />
         <div>
           <div className="text-sm font-semibold text-neutral-900">Faultline</div>
           <div className="text-[11px] text-neutral-700">Parametric quake bond</div>
