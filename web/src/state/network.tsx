@@ -22,11 +22,15 @@ const STORAGE_KEY = "faultline.network";
 
 // The chosen network lives in localStorage (a per-viewer convenience), read as an external store.
 const CHANGE = "faultline:network";
+/** Network before the viewer picks one: local, unless the build sets NEXT_PUBLIC_DEFAULT_NETWORK=testnet (a hosted
+ *  dashboard has no local node; web/vercel.json sets it). */
+const DEFAULT_ID: NetworkId = process.env.NEXT_PUBLIC_DEFAULT_NETWORK === "testnet" ? "testnet" : "local";
 function storedId(): NetworkId {
   try {
-    return window.localStorage.getItem(STORAGE_KEY) === "testnet" ? "testnet" : "local";
+    const v = window.localStorage.getItem(STORAGE_KEY);
+    return v === "testnet" || v === "local" ? v : DEFAULT_ID;
   } catch {
-    return "local";
+    return DEFAULT_ID;
   }
 }
 function subscribeStored(fn: () => void): () => void {

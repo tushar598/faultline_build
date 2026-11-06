@@ -255,6 +255,12 @@ Testnet mode: choose "Hedera testnet (296)" in the sidebar (the choice is per br
 thirdweb, by an `eth_chainId` probe; `NEXT_PUBLIC_TESTNET_RPC_URL=<relay> npm run web:dev` points it elsewhere (both relays
 answered the browser CORS preflight on 2026-10-30). Verified in step 9 with Hashio; the thirdweb fallback was not exercised.
 
+Hosted (Vercel): project Root Directory `web`, with "Include files outside the Root Directory" on (the default).
+`web/vercel.json` installs `web/` and the repo root (`shared/ts` resolves `ethers` from the root `node_modules`), compiles
+the contracts (the issuer page bundles `artifacts/`, which is gitignored), then builds with
+`NEXT_PUBLIC_DEFAULT_NETWORK=testnet`, so a first visit opens on testnet; a viewer's own choice still wins. A clean copy
+built with these exact commands on 2026-11-06.
+
 ### Issuer page (`/issuer`, added 2026-11-03: local mock-tested, testnet NOT testnet-verified)
 
 Launches a new bond from the dashboard with the connected wallet as admin. No contract change: it deploys the root build
