@@ -1,7 +1,7 @@
 # Demo video script (5 minutes or less)
 
 Follows HANDOVER §11 and covers the track's video rule: issuance, configuration and at least one lifecycle operation.
-Target 4:40, which leaves room for a slip. Every number below is from the testnet run of 2026-10-27/28
+Target 4:40, which leaves room for a slip. Every number below is from the testnet run of 2026-11-05
 (docs/TESTNET-EVIDENCE.md "Full demo"), except where a shot is marked LOCAL.
 
 ## Rules for the recording
@@ -25,7 +25,7 @@ Target 4:40, which leaves room for a slip. Every number below is from the testne
 1. Dashboard in testnet mode: `npm run web:dev`, network "Hedera testnet (296)". This shows the finished demo.
 2. For the live countdown (LOCAL): `npm run node`, `npm run dashboard:demo:local`, `npm run web:dev` in a second browser
    profile. COMMANDS §9.
-3. HashScan tabs: the pool, the trigger, topic `0.0.11195949`, the pause, veto, replay and execute transactions, and B's redeem.
+3. HashScan tabs: the pool, the trigger, topic `0.0.11330395`, the pause, veto, replay and execute transactions, and B's redeem.
 4. Terminal with `npm run check` already scrolled to the test totals.
 
 Screen links are in docs/TESTNET-EVIDENCE.md.
@@ -40,8 +40,8 @@ Screen links are in docs/TESTNET-EVIDENCE.md.
 | 1:20–2:10 | LOCAL: Trustee view with countdown, label on screen. Then HashScan: pause, veto, replay revert | "Flow A: the trustee's veto. This event is SYNTHETIC, not a real USGS event. The oracle attests it and publishes to HCS. A challenge window starts. On testnet the trustee paused with 114 of 120 seconds left, the clock froze, and the veto went through while paused. Here is that veto on HashScan. Now the attack: the same signature, sent again. It reverts with EventFinalised. A vetoed event can never come back." |
 | 2:10–2:55 | Quake replay view; HCS message on HashScan; execute tx | "Flow B: the real 2001 Bhuj earthquake, fetched live from USGS and replayed into the demo's risk period. M7.7 gives 7,000 basis points. The oracle signs it and publishes to HCS, and the signature inside the message recovers to the oracle. The 120-second window here is demo-only; production is 48 to 72 hours. A real event would also wait for USGS review and a 6-hour cooling period. After the window the keeper executes." |
 | 2:55–3:20 | Investor view: ATS balance next to effective value; Sponsor view | "The write-down. One transaction raises a global loss index, with no loop over holders. 350 of 500 dollars of collateral goes to the sponsor. Holders' ATS balances do not change, so the dashboard shows the effective value: 30 % of principal." |
-| 3:20–3:55 | Investor view; B's redeem and claim on HashScan | "Redemption. After the deadline each holder redeems, and the pool burns units through the ATS controller role. Investor B did this through this dashboard with MetaMask. An honest note: B's first attempt ran out of gas. We found it on the mirror node, fixed the gas limit, and the retry passed. That failed transaction is in the evidence too." |
-| 3:55–4:20 | Evidence view; HashScan verified source; test totals | "The books close to the base unit: 501 paid out equals 500 deposited plus 1 of reserve, and the pool ends at zero. Both contracts are verified with an exact match. Every transaction is in the evidence file, including the two that reverted. The README says what is testnet-verified and what is only mock-tested." |
+| 3:20–3:55 | Investor view; B's redeem and claim on HashScan | "Redemption. After the deadline each holder redeems, and the pool burns units through the ATS controller role. Investor B does this through this dashboard with MetaMask." |
+| 3:55–4:20 | Evidence view; HashScan verified source; test totals | "The books close to the base unit: 501 paid out equals 500 deposited plus 1 of reserve, and the pool ends at zero. Both contracts are verified with an exact match. Every transaction is in the evidence file, including the replay that reverted on purpose. The README says what is testnet-verified and what is only mock-tested." |
 | 4:20–4:40 | README trust and legal section | "This is a prototype: self-reviewed, not audited, not a regulated product. A real deal needs a licensed insurer and a Rule 144A, Regulation D or Regulation S offering. What it shows is a transparent, automatic, auditable lifecycle." |
 
 ### Optional 20-second issuer shot (LOCAL)

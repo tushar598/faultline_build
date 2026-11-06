@@ -67,11 +67,11 @@ npm --prefix web i --save-exact ethers@6.17.0
 npx hardhat --version            # 2.29.1
 npx hardhat compile              # Compiled N Solidity files successfully (evm target: cancun); OZ prints a
                                  # TSTORE warning for ReentrancyGuardTransient (expected, safe for a guard)
-npx hardhat test                 # 203 passing on 2026-10-30 (interfaces + mocks + pool + trigger + shared/ts + local e2e + security)
+npx hardhat test                 # 436 passing on 2026-11-06 (interfaces + mocks + pool + trigger + shared/ts + local e2e + security)
 npm run typecheck                # no output = OK
 npm run oracle:typecheck         # no output = OK
 npm run oracle:test              # 83 passed, 1 skipped (the opt-in live USGS test)
-npm run web:test                 # 44 passed
+npm run web:test                 # 99 passed
 npm run web:build                # ✓ Compiled successfully
 npm run check                    # all of the above in one go
 ```
@@ -142,36 +142,37 @@ Flow C (cap + Superseded): L 10000 bps, sponsor credited 10,000.000000 (claimed 
 Coupon figures in Flows B and C depend on the exact second of each `execute` (one block per transaction), so they
 can move by a few base units if the flow's steps change; the test recomputes them from the execute timestamps.
 
-## 7. Testnet smoke run (HANDOVER §10 step 5b; testnet-verified 2026-10-26)
+## 7. Testnet smoke run (HANDOVER §10 step 5b; testnet-verified 2026-11-05)
 
-Runs from `ops/` in this repo (Hardhat 3 + global encrypted keystore) against the root build and `shared/ts`. The run of
-2026-10-26 used these scripts from the spikes repo (commits `2fa20a8`…`376c745`; archived at `~/Desktop/faultline-spikes`, last commit `b527729`); they
-moved to `ops/` on 2026-11-03 and have not been re-run on testnet from there. Every script is a **dry run** unless `EXECUTE=1`; only the owner runs `EXECUTE=1`,
-and each run asks for the keystore password once. State: `ops/out/smoke-state.json` (resumable: finished steps skip);
-evidence: `ops/out/evidence.jsonl`. Accounts and keystore names: docs/TESTNET-EVIDENCE.md "Faultline accounts".
+Runs from `ops/` (Hardhat 3 + global encrypted keystore) against the root build and `shared/ts`. Every script is a
+**dry run** unless `EXECUTE=1`; only the owner runs `EXECUTE=1`, and each run asks for the keystore password once.
+State: `ops/out/smoke-state.json` (resumable: finished steps skip); evidence: `ops/out/evidence.jsonl`. Accounts and
+keystore names: docs/ACCOUNTS.md; ids and hashes of the 2026-11-05 run: docs/DEPLOYMENTS.md.
 
 ```bash
-cd ~/Desktop/faultline && npm run compile          # the build the smoke run deploys (preflight records its keccak)
+cd ~/Desktop/faultline-hedera/faultline && npm run compile   # the build the smoke run deploys (preflight records its keccak)
 npm run ops:setup
-cd ops
-R="npx hardhat run --network testnetRead"           # plain ethers on Hashio; the network name only picks no key
+cd ops                                                       # plain ethers on Hashio; testnetRead holds no key
 
-$R scripts/smoke/smoke-0-preflight.ts                # no tx: accounts, build hashes, live USGS dataHash, HBAR estimate
-CHECK_KEYS=1 $R scripts/smoke/smoke-0-preflight.ts   # owner: every FL_* key derives to its documented address
+npx hardhat run --network testnetRead scripts/smoke/smoke-0-preflight.ts                # no tx: accounts, build hashes, live USGS dataHash, HBAR estimate
+CHECK_KEYS=1 npx hardhat run --network testnetRead scripts/smoke/smoke-0-preflight.ts   # owner: every FLH_* key derives to its documented address
 
 # Each line: run it without EXECUTE first (dry run), then with EXECUTE=1.
-EXECUTE=1 $R scripts/smoke/smoke-1-token.ts          # HTS fUSD (hollow deployer pays), holders associate/KYC/fund
-                                                     # fallback only if TokenCreate refuses a hollow payer: PHASE=complete
+EXECUTE=1 npx hardhat run --network testnetRead scripts/smoke/smoke-1-token.ts          # HTS fUSD (hollow deployer pays), holders associate/KYC/fund
 # Phases 2 → 5 back to back (phase 3 must start <= 29 min after the bond deploy with BOND_MATURITY_MIN=45):
-BOND_MATURITY_MIN=45 EXECUTE=1 $R scripts/smoke/smoke-2-bond.ts     # ATS v8 bond, addIssuer, bond KYC for A/B
-BOND_MATURITY_MIN=45 EXECUTE=1 $R scripts/smoke/smoke-3-deploy.ts   # pool + trigger, initialize, pool KYC, roles, D4 asserts
-EXECUTE=1 $R scripts/smoke/smoke-4-subscribe.ts      # inside the 13-min issuance window; aborts if < 180 s left
-EXECUTE=1 $R scripts/smoke/smoke-5-event.ts          # waits for observedAt, hashAttestation gate, submit, 60 s, execute
-EXECUTE=1 $R scripts/smoke/smoke-6-settle.ts         # after submissionDeadline(): redeem, claim, sweeps, final books
+BOND_MATURITY_MIN=45 EXECUTE=1 npx hardhat run --network testnetRead scripts/smoke/smoke-2-bond.ts     # ATS v8 bond, addIssuer, bond KYC for A/B
+BOND_MATURITY_MIN=45 EXECUTE=1 npx hardhat run --network testnetRead scripts/smoke/smoke-3-deploy.ts   # pool + trigger, initialize, pool KYC, roles, D4 asserts
+EXECUTE=1 npx hardhat run --network testnetRead scripts/smoke/smoke-4-subscribe.ts      # inside the 13-min issuance window; aborts if < 180 s left
+EXECUTE=1 npx hardhat run --network testnetRead scripts/smoke/smoke-5-event.ts          # waits for observedAt, hashAttestation gate, submit, 60 s, execute
+EXECUTE=1 npx hardhat run --network testnetRead scripts/smoke/smoke-6-settle.ts         # after submissionDeadline(): redeem, claim, sweeps, final books
 ```
 
-Expected end (2026-10-26 run): L = 7000; A claims 180.000664, B 120.000442, sponsor 700.998894; total 1,001.000000 =
-1,000 deposits + 1 reserve; pool ends at 0; ≈ 35 HBAR in total (deployer ≈ 28.3). If any tx fails: stop, do not
+The commands are written out in full: in zsh, `R="npx hardhat run …"; $R …` fails ("command not found"), because zsh
+does not split a variable into words.
+
+Result of the 2026-11-05 run: L = 7000; A claims 180.000674, B 120.000449, sponsor 700.998877; total 1,001.000000 =
+1,000 deposits + 1 reserve; pool ends at 0; 33 transactions, ≈ 40.1 HBAR in total (deployer ≈ 32.3; the TokenCreate
+alone 15.05 at $0.068/HBAR). If any tx fails: stop, do not
 retry, read `ops/out/evidence.jsonl` (`REJECTED_PRECHECK` = no tx hash; `FAILED` = at consensus, with the mirror fee).
 
 ## 8. Oracle (mock HCS, local only — HANDOVER §10 step 6)
@@ -206,7 +207,7 @@ read -s RELAYER_PRIVATE_KEY && export RELAYER_PRIVATE_KEY
 Spike S7 (HCS topic keys, testnet, owner runs EXECUTE):
 
 ```bash
-cd ops                                         # moved from the spikes repo on 2026-11-03 (reference; S7 is done)
+cd ops                                         # not run in this deployment; the demo creates its own topic
 CHECK_KEYS=1 npx hardhat run scripts/s7/00-preflight.ts --network testnetRead
 npx hardhat run scripts/s7/s7-hcs-keys.ts --network testnetRead              # dry run
 EXECUTE=1 npx hardhat run scripts/s7/s7-hcs-keys.ts --network testnetRead    # create, publish, wrong, rotate
@@ -250,7 +251,7 @@ npm run web:e2e                           # Playwright (11 tests, 2 of them the 
 ```
 
 Testnet mode: choose "Hedera testnet (296)" in the sidebar (the choice is per browser). It reads the full-demo bond
-(trigger `0xED64…667A`), the topic `0.0.11195949` and contract logs from the mirror node. The RPC tries Hashio, then
+(trigger `0xD51E…405c`), the topic `0.0.11330395` and contract logs from the mirror node. The RPC tries Hashio, then
 thirdweb, by an `eth_chainId` probe; `NEXT_PUBLIC_TESTNET_RPC_URL=<relay> npm run web:dev` points it elsewhere (both relays
 answered the browser CORS preflight on 2026-10-30). Verified in step 9 with Hashio; the thirdweb fallback was not exercised.
 
@@ -282,11 +283,11 @@ page"); the page prints the commands with the values filled in, the owner runs t
 ```bash
 SUBMIT_EVM=<oracle> ADMIN_EVM=<trustee> PAYER_EVM=<relayer> MEMO=faultline-<symbol> npm run ops:issuer:topic            # dry run
 EXECUTE=1 SUBMIT_EVM=… npm run ops:issuer:topic                                                                          # owner
-TOKEN=0.0.11181839 ACCOUNTS=<pool>[,<investor>…] KYC_EVM=<KYC key holder> npm run ops:issuer:kyc                       # dry run
+TOKEN=0.0.11329874 ACCOUNTS=<pool>[,<investor>…] KYC_EVM=<KYC key holder> npm run ops:issuer:kyc                       # dry run
 EXECUTE=1 TOKEN=… npm run ops:issuer:kyc                                                                                 # owner
 ```
 
-The keystore entries default to `flOracle`, `flTrustee`, `flRelayer` (topic) and `flDeployer` (KYC); `SUBMIT`, `ADMIN`, `PAYER`
+The keystore entries default to `flhOracle`, `flhTrustee`, `flhRelayer` (topic) and `flhDeployer` (KYC); `SUBMIT`, `ADMIN`, `PAYER`
 and `KYC` pick other networks of `ops/hardhat.config.ts`. Both scripts refuse a key that does not derive to the address given.
 Tests: `npm run web:test` (terms, schedule, wizard, deployments, ATS facts, audit copy, ops commands) and `web/e2e/issuer.spec.ts`
 (part of `npm run web:e2e`). The testnet run is RT-29 in docs/REMAINING-TESTS.md.
@@ -302,41 +303,38 @@ npm run coverage                                   # after D17: pool 97/98 branc
 npm audit --omit=dev; npm --prefix oracle audit --omit=dev; npm --prefix web audit --omit=dev
 
 brew install gitleaks                              # 8.30.1
-gitleaks git ~/Desktop/faultline --redact; gitleaks git ~/Desktop/faultline-spikes --redact     # history (spikes = archive)
-gitleaks dir ~/Desktop/faultline --redact          # working tree (hits under web/.next are build output)
+gitleaks git ~/Desktop/faultline-hedera/faultline --redact     # history
+gitleaks dir ~/Desktop/faultline-hedera/faultline --redact     # working tree (hits under web/.next are build output)
 
 npx hardhat test test/security.contracts.test.ts   # PoCs for the open findings (part of npm test)
 SECURITY_VERBOSE=1 npx hardhat test test/security.contracts.test.ts   # prints why each open finding reproduces
 ```
 
-## 11. Full testnet demo (HANDOVER §10 step 9; testnet-verified 2026-10-27/28)
+## 11. Full testnet demo (HANDOVER §10 step 9; phases 0–5 testnet-verified 2026-11-05)
 
-Runs from `ops/` against the root build, `shared/ts` and the real `oracle/` CLI. **The 2026-10-27/28 run used these scripts
-from the spikes repo (commit `b527729` and earlier, archived at `~/Desktop/faultline-spikes` with its `out/` evidence);
-they moved to `ops/` on 2026-11-03, dry runs from `ops/` print the same as the spikes copy, and no transaction has been
-sent from `ops/` yet.** Every script is a **dry run** unless `EXECUTE=1`; only the owner runs `EXECUTE=1`, and each run
-asks for the keystore password once. State: `ops/out/demo-state.json` (resumable: finished steps skip; a new deployment
-needs a fresh state file, so move the old one aside first); oracle config, terms and ledger: `ops/out/demo/`; evidence:
-`ops/out/evidence.jsonl`, which holds script-sent transactions only (use the mirror node for the whole run). Accounts:
-docs/TESTNET-EVIDENCE.md "Faultline accounts". The relay is `FL_RPC_URL` (comma list), else Hashio then thirdweb.
+Runs from `ops/` against the root build, `shared/ts` and the real `oracle/` CLI. Every script is a **dry run** unless
+`EXECUTE=1`; only the owner runs `EXECUTE=1`, and each run asks for the keystore password once. State:
+`ops/out/demo-state.json` (resumable: finished steps skip; a new deployment needs a fresh state file, so move the old one
+aside first); oracle config, terms and ledger: `ops/out/demo/`; evidence: `ops/out/evidence.jsonl`, which holds
+script-sent transactions only (use the mirror node for the whole run). Accounts: docs/ACCOUNTS.md; ids and hashes:
+docs/DEPLOYMENTS.md. The relay is `FL_RPC_URL` (comma list), else Hashio then thirdweb.
 
 ```bash
-cd ~/Desktop/faultline && git status --short && npm run compile   # clean tree: the build recorded by the preflight
+cd ~/Desktop/faultline-hedera/faultline && git status --short && npm run compile   # clean tree: the build recorded by the preflight
 npm run ops:setup && cd ops                                      # or from the root: npm run ops:demo:N
-R="npx hardhat run --network testnetRead"
 
-CHECK_KEYS=1 $R scripts/demo/demo-0-preflight.ts                  # no tx: accounts, keys derive to addresses, build, budget
+CHECK_KEYS=1 npx hardhat run --network testnetRead scripts/demo/demo-0-preflight.ts   # no tx: accounts, keys derive to addresses, build, budget
 
 # Each line: run it without EXECUTE first (dry run), then with EXECUTE=1.
-EXECUTE=1 $R scripts/demo/demo-1-bond-topic.ts                    # HCS topic, ATS bond, addIssuer, bond KYC for A/B
-EXECUTE=1 $R scripts/demo/demo-2-deploy.ts                        # pool + trigger + wiring + backup trustee: THE CLOCK STARTS
-EXECUTE=1 $R scripts/demo/demo-3-subscribe.ts                     # sponsor funds the reserve; A invests 300, B invests 200
-SEND_REVERT=1 EXECUTE=1 $R scripts/demo/demo-4-flow-a.ts          # SYNTHETIC: oracle → pause → veto → unpause → replay rejected
-EXECUTE=1 $R scripts/demo/demo-5-flow-b.ts                        # live Bhuj: oracle → 120 s window → keeper → L = 7000
-EXECUTE=1 $R scripts/demo/demo-7-verify.ts                        # Sourcify; publishes the source; no Hedera tx, no HBAR
-PART=a EXECUTE=1 $R scripts/demo/demo-6-settle.ts                 # after the deadline: A redeem + claim, sponsor claims 350
+EXECUTE=1 npx hardhat run --network testnetRead scripts/demo/demo-1-bond-topic.ts                    # HCS topic, ATS bond, addIssuer, bond KYC for A/B
+EXECUTE=1 npx hardhat run --network testnetRead scripts/demo/demo-2-deploy.ts                        # pool + trigger + wiring + backup trustee: THE CLOCK STARTS
+EXECUTE=1 npx hardhat run --network testnetRead scripts/demo/demo-3-subscribe.ts                     # sponsor funds the reserve; A invests 300, B invests 200
+SEND_REVERT=1 EXECUTE=1 npx hardhat run --network testnetRead scripts/demo/demo-4-flow-a.ts          # SYNTHETIC: oracle → pause → veto → unpause → replay rejected
+EXECUTE=1 npx hardhat run --network testnetRead scripts/demo/demo-5-flow-b.ts                        # live Bhuj: oracle → 120 s window → keeper → L = 7000
+EXECUTE=1 npx hardhat run --network testnetRead scripts/demo/demo-7-verify.ts                        # Sourcify; publishes the source; no Hedera tx, no HBAR
+PART=a EXECUTE=1 npx hardhat run --network testnetRead scripts/demo/demo-6-settle.ts                 # after the deadline: A redeem + claim, sponsor claims 350
 # dashboard (below): investor B redeems and claims with MetaMask
-PART=sweep EXECUTE=1 $R scripts/demo/demo-6-settle.ts             # sweepExcess, sweepDust, sponsor claim, final books
+PART=sweep EXECUTE=1 npx hardhat run --network testnetRead scripts/demo/demo-6-settle.ts             # sweepExcess, sweepDust, sponsor claim, final books
 ```
 
 Timing limits (the schedule is demo-only; each phase prints its own deadline):
@@ -356,16 +354,17 @@ Timing limits (the schedule is demo-only; each phase prints its own deadline):
 Dashboard step:
 
 ```bash
-cd ~/Desktop/faultline && npm run web:build && npm --prefix web start     # http://localhost:3000; the build the run used
+cd ~/Desktop/faultline-hedera/faultline && npm run web:build && npm --prefix web start     # http://localhost:3000; the build the run used
 ```
 
 1. Choose "Hedera testnet (296)" in the sidebar.
 2. Set the wallet to Hedera Testnet: RPC `https://testnet.hashio.io/api`, chain id 296, currency HBAR, explorer
-   `https://hashscan.io/testnet`, account investor B (`0x6723…0A68`). In Brave, first set `brave://settings/wallet` →
+   `https://hashscan.io/testnet`, account investor B (`0xF978…301F`). In Brave, first set `brave://settings/wallet` →
    Default Ethereum wallet → "Extensions (no fallback)".
-3. Open Investor, press "Sign in with wallet", press Redeem, then Claim. B receives 60.000299 fUSD.
+3. Open Investor, press "Sign in with wallet", press Redeem, then Claim. B receives 60 fUSD plus its coupon (about 0.0003).
 
-Expected end (2026-10-27/28 run): L = 7000; A claims 90.000448, B 60.000299, sponsor 350.999253; total 501.000000 = 500
-deposits + 1 reserve; pool fUSD 0, bond supply 0, `totalClaimable` 0, `isSolvent()` true; both contracts `exact_match`;
-≈ 21 HBAR. If a transaction fails: stop, do not retry, read the mirror node. A second run from a fresh state file has
-not been tried.
+State of the 2026-11-05 run: phases 0–5 done (Flow A vetoed, Flow B executed, L = 7000; 33 transactions and two HCS
+messages, docs/DEPLOYMENTS.md). Expected end after settlement: A claims 90 + coupon, B 60 + coupon, sponsor 350 +
+unused reserve; total 501.000000 = 500 deposits + 1 reserve; pool fUSD 0, bond supply 0, `totalClaimable` 0,
+`isSolvent()` true; both contracts `exact_match` on Sourcify. If a transaction fails: stop, do not retry, read the
+mirror node.

@@ -4,8 +4,9 @@ Assessment sessions 2 and 3, 2026-10-30 and 2026-10-31. Branch `test-assessment`
 `FaultlinePool` now differs from the testnet build: creation keccak `0x78712136…09563f6d`, against `0x13a97433…69957f43` on testnet.
 `FaultlineTrigger` is byte-identical (`0x3205b3ca…aa8fcf3`). No testnet transaction was sent in either session.
 
-**State of the testnet evidence: all of it is from build `e617570`, before D18.** The fixed pool is deployed on no chain, a holder
-burn was never mined, and a re-run on the fixed build is still to do. Everything about D18 below is mock-tested.
+**State of the testnet evidence (updated 2026-11-06):** the D18 build is deployed on testnet (smoke run and full demo of
+2026-11-05, docs/DEPLOYMENTS.md), but a holder burn was never mined (RT-02 not run), so everything about D18's
+behaviour after a burn below is mock-tested.
 
 **Labels.** *Mock-tested*: local Hardhat chain with MockBond, MockUSD and MockHTS. *Testnet-simulated*: a read-only mirror-node
 `contracts/call` against a real bond, which proves the guard answers but mines nothing. *Testnet-verified*: a mined transaction.
@@ -69,8 +70,8 @@ bytecode would stop matching the verified build. See section 9.
 ## 3. RT-03: ATS holder-surface parity
 
 Source: ATS `v.8.0.0-ats`, every state-changing `external` function in `contracts/facets` (270), checked against `BOND_FACETS`.
-54 have no role modifier; the rest are role-gated and appear only where they matter. "Sim" is a read-only simulation on FLDMO at
-block 42328936 (A 300, B 200) or on FLSPK inside the S2 pause. **Nothing here was mined.**
+54 have no role modifier; the rest are role-gated and appear only where they matter. "Sim" is a read-only simulation on an ATS v8
+demo bond while A held 300 and B 200, or on a paused ATS v8 bond (spike S2). **Nothing here was mined.**
 
 | Function (no role) | Sim result | `totalSupply` | `balanceOf` | Blocks `controllerRedeem` | MockBond | Verdict |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -104,18 +105,19 @@ Role-gated, simulated as refused for a holder: `burn`, `batchBurn`, `controllerR
 - No holder call can stop `controllerRedeem` for **another** holder, and none raises the supply.
 - Every holder-reachable supply decrease goes through the same `ERC1410StorageWrapper.redeemByPartition`, so the SEC-15 fix covers all four paths.
 - **`redeem` has no `onlyUnpaused` modifier, yet it reverts `IsPaused`.** ATS reaches the check later, in `triggerAndSyncAll`. So on a paused bond
-  compliance errors win: stranger `InvalidKycStatus`, over balance `InsufficientBalance`, and only then `IsPaused` (simulated at FLSPK block 42232780, inside
-  the S2 pause). MockBond copies that order. A bond pause would stop the burn, but it also blocks the pool's `controllerRedeem`, so it is no defence.
+  compliance errors win: stranger `InvalidKycStatus`, over balance `InsufficientBalance`, and only then `IsPaused` (simulated on a paused ATS v8 bond,
+  spike S2). MockBond copies that order. A bond pause would stop the burn, but it also blocks the pool's `controllerRedeem`, so it is no defence.
 - `balanceOf` is the free balance: holds, locks, clearing and frozen units sit outside it, while `totalSupply` keeps them. Sum of `balanceOf` is not `totalSupply` once a hold exists.
 
 ## 4. Task 2A: deployer's `DEFAULT_ADMIN_ROLE`
 
-SEC-02 stays accepted, and spike S2 already proved on testnet that a paused bond reverts `controllerRedeem` and `mint` with `IsPaused()`: that evidence stands and
-was not repeated. SEC-01 is fixed by D17 and stays a regression in `test/security.contracts.test.ts`.
+SEC-02 stays accepted; spike S2 showed that a paused bond reverts `controllerRedeem` and `mint` with `IsPaused()` (not repeated on
+this project's bonds). SEC-01 is fixed by D17 and stays a regression in `test/security.contracts.test.ts`.
 
 Added: `scripts/lib/bondAudit.ts`. `auditBondRoles` fails a deploy if anyone but the pool holds `ROLE_ISSUER` or `ROLE_CONTROLLER`, or anyone holds one of nine
 forbidden roles; `scripts/lib/e2e.ts` now runs it. `handOverBondAdmin` moves the admin role in two steps. Tested in `test/deploy.bondaudit.test.ts`, mock-tested.
-The testnet deploy scripts in `faultline-spikes` now call it (SEC-20, commit `b527729` there), through the same module.
+The testnet deploy scripts in `ops/scripts` call it (SEC-20, `smoke-3-deploy.ts` and `demo-2-deploy.ts`), through the same module; it was clean on
+both 2026-11-05 deployments.
 
 New angles:
 
@@ -146,7 +148,7 @@ true surplus and every holder stays covered.
 | Item | Severity | Test | Result | Environment |
 | --- | --- | --- | --- | --- |
 | RT-01 | High | `test/pool.supplyburn.test.ts` | fixed by D18, no open test left | mock-tested |
-| RT-02 | High | `scripts/demo/rt02-holder-burn.ts` (spikes) | written, **not run** | not on any chain |
+| RT-02 | High | `ops/scripts/demo/rt02-holder-burn.ts` | written, **not run** | not on any chain |
 | RT-03 | High | `test/bond.holdersurface.test.ts`, section 3 | done | mock-tested + testnet-simulated |
 | RT-04 | Medium | `test/pool.bondstate.test.ts` | pass | mock-tested |
 | RT-05 | Medium | `test/pool.reentrancy.test.ts` | pass, pool branches 98/98 | mock-only |
@@ -226,13 +228,14 @@ call, so all 338 tests pass with 100 % trigger branch coverage. SEC-02's test bu
 recovery is out of band: the bond admin grants itself `ROLE_ISSUER` and mints the missing units, which is what D4 assumes
 never happens, and the attacker can repeat the burn. Nothing is stolen.
 
-**Proof (read-only, no transaction).** Historical simulation on the **real Faultline demo bond** FLDMO at block 42328936
-(2026-10-27 19:09:56 UTC). The pool held `ROLE_CONTROLLER`, A held 300 units and B held 200:
+**Proof (read-only, no transaction).** Historical simulation on the **real Faultline demo bond** FLDMO
+(`0x4DdEBa59E3b8e5e62bD3f3872571EE4779C8f173`) at block 42713496 (2026-11-05 22:06:38 UTC, after Flow B, before the bond's
+maturity). The pool held `ROLE_CONTROLLER`, A held 300 units and B held 200:
 
 ```bash
 curl -s -X POST https://testnet.mirrornode.hedera.com/api/v1/contracts/call -H 'content-type: application/json' -d '{
-  "block":"0x285e368","estimate":false,"gas":500000,"gasPrice":0,"value":0,
-  "from":"0x6d35b49d61045837Cb7F7a161c2712B68E4Fd145","to":"0xF227eF78813e5058C8B7Bfccfc86dAF22087473e",
+  "block":"0x28bc098","estimate":false,"gas":500000,"gasPrice":0,"value":0,
+  "from":"0xCE69d905EFc74B2fa4c93D6924EF5903DF8d9bda","to":"0x4DdEBa59E3b8e5e62bD3f3872571EE4779C8f173",
   "data":"0xe77c646d000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000"}'
 ```
 
@@ -246,8 +249,9 @@ curl -s -X POST https://testnet.mirrornode.hedera.com/api/v1/contracts/call -H '
 | A `redeemFrom(B, 1, "")` without allowance (control) | reverts `InsufficientAllowance` |
 | Unknown selector (control) | reverts `FunctionNotFound` |
 
-Live `eth_call` on spike bond FLSPK gave the same: `redeem` and `redeemByPartition` succeed for the KYC'd holder and revert
-for a stranger.
+Re-checked 2026-11-06 at the latest block (42724880, after the bond's maturity 1793917445): every holder `redeem` above
+now reverts `InvalidPartition` (`0xbf84f4ec`) instead, while the stranger, allowance and unknown-selector controls revert
+as before. So on this ATS v8 bond a holder burn is possible before maturity only (testnet-simulated, not mined).
 
 **Status:** INCONCLUSIVE until a real transaction confirms it; the simulations are strong evidence, not a mined burn. No
 contract was changed. Rule 4 asks for a failing test first, and this session may not write tests, so that test is item
@@ -276,7 +280,7 @@ failing test planned as RT-15.
 
 After `npm run coverage`, `artifacts/` holds instrumented bytecode: the pool's creation keccak was `0x60d41727…` instead of
 `0x13a97433…`, runtime size 21,353 bytes instead of 9,662, and `npm run compile` recompiled 43 files. Slither crashed on this.
-The spikes deploy from these artifacts, so deploying straight after coverage would ship instrumented code. The COMMANDS
+The `ops/` scripts deploy from these artifacts, so deploying straight after coverage would ship instrumented code. The COMMANDS
 runbooks start with `npm run compile`, which repairs it, so this is a procedure risk. Proof: commands in section 3.3.
 The per-file Hardhat counts in section 2.1 ran after coverage with `--no-compile`, on instrumented bytecode. Their sum equals
 the clean full run.

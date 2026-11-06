@@ -1,7 +1,7 @@
 # Test inventory and baseline (assessment session 1)
 
-Date: 2026-10-30. Repo commit `a98f806` (branch point `main`), with the owner's uncommitted edits to `HANDOVER.md`,
-`README.md` and `docs/COMMANDS.md` left in place. Spikes repo: 27 commits, read only.
+Date: 2026-10-30 (session 1 baseline; the counts in §1–§3 are that day's). Current counts: docs/TEST-STATE.md. Section 7
+describes this project's testnet runs of 2026-11-05.
 Environment: macOS 26.5.2 arm64, Node v24.16.0, npm 11.13.0.
 
 This session was read-only on code. No contract, oracle or dashboard file changed, no test was written and no testnet
@@ -139,12 +139,12 @@ unpause, fund and sweep buttons are not pressed.
 | Shared | `shared/ts/{attestation,hcsMessage,jcs}.ts`, `shared/attestation.eip712.json` |
 | Fixtures | 2 real USGS records, 6 labelled SYNTHETIC records (`oracle/fixtures/README.md`) |
 | Local scripts | `scripts/{e2e-local,deploy-local,oracle-e2e-local,dashboard-demo-local}.ts`, `scripts/with-local-node.mjs`, `scripts/lib/{e2e,fixtures,oracle-local}.ts` |
-| Testnet scripts | `faultline-spikes/scripts/`: `s0, s1, s2, s3, s5, s7, smoke, demo`, `lib` (53 TypeScript files). They have no automated tests; they produce evidence |
+| Testnet scripts | `ops/scripts/`: `smoke`, `demo`, `s7`, `issuer`, `lib`. They have no automated tests; they produce evidence |
 | Dashboard | Views `/`, `/investor`, `/sponsor`, `/trustee`, `/replay`, `/evidence` (6). Routes `/api/local/config`, `/api/local/hcs`, `/api/usgs/[id]` |
 | Package scripts | root `package.json`: setup, compile, clean, test, test:gas, coverage, node, e2e:local, deploy:local, oracle:e2e:local, typecheck, oracle:typecheck, oracle:test, web:dev, web:build, web:lint, check, web:test, web:e2e, dashboard:demo:local |
 | CI workflows | **None** in either repo (no `.github/`). NOT IMPLEMENTED |
 | Security docs | `docs/SECURITY-REVIEW.md`, README trust section, ARCHITECTURE §9 |
-| Testnet evidence | `docs/TESTNET-EVIDENCE.md`, `faultline-spikes/out/` (git-ignored) |
+| Testnet evidence | `docs/TESTNET-EVIDENCE.md`, `docs/DEPLOYMENTS.md`, `ops/out/` (git-ignored) |
 
 Environment variable **names** (values were not read):
 
@@ -153,7 +153,7 @@ Environment variable **names** (values were not read):
   `ORACLE_RPC_URL`, `ORACLE_CONFIG`, `ORACLE_LOG_LEVEL`, `ORACLE_E2E_LIVE`, `USGS_LIVE`, `HARDHAT_ACCOUNT_ORACLE`, `HARDHAT_ACCOUNT_RELAYER`,
   `DEMO_ADVISORY`, `DEMO_WINDOW_SEC`, `FAULTLINE_LOCAL_API`, `FAULTLINE_REPO_DIR`, `NEXT_PUBLIC_TESTNET_RPC_URL`, `FC_RUNS`, `REPORT_GAS`, `SECURITY_VERBOSE`.
 - Spikes repo: `EXECUTE`, `CHECK_KEYS`, `PART`, `PHASE`, `SEND_REVERT`, `B_BY_SCRIPT`, `BOND_MATURITY_MIN`, `MATURITY_MIN`, `MAX_WAIT_SEC`, `MIN_REMAINING_SEC`,
-  `FORCE_SEND`, `FRESH_ADDRESS`, `FRESH_ID`, `VC_FILE`, `WHO`, `FL_RPC_URL`, and the keystore names `FL_{DEPLOYER,TRUSTEE,TRUSTEE_BACKUP,ORACLE,RELAYER,SPONSOR,INVESTOR_A,INVESTOR_B}_PRIVATE_KEY`.
+  `FORCE_SEND`, `FRESH_ADDRESS`, `FRESH_ID`, `VC_FILE`, `WHO`, `FL_RPC_URL`, and the keystore names `FLH_{DEPLOYER,TRUSTEE,TRUSTEE_BACKUP,ORACLE,RELAYER,SPONSOR,INVESTOR_A,INVESTOR_B}_PRIVATE_KEY`.
 
 ---
 
@@ -235,9 +235,8 @@ It is scheduled for session 4 with an explicit exclusion.
 | Oracle Vitest | stubbed SDK, fetch, chain | no | no | no |
 | Web Vitest | stubbed provider | no | no | no |
 | Playwright | test wallet, mock tokens | yes | no | no |
-| Smoke run (spikes) | none | no | no | **yes, pre-D17 build `d07f7a5`** |
-| Full demo (spikes) | none | no | no | **yes, D17 build `e617570`** |
-| Spikes S0–S7 | none | no | no | yes, probes only, not Faultline contracts |
+| Smoke run (`ops/scripts/smoke`) | none | no | no | **yes, D18 build `2a71b00`, 2026-11-05** |
+| Full demo (`ops/scripts/demo`) | none | no | no | **yes, D18 build `a0b1dd5`, 2026-11-05 (phases 0–5)** |
 
 Fork tests do not exist. NOT IMPLEMENTED.
 
@@ -313,43 +312,31 @@ No test was found with no assertion at all.
 
 ## 7. README and evidence claims
 
-Testnet evidence has two runs. They are not interchangeable.
+Testnet evidence has two runs, both on 2026-11-05 (UTC), both from `ops/` on the FLH_* accounts, both on the D18 build
+(same creation keccaks: pool `0x78712136…09563f6d`, trigger `0x3205b3ca…aa8fcf3`).
 
 | Run | Build | Contracts on testnet | What it proves | What it does not prove |
 | --- | --- | --- | --- | --- |
-| Smoke run, 2026-10-26 | `d07f7a5`, **pre-D17** | pool `0xEB64…Cf7E`, trigger `0xA4C8…7cCc` | Happy path on real ATS, HTS, `0x167`, signed by a script | Anything about D17. The deployed bytecode is not the current source |
-| Full demo, 2026-10-27/28 | `e617570`, D17 | pool `0xC4Ba…B1a3`, trigger `0xED64…667A` | Pause, veto, replay revert, oracle, HCS, keeper, redeem, sweeps, one dashboard write | Revisions, two events, cap, Superseded, D15, D11 failures, post-deadline pause |
-
-**Update 2026-10-31:** this no longer holds for the pool. D18 changed `FaultlinePool.sol` (creation keccak `0x78712136…09563f6d`), which
-was never deployed; `FaultlineTrigger` stays byte-identical. The inventory below describes session 1 and is not rewritten.
-
-**At session 1, current source equalled the D17 build.** `git diff e617570 HEAD -- contracts shared hardhat.config.ts oracle/src` was empty. A clean
-compile gave creation keccak `0x13a97433…69957f43` (pool) and `0x3205b3ca…aa8fcf3` (trigger), equal to
-`docs/TESTNET-EVIDENCE.md`.
+| Smoke run | `2a71b00`, D18 | pool `0xfF26…1359`, trigger `0x6455…20ab` | Happy path on real ATS, HTS, `0x167`, signed by a script; settlement to the base unit | Pause, veto, oracle CLI, HCS |
+| Full demo | `a0b1dd5`, D18 | pool `0x6d84…597e`, trigger `0xD51E…405c` | Pause, veto, replay revert, real oracle CLI, HCS, keeper (phases 0–5) | Settlement and Sourcify (phases 6–7 not run yet); revisions, two events, cap, Superseded, D15, D11 failures, post-deadline pause |
 
 ### 7.1 Mirror-node spot check
 
-All **68** transactions linked in the two evidence tables were looked up on the mirror node, far above the 10 required, plus
-8 spike transactions. Read-only.
+Checked while recording the runs (read-only: mirror node REST and `eth_call`).
 
 | Check | Claim | Mirror shows | Status |
 | --- | --- | --- | --- |
-| Smoke rows | 33 txs, all success | 33 found, 27 EVM + 6 SDK, 33 `SUCCESS` | PASS — TESTNET |
-| Smoke fees | 35.14 HBAR | 35.1392 charged | PASS — TESTNET |
-| Demo rows | 35 txs: 31 EVM + 4 SDK; 33 success, 2 reverts | exactly that; reverts are the replay and B's first redeem | PASS — TESTNET |
-| Demo fees | 20.83 HBAR by balance drop; 20.8371 charged | 20.8371 charged | PASS — TESTNET |
-| Signers | trustee pauses and vetoes, admin unpauses, relayer executes, B redeems | `from` matches each role | PASS — TESTNET |
-| Replay revert | `EventFinalised(eventId, 2)` | selector `0x67e5eebc`, eventId of the SYNTHETIC record, status 2 | PASS — TESTNET |
-| B's first redeem | gas limit 311,684, used 304,741, reverted | exactly that | PASS — TESTNET |
-| B's retry | 1.3× limit | limit 405,190 = ceil(311,684 × 1.3) | PASS — TESTNET |
-| HCS | topic holds exactly 2 messages, oracle signed | 2 messages, relayer paid, `verifyTypedData` recovers the oracle for both | PASS — TESTNET |
-| Topic keys | submit = oracle, admin = trustee, not deleted | key prefixes match S7 values, `deleted` false | PASS — TESTNET |
-| Sourcify | `exact_match` | both contracts: match, creation and runtime all `exact_match` | PASS — TESTNET |
-| Final books | L 7000, 500 issued and redeemed, credited 350, claimable 0, solvent, pool 0 fUSD, supply 0 | `eth_call` and mirror agree | PASS — TESTNET |
-| D17 roles | role admin is itself; trustee and backup yes, deployer no | `eth_call` agrees | PASS — TESTNET |
-| Event records | SYNTHETIC Vetoed, Bhuj Executed | status 2 and 3, Bhuj `dataHash` `0xd604b4f7…` | PASS — TESTNET |
-| Bond roles | ISSUER and CONTROLLER = pool; no AGENT, ADJUSTMENT, PAUSER | counts 1, 1, 0, 0, 0 | PASS — TESTNET |
-| Spikes | S1, S2, S3 and HANDOVER §5 samples | 8 of 8 as documented; S2 reverted `0x1309a563` | PASS — TESTNET |
+| Accounts | eight FLH_* ids map to the documented EVM addresses | `evm_address` matches for all eight | PASS — TESTNET |
+| fUSD keys | KYC key = deployer key, no wipe/freeze/pause key | `kyc_key` == deployer account key `03f39002…bddb441`; no other key | PASS — TESTNET |
+| Smoke rows | 33 txs, all success | 33 evidence lines, each with its mirror `charged_tx_fee` and `SUCCESS` | PASS — TESTNET |
+| Smoke fees | ≈ 40.1 HBAR | 40.063 charged in total | PASS — TESTNET |
+| Topic keys | submit = oracle, admin = trustee, auto-renew = relayer, not deleted | keys equal the oracle and trustee public keys; `deleted` false | PASS — TESTNET |
+| HCS | two messages, relayer paid | sequence 1 (707 B) and 2 (692 B), payer `0.0.11329581` | PASS — TESTNET |
+| termsHash | web config == trigger | `trigger.termsHash()` = `0x76135117…387957e2` | PASS — TESTNET |
+| Oracle txs | submit ×2 and keeper execute from the relayer | `from` = the relayer's long-zero address, `SUCCESS` | PASS — TESTNET |
+| Replay revert | `EventFinalised(eventId, 2)` | `CONTRACT_REVERT_EXECUTED`, selector `0x67e5eebc`, the SYNTHETIC eventId, status 2 | PASS — TESTNET |
+| Subscription | 500 issued, reserve 1 | `unitsIssued` 500,000,000, `couponReserve` 1,000,000 | PASS — TESTNET |
+| Settlement, Sourcify | — | not run yet | NOT RUN |
 
 ### 7.2 README claim table
 
