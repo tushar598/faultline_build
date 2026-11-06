@@ -22,6 +22,12 @@ Sources and dates: [`docs/research/MARKET.md`](docs/research/MARKET.md).
 
 ## How it works
 
+<p align="center">
+  <img src="docs/img/bond-lifecycle-flow.svg" width="680" alt="Faultline bond flow: setup, investors buy, risk period, earthquake, oracle attests, challenge window, payout, maturity; side branches for no earthquake (full money and coupon) and a trustee veto (no payout)">
+</p>
+
+The same flow at contract level:
+
 ```
  Sponsor ──fund coupon reserve──▶ FaultlinePool ◀──stablecoin── Investors (KYC'd)
                                       │  mints ATS bond units 1:1
