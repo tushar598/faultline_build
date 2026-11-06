@@ -17,7 +17,7 @@ import path from "node:path";
 import { Contract, getAddress } from "ethers";
 import { EXECUTE, ROOT, explain, rpcUrl } from "../lib/common.js";
 import {
-  ACCOUNTS, BHUJ_ID, SYNTHETIC_FIXTURE, SYNTHETIC_ID, artifact, eventually, iso, latestTs, ledgerEntry, oracleKeys, provider, report, runOracle, sharedTs,
+  ACCOUNTS, BHUJ_ID, SYNTHETIC_FIXTURE, bhujFixture, SYNTHETIC_ID, artifact, eventually, iso, latestTs, ledgerEntry, oracleKeys, provider, report, runOracle, sharedTs,
   syntheticFixture, useFaultlineErrors, verifyHcsAttestation, waitForBlockTime,
 } from "../demo/lib.js";
 import { saveResult } from "./lib.js";
@@ -40,7 +40,7 @@ if (!d.topicId || !/^0\.0\.\d+$/.test(d.topicId)) throw new Error("the entry has
 if (d.terms?.mode !== "replay") throw new Error("the bond's terms are live: this helper replays a historical record and needs replay terms (D10, D14)");
 const trigger = getAddress(d.trigger);
 console.log(`bond ${d.label ?? "(no label)"}: trigger ${trigger}, topic ${d.topicId}, replay offset ${d.terms.timeOffsetSec} s`);
-console.log(`event: ${EVENT === "bhuj" ? `REAL USGS record ${BHUJ_ID} (2001 Bhuj, fetched live)` : `SYNTHETIC fixture ${SYNTHETIC_FIXTURE} (not a real event)`}, eventId ${shared.eventIdOf(usgsId)}`);
+console.log(`event: ${EVENT === "bhuj" ? `REAL USGS record ${BHUJ_ID} (2001 Bhuj; live from USGS, else the saved real record)` : `SYNTHETIC fixture ${SYNTHETIC_FIXTURE} (not a real event)`}, eventId ${shared.eventIdOf(usgsId)}`);
 
 const p = await provider();
 const t = new Contract(trigger, artifact("FaultlineTrigger").abi as never, p);
@@ -83,10 +83,26 @@ fs.writeFileSync(
 // ------------------------------------------------------------ the record, the rule and the timing
 const now = await latestTs(p);
 let feature: Parameters<typeof shared.buildAttestation>[0]["feature"];
+// Bhuj: the live USGS record, 3 tries; if USGS cannot be reached (a slow network timed out on 2026-11-06), the saved REAL
+// record oracle/fixtures/real-usgs-usp000a8ds-detail.geojson, whose dataHash equals the live one (demo preflight check
+// 6), and the oracle CLI then runs with --offline on that same file. USGS_OFFLINE=1 forces it.
+let offline = process.env.USGS_OFFLINE === "1";
 if (EVENT === "bhuj") {
-  const res = await fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=${BHUJ_ID}&format=geojson`);
-  if (!res.ok) throw new Error(`USGS answered HTTP ${res.status}`);
-  feature = (await res.json()) as typeof feature;
+  for (let i = 1; i <= 3 && !offline && !feature!; i++) {
+    try {
+      const res = await fetch(`https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=${BHUJ_ID}&format=geojson`, { signal: AbortSignal.timeout(20_000) });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      feature = (await res.json()) as typeof feature;
+    } catch (e) {
+      console.log(`  USGS try ${i}/3 failed: ${(e as Error).message}${(e as { cause?: { code?: string } }).cause?.code ? ` (${(e as { cause: { code: string } }).cause.code})` : ""}`);
+      if (i < 3) await new Promise((r) => setTimeout(r, 3000));
+    }
+  }
+  if (!feature!) {
+    offline = true;
+    feature = bhujFixture() as typeof feature;
+    console.log(`  using the saved REAL USGS record (oracle/fixtures/real-usgs-${BHUJ_ID}-detail.geojson); the oracle runs with --offline`);
+  }
 } else {
   feature = syntheticFixture() as typeof feature;
 }
@@ -118,7 +134,7 @@ if (s === "None") {
   if (await t.paused()) throw new Error("trigger is paused — nothing sent");
   if (!(await waitForBlockTime(p, observedAt + 3, "the replayed observedAt", MAX_WAIT_SEC))) throw new Error("observedAt too far away — nothing sent (run again later)");
   if ((await latestTs(p)) > deadline) throw new Error("past submissionDeadline — nothing sent");
-  const args = EVENT === "bhuj" ? ["replay", "--usgs-event", BHUJ_ID] : ["replay", "--fixture", SYNTHETIC_FIXTURE];
+  const args = EVENT === "bhuj" ? ["replay", "--usgs-event", BHUJ_ID, ...(offline ? ["--offline"] : [])] : ["replay", "--fixture", SYNTHETIC_FIXTURE];
   const r = await runOracle(args, await oracleKeys(), undefined, configFile);
   if (r.code !== 0 || !/→ submit-new/.test(r.out)) throw new Error(`oracle replay did not submit (exit ${r.code}) — stop and report`);
   s = await eventually(status, (v) => v === "Pending");
