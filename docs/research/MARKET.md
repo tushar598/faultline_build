@@ -61,11 +61,11 @@ Notable sponsors, one deal each:
 | Bond | Year | Size | Trigger | Paid out? | Source | Status |
 | --- | --- | --- | --- | --- | --- | --- |
 | IBRD / FONDEN 2017 (Mexico), Class A quake tranche | 2017 | $150m quake tranche (total up to $360m quake + hurricane) | **parametric** | **yes, 100% ($150m)** after the M8.1 Chiapas quake of Sept 2017 | World Bank 4 Aug 2017 (issue) [19]; Artemis 11 Oct 2017 (payout) [20] | issue confirmed; payout secondary (Mexican Finance Ministry via Artemis) |
-| Pacific Alliance (IBRD CAR 116–120): Chile, Colombia, Mexico, Peru | Feb 2018 | $1.36bn total: Chile $500m, Colombia $400m, Mexico $260m, Peru $200m | **parametric** | **Peru: yes, 30% ($60m)** after the M8.0 quake of 26 May 2019; others: none found | World Bank 7 Feb 2018 [21]; Peru MEF [22]; Artemis [23] | issue confirmed; payout secondary (the MEF page did not load; figures via search and Artemis) |
+| Pacific Alliance (IBRD CAR 116–120): Chile, Colombia, Mexico, Peru | Feb 2018 | "US$1.36 billion in earthquake protection": Chile US$500m, Colombia US$400m, Mexico US$260m, Peru US$200m; "more than 45 investors" | **parametric** ("The triggers are parametric and depend on data provided by the US Geological Survey") | **Peru: yes, 30% ($60m)** after the M8.0 quake of 26 May 2019; others: none found | World Bank 7 Feb 2018 [21]; Peru MEF [22]; Artemis [23] | issue confirmed; payout secondary (the MEF page did not load; figures via search and Artemis) |
 | IBRD CAR 123 (Philippines), quake tranche | Nov 2019 | $75m quake + $150m typhoon = $225m | parametric (modelled loss per occurrence) | quake: none found (typhoon tranche paid after Rai) | World Bank 25 Nov 2019 [24]; IFSCA 2025 [25] | confirmed |
 | IBRD CAR 131 (Chile) | Mar 2023 | $350m bond (+$280m swaps) | **parametric** | none found (scheduled maturity 31 Mar 2026) | World Bank 17 Mar 2023 [11] | confirmed |
 | IBRD CAR Mexico 2024 | 2024 | $420m quake + Atlantic storm, plus $175m Pacific storm → $595m | **parametric** | none found | Artemis [26]; World Bank 15 May 2024 (Pacific part) [27] | secondary (quake part) |
-| ADB Kyrgyz Republic / Tajikistan | 2026 | $80m each (earthquake sub-limit $70m) | **parametric** | none found | ADB 3 May 2026 [12] | confirmed |
+| ADB Kyrgyz Republic / Tajikistan | 2026 | "$80 million 3-year DRB" each (SOFR + 4 bps funding margin + 600 bps risk margin); earthquake sub-limit $70m per Artemis | **parametric** ("predefined and independently verified parametric triggers") | none found | ADB 3 May 2026 [12]; Artemis [13] (sub-limit) | confirmed (sub-limit secondary) |
 | Bosphorus 1 Re (Turkey, TCIP) | 2013 | $400m | **parametric** (KOERI data, index value) | none found; matured Apr 2016 | Artemis [17] | confirmed |
 | Black Kite Re 2025-1 (Peak Re), India and China EQ part | 2025 | $50m deal | **parametric** (USGS, magnitude in boxes) for China/India; industry loss for Japan | none found | Artemis [16] | secondary |
 | Acorn Re 2025-1 (Hannover Re) | 2025 | $240m | **parametric** | none found | Artemis Q4 2025 [5] | confirmed |
@@ -90,7 +90,7 @@ Notable sponsors, one deal each:
 
 | Fact | Value as stated | Source, date | Status |
 | --- | --- | --- | --- |
-| Sovereign cover | "Sovereign parametric insurance schemes covering public assets against risk of natural disasters, as well as other sovereign risk transfer mechanisms, are non-existent" | OECD (2024), *Fostering Catastrophe Bond Markets in Asia and the Pacific* [18] | confirmed (as of 2024) |
+| Sovereign cover | India has no sovereign cat bond or sovereign parametric cover: "Sovereign parametric insurance schemes covering public assets against risk of natural disasters, as well as other sovereign risk transfer mechanisms, are non-existent" | OECD (2024), *Fostering Catastrophe Bond Markets in Asia and the Pacific* [18] | confirmed (as of 2024) |
 | Policy direction | the government "has begun to encourage the development of CAT bond markets"; IFSCA constituted a committee; Nagaland piloted parametric excess-rainfall cover in 2020 | OECD 2024 [18] | confirmed |
 | IFSCA working group report | *Insurance Linked Securities (ILS): An alternate source for ever growing need of capacity for the Catastrophe protection*, submitted 16 Jun 2025: India "highly prone to floods, cyclones, droughts, and earthquakes"; recommends a framework for ILS / cat bonds in GIFT IFSC; Indian insurers currently not able to invest in ILS abroad | IFSCA, published 31 Jul 2025 [25] | confirmed |
 | First cat bond covering India | Black Kite Re 2025-1 (Peak Re, Hong Kong): India earthquake on a parametric basis; described as the first 144A cat bond to cover risks in India | Artemis [16] | secondary |
@@ -131,7 +131,7 @@ parametric cat bond exists (Danish Red Cross) [18], and a blockchain-native cat 
 
 | Fact | Value as stated | Source, date | Status |
 | --- | --- | --- | --- |
-| Melissa payout | "a full payout of $150 million under its catastrophe insurance coverage with the World Bank", backed by "a catastrophe bond issued in 2024 by the World Bank"; "Pre-agreed parametric triggers reached for full payout based on storm's central pressure and path"; calculation agent AIR Worldwide | World Bank press release, 7 Nov 2025 [40] | confirmed |
+| Melissa payout | Melissa **triggered** a full $150 million payout (the release calls the payout forthcoming): "a full payout of $150 million under its catastrophe insurance coverage with the World Bank", backed by "a catastrophe bond issued in 2024 by the World Bank"; "Pre-agreed parametric triggers reached for full payout based on storm's central pressure and path"; calculation agent AIR Worldwide | World Bank press release, 7 Nov 2025 [40] | confirmed |
 | Replacement bond | USD 200 million, named storms, "Parametric, Per Occurrence"; trade date 18 May 2026, settlement 26 May 2026, scheduled maturity 23 May 2030; risk margin 6.75% p.a. + funding margin 0.12% p.a. over compounded SOFR; listed on SGX; "For the 3-year 2024 catastrophe bond, a full payout to Jamaica was triggered by Hurricane Melissa in 2025" | World Bank press release, 18 May 2026 [10] | confirmed |
 | Upsizing | target raised from $150m to $200m (oversubscribed) | Artemis [41]; World Bank [10] | confirmed |
 
@@ -156,6 +156,10 @@ parametric cat bond exists (Danish Red Cross) [18], and a blockchain-native cat 
   low-reliability site mentions early talks on a flood/heatwave scheme (not used).
 - **Not fully read:** the Swiss Re ILS report itself (figures via Artemis), the Peak Re press release (HTTP 403), the
   AM Best report (figures via Artemis).
+- **Dead or blocked links:** [21] (World Bank, 404) and [12] (ADB, 403 to scripts) were read from Wayback Machine
+  snapshots of the same pages; the facts used are quoted from those snapshots.
+- **India wording:** Black Kite Re 2025-1 (Peak Re) covers Indian earthquake risk, so India is not absent from the cat
+  bond market; what is absent is a sovereign cat bond or sovereign parametric cover (OECD, 2024).
 
 ## Pitch summary (confirmed facts only)
 
@@ -164,12 +168,14 @@ parametric cat bond exists (Danish Red Cross) [18], and a blockchain-native cat 
 2. Sovereign **parametric earthquake** cover is an established product: the World Bank placed **$1.36 billion** for Chile,
    Colombia, Mexico and Peru in 2018 and **$630 million** (bond + swaps) for Chile in 2023, and the ADB issued its first
    parametric earthquake cat bonds (**$160 million**, Kyrgyz Republic and Tajikistan) in 2026.
-3. In November 2025 the World Bank confirmed a **full $150m parametric payout to Jamaica** after Hurricane Melissa; in May
-   2026 Jamaica replaced it with a **$200m** World Bank parametric bond.
-4. India has **no sovereign parametric cover or sovereign risk transfer** (OECD, 2024), while IFSCA's 2025 working group
-   calls India "highly prone to … earthquakes" and recommends building an ILS / cat bond framework in GIFT IFSC.
-5. Small and private deals face real costs: a **cat bond lite** exists to skip cost-intensive steps (OECD), and a
-   blockchain-based placement cut an issuer's transaction costs by about **USD 200,000–400,000 per issue** (OECD).
+3. In November 2025 the World Bank confirmed that Hurricane Melissa **triggered a full $150 million parametric payout** for
+   Jamaica; in May 2026 Jamaica replaced the cover with a **$200 million** World Bank parametric bond.
+4. India has **no sovereign cat bond or sovereign parametric cover** (OECD, 2024), while IFSCA's 2025 working group calls
+   India "highly prone to … earthquakes" and recommends building an ILS / cat bond framework in GIFT IFSC.
+5. Small and private deals face real costs: a **cat bond lite** exists to skip cost-intensive steps (OECD, 2024). For the
+   blockchain-based ILS platform used in the Danish Red Cross volcano bond, the OECD puts the saving at about
+   **USD 200,000–400,000 per issue** against traditional settlement; that figure is for that platform, not for
+   blockchain in general.
 
 ## Sources
 
@@ -184,7 +190,7 @@ parametric cat bond exists (Danish Red Cross) [18], and a blockchain-native cat 
 9. Risk & Insurance, "Reinsurance Market Shifts to Buyers' Favor as Cat Bond Issuance Shatters Records". https://riskandinsurance.com/reinsurance-market-shifts-to-buyers-favor-as-cat-bond-issuance-shatters-records/
 10. World Bank, press release, "World Bank Prices Catastrophe Bond for Disaster Protection for Jamaica", 18 May 2026. https://www.worldbank.org/en/news/press-release/2026/05/18/world-bank-prices-catastrophe-bond-for-disaster-protection-for-jamaica
 11. World Bank, press release, "World Bank Executes its Largest Single Country Catastrophe Bond and Swap Transaction to Provide Chile $630 Million…", 17 Mar 2023. https://www.worldbank.org/en/news/press-release/2023/03/17/world-bank-executes-its-largest-single-country-catastrophe-bond-and-swap-transaction-to-provide-chile-630-million-in-fin
-12. Asian Development Bank, "ADB issues inaugural disaster relief bonds targeting earthquake and extreme precipitation risk", 3 May 2026. https://www.adb.org/news/adb-issues-inaugural-disaster-relief-bonds-targeting-earthquake-and-extreme-precipitation-risk
+12. Asian Development Bank, news release "ADB Issues Inaugural Disaster Relief Bonds Targeting Earthquake and Extreme Precipitation Risk in the Kyrgyz Republic and Tajikistan", 3 May 2026. Original (returns 403 to scripts): https://www.adb.org/news/adb-issues-inaugural-disaster-relief-bonds-targeting-earthquake-and-extreme-precipitation-risk. Read from the Wayback Machine snapshot of 3 May 2026: http://web.archive.org/web/20260503120607/https://www.adb.org/news/adb-issues-inaugural-disaster-relief-bonds-targeting-earthquake-and-extreme-precipitation-risk
 13. Artemis, "ADB prices first cat bonds, secures $160m disaster risk finance for Kyrgyz Republic & Tajikistan". https://www.artemis.bm/news/adb-prices-first-cat-bonds-secures-160m-disaster-risk-finance-for-kyrgyz-republic-tajikistan/
 14. Artemis Deal Directory, "Ursa Re Ltd. (Series 2026-1)". https://www.artemis.bm/deal-directory/ursa-re-ltd-series-2026-1/
 15. Artemis Deal Directory, "Nakama Re Pte. Ltd. (Series 2025-1)"; news "Zenkyoren secures $100m Nakama Re 2025-1 quake cat bond priced near low-end". https://www.artemis.bm/deal-directory/nakama-re-pte-ltd-series-2025-1/ and https://www.artemis.bm/news/zenkyoren-secures-100m-nakama-re-2025-1-quake-cat-bond-priced-near-low-end/
@@ -193,7 +199,7 @@ parametric cat bond exists (Danish Red Cross) [18], and a blockchain-native cat 
 18. OECD (2024), *Fostering Catastrophe Bond Markets in Asia and the Pacific*, The Development Dimension, OECD Publishing, Paris, https://doi.org/10.1787/ab1e49ef-en (PDF: https://www.oecd.org/content/dam/oecd/en/publications/reports/2024/02/fostering-catastrophe-bond-markets-in-asia-and-the-pacific_d1e98dc7/ab1e49ef-en.pdf)
 19. World Bank, press release, 4 Aug 2017 (Mexico, US$360 million). https://www.worldbank.org/en/news/press-release/2017/08/04/bonos-del-banco-mundial-proporcionaran-a-mexico-us360-millones-en-proteccion-ante-catastrofes
 20. Artemis, "Mexico confirms $150m cat bond payout for quake", 11 Oct 2017. https://www.artemis.bm/news/2017/10/11/mexico-confirms-150m-cat-bond-payout-for-quake/
-21. World Bank, press release, "World Bank Affirms Position as Largest Sovereign Risk Insurance Provider with Multi-Country Earthquake Bond", 7 Feb 2018. https://www.worldbank.org/en/news/press-release/2018/02/07/world-bank-affirms-position-as-largest-sovereign-risk-insurance-provider-with-multi-country-earthquake-bond
+21. World Bank, press release "World Bank Affirms Position as Largest Sovereign Risk Insurance Provider with Multi-Country Earthquake Bond", Washington, DC, 7 Feb 2018. Original (now returns 404): https://www.worldbank.org/en/news/press-release/2018/02/07/world-bank-affirms-position-as-largest-sovereign-risk-insurance-provider-with-multi-country-earthquake-bond. Read from the Wayback Machine snapshot of 12 Jun 2026: http://web.archive.org/web/20260612151024/https://www.worldbank.org/en/news/press-release/2018/02/07/world-bank-affirms-position-as-largest-sovereign-risk-insurance-provider-with-multi-country-earthquake-bond
 22. Peru, Ministerio de Economía y Finanzas, "Perú recibirá US$ 60 millones del seguro catastrófico contratado en el marco de la Alianza del Pacífico", 2019. https://www.mef.gob.pe/es/notas-de-prensa-y-comunicados/6071-peru-recibira-us-60-millones-del-seguro-catastrofico-contratado-en-el-marco-de-la-alianza-del-pacifico
 23. Artemis, "Peru cat bond pay-out of $60m for earthquake confirmed". https://www.artemis.bm/news/peru-cat-bond-pay-out-of-60m-for-earthquake-confirmed/
 24. World Bank, press release, "World Bank Catastrophe Bond Transaction Insures the Republic of Philippines against Natural Disaster-related Losses Up to US$225 million", 25 Nov 2019. https://www.worldbank.org/en/news/press-release/2019/11/25/world-bank-catastrophe-bond-transaction-insures-the-republic-of-philippines-against-natural-disaster-related-losses-up-to-usd225-million
