@@ -109,6 +109,35 @@ Faultline runs the whole lifecycle of a parametric cat bond on Hedera, without a
 
 ## 3. How it works
 
+### System architecture
+
+```
+                         off-chain                                         Hedera testnet (chain 296)
+ ┌──────────────────────────────────────────────┐        ┌──────────────────────────────────────────────────────────┐
+ │ USGS ComCat (earthquake record)              │        │  HCS topic  ◀── signed attestation / advisory messages    │
+ │        │ fetch, D8 ledger, rule              │        │  (submit key = oracle, admin key = trustee, relayer pays) │
+ │        ▼                                     │  HCS   │                                                          │
+ │ oracle/ (calculation agent)  ────────────────┼───────▶│  FaultlineTrigger (EVM)                                  │
+ │  rule → loss bps → EIP-712 sign (oracle key) │ submit │   termsHash, challenge window, veto, pause, revisions    │
+ │  relayer key pays HCS + EVM fees             ├───────▶│        │ execute() → applyLoss(L)                        │
+ │  keeper: execute() after the window          │        │        ▼                                                 │
+ └──────────────────────────────────────────────┘        │  FaultlinePool (EVM) ── mint / controllerRedeem ──▶ ATS   │
+ ┌──────────────────────────────────────────────┐        │   loss index L, coupon index, claims, supply guard   v8  │
+ │ shared/ts: JCS terms, termsHash, dataHash,   │        │        │ transferFrom / transfer, isKyc (0x167)    bond  │
+ │ EIP-712 types, HCS message format            │        │        ▼                                                 │
+ │ (used by oracle, web, scripts and ops)       │        │  HTS stablecoin (fUSD): collateral, reserve, payouts      │
+ └──────────────────────────────────────────────┘        └──────────────────────────────────────────────────────────┘
+ ┌──────────────────────────────────────────────┐                     ▲                      ▲
+ │ web/ (Next.js dashboard): overview, investor,│  JSON-RPC relay      │   mirror node reads  │
+ │ sponsor, trustee, replay, evidence, /issuer  ├──────────────────────┘──────────────────────┘
+ │ wallet writes through MetaMask (gas × 1.3)   │
+ └──────────────────────────────────────────────┘
+ ┌──────────────────────────────────────────────┐
+ │ ops/ (Hardhat 3 + keystore): smoke run, full │  owner-run, dry run first, EXECUTE=1 sends
+ │ demo phases 0-7, issuer helpers              │
+ └──────────────────────────────────────────────┘
+```
+
 ### Lifecycle
 
 ```
@@ -291,6 +320,39 @@ Test counts on 2026-11-06: `npm run check` → 436 Hardhat tests, 83 oracle test
 ---
 
 ## 6. Repository layout
+
+```
+faultline/
+├── contracts/            FaultlinePool.sol, FaultlineTrigger.sol
+│   ├── interfaces/       IAtsBond, IHRC719, IHederaTokenServiceLite, IFaultlinePool, IFaultlineTrigger
+│   └── mocks/            MockBond, MockUSD, MockHTS, MockTrigger, … (local tests only)
+├── test/                 Hardhat tests: pool, trigger, shared/ts, local e2e, security, invariant fuzz
+├── shared/
+│   ├── attestation.eip712.json   EIP-712 types (one source for Solidity tests, oracle and web)
+│   └── ts/               jcs.ts, attestation.ts (terms, termsHash, dataHash, curve), hcsMessage.ts
+├── scripts/              local deploy, e2e, dashboard demo world, oracle e2e; lib/bondAudit.ts
+├── oracle/
+│   ├── src/              cli, usgs, rule, decision, ledger, attest, hcs, submit, keeper, hederaEvm, …
+│   ├── test/             Vitest
+│   └── fixtures/         real Bhuj record + labelled SYNTHETIC records
+├── web/
+│   ├── src/app/          overview, investor, sponsor, trustee, replay, evidence, issuer, api/
+│   ├── src/lib/          chain reads, events, HCS, gas, issuer wizard (lib/issuer/)
+│   ├── src/config/       networks.ts (local + testnet demo)
+│   ├── test/             Vitest
+│   └── e2e/              Playwright
+├── ops/                  Hardhat 3 testnet scripts
+│   ├── scripts/smoke/    smoke run, phases 0-6
+│   ├── scripts/demo/     full demo, phases 0-7
+│   ├── scripts/issuer/   HCS topic + HTS KYC helpers for /issuer
+│   ├── scripts/s7/       HCS topic-key spike
+│   ├── scripts/lib/      dry-run / EXECUTE step, keystore signers, mirror helpers
+│   └── abi/              ATS v8 factory, bond and error ABIs
+├── docs/                 ARCHITECTURE, COMMANDS, TESTNET-EVIDENCE, DEPLOYMENTS, ACCOUNTS, LESSONS,
+│                         SECURITY-*, TEST-*, DEMO-SCRIPT, research/, reference/
+├── HANDOVER.md           idea, research, design and decision log
+└── README.md
+```
 
 | Path | Contents |
 | --- | --- |
