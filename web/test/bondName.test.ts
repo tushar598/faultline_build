@@ -5,7 +5,7 @@ import { ERC20_ABI, POOL_ABI, TRIGGER_ABI } from "@/lib/abi";
 import { readStatic } from "@/lib/chain";
 import { bondTitle } from "@/lib/format";
 
-const A = { trigger: "0xA4C8f56FA4De893dA948952223a0783923647cCc", pool: "0xEB64C687992EA1ae206AAfADf626bee21300Cf7E", bond: "0x274A5E70A378d1494327d1e17945779b806031CC", usd: "0x0000000000000000000000000000000000aa9F0f" };
+const A = { trigger: "0x6455F6B7E140Cb273FA612f8091a6c8a5C2A20ab", pool: "0xfF26af30416E7897A1a2a4d703dE05374E9c1359", bond: "0xB26CDB984337E37F021e64CaEb02Fc4085131d6F", usd: "0x0000000000000000000000000000000000aCe152" };
 const trig = new Interface(TRIGGER_ABI);
 const pool = new Interface(POOL_ABI);
 const erc20 = new Interface(ERC20_ABI);

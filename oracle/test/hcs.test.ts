@@ -94,7 +94,7 @@ describe("publishers", () => {
         setMessage: (b) => ((sent = b), calls.push(`message ${b.length} bytes`), tx),
         freezeWith: (c) => (calls.push(`freeze ${String(c)}`), tx),
         sign: async (k) => (calls.push(`sign ${String(k)}`), tx),
-        execute: async (c) => (calls.push(`execute ${String(c)}`), { transactionId: { toString: () => "0.0.11183040@1.2" }, getReceipt: async () => ({ status: { toString: () => status }, topicSequenceNumber: seq === null ? null : { toString: () => seq } }) }),
+        execute: async (c) => (calls.push(`execute ${String(c)}`), { transactionId: { toString: () => "0.0.11329581@1.2" }, getReceipt: async () => ({ status: { toString: () => status }, topicSequenceNumber: seq === null ? null : { toString: () => seq } }) }),
       };
       return tx;
     };

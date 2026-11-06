@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Hedera testnet operator scripts for Faultline (moved from faultline-spikes b527729). Hardhat 3 + global keystore; the repo root stays Hardhat 2.",
+  "description": "Hedera testnet operator scripts for Faultline. Hardhat 3 + global keystore; the repo root stays Hardhat 2.",
   "license": "UNLICENSED",
   "scripts": {
     "typecheck": "tsc --noEmit",

@@ -20,7 +20,7 @@ describe("SEC-10: local-network routes never answer on a deployed production ser
 
 describe("route ids cannot escape their directory or reach another host", () => {
   it("accepts USGS and topic ids", () => {
-    for (const ok of ["usp000a8ds", "synthetic-kutch-3", "local-5fc8d326", "0.0.11183410"]) expect(SAFE_ID.test(ok), ok).toBe(true);
+    for (const ok of ["usp000a8ds", "synthetic-kutch-3", "local-5fc8d326", "0.0.11330395"]) expect(SAFE_ID.test(ok), ok).toBe(true);
   });
   it("rejects separators, encodings, schemes and oversize input", () => {
     for (const bad of ["../config.local", "a/b", "a\\b", "%2e%2e%2f", "http://evil", "x".repeat(81), "", "id?x=1", "id#frag", "a b"]) expect(SAFE_ID.test(bad), bad).toBe(false);

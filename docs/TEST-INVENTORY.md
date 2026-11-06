@@ -364,7 +364,6 @@ Checked while recording the runs (read-only: mirror node REST and `eth_call`).
 | D17 trustee and backup; backup never signed | role reads agree | PASS — TESTNET |
 | Sourcify `exact_match` | re-checked today | PASS — TESTNET |
 | Dashboard wrote through MetaMask | investor B signed, gas limit fits the fix. The chain cannot show which wallet app signed | PASS — TESTNET for the tx; MetaMask PASS — REVIEWED |
-| HIP-1215 self-scheduling, alarm contract | contract `0.0.11157023` exists with 2 results; no tx row in TESTNET-EVIDENCE | INCONCLUSIVE, not used by Faultline |
 | Layout: "unit, property, invariant" tests | one property test; invariants are fixed-point checks | INCONCLUSIVE wording: no stateful invariant suite exists |
 | Security review: 0 Critical, 0 High, 4 Medium, 4 Low, 6 Info | matches the 2026-10-27 table, but **SEC-15 is a new High** | FAIL as a current statement until updated |
 | Trust note 5 and "Bond roles": name the bond admin as the way to trip the supply guard | incomplete: a plain holder can too (SEC-15) | FAIL |

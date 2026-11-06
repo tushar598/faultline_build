@@ -60,7 +60,7 @@ describe("schemas", () => {
   it("evm transport: the relay by default; hedera-sdk needs a network and the relayer's account id", () => {
     const base = { rpcUrl: "http://127.0.0.1:8545", chainId: 296, trigger: "0x5fc8d32690cc91d4c39d9d3abcbd16989f875707", termsFile: "t.json", hcs: { mode: "mock", topicId: "t" }, stateDir: "out" };
     expect(ConfigSchema.parse(base).evm).toEqual({ transport: "relay" });
-    expect(ConfigSchema.parse({ ...base, evm: { transport: "hedera-sdk", network: "testnet", payerAccountId: "0.0.11183040" } }).evm.transport).toBe("hedera-sdk");
+    expect(ConfigSchema.parse({ ...base, evm: { transport: "hedera-sdk", network: "testnet", payerAccountId: "0.0.11329581" } }).evm.transport).toBe("hedera-sdk");
     expect(() => ConfigSchema.parse({ ...base, evm: { transport: "hedera-sdk", network: "testnet" } })).toThrow();
     expect(() => ConfigSchema.parse({ ...base, evm: { transport: "hedera-sdk", network: "testnet", payerAccountId: "0x1" } })).toThrow();
   });

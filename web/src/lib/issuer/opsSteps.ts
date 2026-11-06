@@ -6,7 +6,7 @@
 //              NOT testnet-verified), so the page offers the proven SDK path.
 import { computeAddress, getAddress, isAddress } from "ethers";
 
-/** `0x000…00aa9f0f` (HTS long-zero facade) → `0.0.11181839`; null for any other address. */
+/** `0x000…00ace152` (HTS long-zero facade) → `0.0.11329874`; null for any other address. */
 export function htsTokenId(evm: string): string | null {
   if (!isAddress(evm) || !/^0x0{24}/i.test(evm)) return null;
   return `0.0.${BigInt(evm)}`;

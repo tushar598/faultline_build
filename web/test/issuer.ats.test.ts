@@ -101,10 +101,10 @@ describe("ops/ steps", () => {
     const t = topicCommand({ oracle: oracle.address.toLowerCase(), trustee: trustee.address, payer: trustee.address, memo: topicMemo("FLKB") });
     expect(t.dryRun).toBe(`SUBMIT_EVM=${oracle.address} ADMIN_EVM=${trustee.address} PAYER_EVM=${trustee.address} MEMO=faultline-flkb npm run ops:issuer:topic`);
     expect(t.execute).toBe(`EXECUTE=1 ${t.dryRun}`);
-    const k = kycCommand({ stablecoin: "0x0000000000000000000000000000000000aa9f0f", accounts: [oracle.address, trustee.address], kycKeyHolder: trustee.address });
-    expect(k?.dryRun).toBe(`TOKEN=0.0.11181839 ACCOUNTS=${oracle.address},${trustee.address} KYC_EVM=${trustee.address} npm run ops:issuer:kyc`);
+    const k = kycCommand({ stablecoin: "0x0000000000000000000000000000000000ace152", accounts: [oracle.address, trustee.address], kycKeyHolder: trustee.address });
+    expect(k?.dryRun).toBe(`TOKEN=0.0.11329874 ACCOUNTS=${oracle.address},${trustee.address} KYC_EVM=${trustee.address} npm run ops:issuer:kyc`);
     expect(kycCommand({ stablecoin: oracle.address, accounts: [trustee.address], kycKeyHolder: trustee.address })).toBeNull();
-    expect(kycCommand({ stablecoin: "0x0000000000000000000000000000000000aa9f0f", accounts: [], kycKeyHolder: trustee.address })).toBeNull();
+    expect(kycCommand({ stablecoin: "0x0000000000000000000000000000000000ace152", accounts: [], kycKeyHolder: trustee.address })).toBeNull();
   });
 
   it("the npm scripts the commands name exist at the root and in ops/", () => {
@@ -117,7 +117,7 @@ describe("ops/ steps", () => {
   });
 
   it("HTS token ids and ECDSA keys from the mirror node", () => {
-    expect(htsTokenId("0x0000000000000000000000000000000000aa9F0f")).toBe("0.0.11181839");
+    expect(htsTokenId("0x0000000000000000000000000000000000aCe152")).toBe("0.0.11329874");
     expect(htsTokenId(oracle.address)).toBeNull();
     const compressed = oracle.signingKey.compressedPublicKey.slice(2);
     expect(evmOfKey({ _type: "ECDSA_SECP256K1", key: compressed })).toBe(oracle.address);
