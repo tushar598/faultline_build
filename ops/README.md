@@ -10,7 +10,7 @@ their keystore names are in docs/ACCOUNTS.md.
 | `scripts/smoke/` | Smoke run, phases 0 to 6: fUSD, ATS bond, pool + trigger, invest, Bhuj event, settle; `smoke/lib.ts` is also the base of the demo library |
 | `scripts/s7/` | Spike S7 (HCS topic keys); the demo reuses its key helpers |
 | `scripts/demo/` | Full testnet demo, phases 0 to 7, and `rt02-holder-burn.ts` (written, not run) |
-| `scripts/issuer/` | The two steps of the web issuer page a browser wallet cannot sign: `hcs-topic.ts` (TopicCreate, D16 keys) and `hts-kyc.ts` (TokenGrantKyc for the pool and investors) |
+| `scripts/issuer/` | The two steps of the web issuer page a browser wallet cannot sign: `hcs-topic.ts` (TopicCreate, D16 keys) and `hts-kyc.ts` (TokenGrantKyc for the pool and investors) and `oracle-replay.ts` (the oracle step for an issuer-page bond: Bhuj or the SYNTHETIC event, from the page's deployment entry; NOT testnet-verified) |
 | `abi/` | ATS v8 factory, bond and error ABIs (public) |
 | `out/` | Run state and evidence logs; gitignored |
 

@@ -295,6 +295,8 @@ EXECUTE=1 TOKEN=… npm run ops:issuer:kyc                                      
 
 The keystore entries default to `flhOracle`, `flhTrustee`, `flhRelayer` (topic) and `flhDeployer` (KYC); `SUBMIT`, `ADMIN`, `PAYER`
 and `KYC` pick other networks of `ops/hardhat.config.ts`. Both scripts refuse a key that does not derive to the address given.
+The whole lifecycle from the browser (launch, invest, pause and veto, execute, settle), with the oracle step
+`npm run ops:issuer:oracle`: [`BROWSER-LIFECYCLE.md`](BROWSER-LIFECYCLE.md).
 Tests: `npm run web:test` (terms, schedule, wizard, deployments, ATS facts, audit copy, ops commands) and `web/e2e/issuer.spec.ts`
 (part of `npm run web:e2e`). The testnet run is RT-29 in docs/REMAINING-TESTS.md.
 
