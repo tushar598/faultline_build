@@ -41,3 +41,31 @@ describe("custom errors become plain sentences", () => {
     expect(plainError(new TypeError("Failed to fetch"))).toBe("The RPC endpoint did not answer.");
   });
 });
+
+describe("issuer RPC failures name the RPC (viaRpc)", () => {
+  it("a wallet fetch failure says the wallet's RPC and that nothing was sent", async () => {
+    const { viaRpc } = await import("../src/lib/issuer/tx");
+    await expect(viaRpc("wallet", () => Promise.reject(Object.assign(new Error("could not coalesce error"), { error: { message: "Failed to fetch" } })))).rejects.toThrow(/wallet's RPC did not answer.*nothing was sent/);
+    const err = await viaRpc("wallet", () => Promise.reject(new Error("Failed to fetch"))).catch((e) => e);
+    expect(plainError(err)).toMatch(/wallet's RPC did not answer/);
+  });
+  it("a dashboard fetch failure says the dashboard's read RPC", async () => {
+    const { viaRpc } = await import("../src/lib/issuer/tx");
+    await expect(viaRpc("dashboard", () => Promise.reject(Object.assign(new Error("x"), { code: "NETWORK_ERROR" })))).rejects.toThrow(/dashboard's read RPC/);
+  });
+  it("a revert passes through unchanged", async () => {
+    const { viaRpc } = await import("../src/lib/issuer/tx");
+    const revert = Object.assign(new Error("execution reverted"), { code: "CALL_EXCEPTION", data: "0x1234" });
+    await expect(viaRpc("wallet", () => Promise.reject(revert))).rejects.toBe(revert);
+  });
+});
+
+describe("viaRpc never hides a revert or a rejection", () => {
+  it("a revert whose text mentions fetch stays a revert; a user rejection stays a rejection", async () => {
+    const { viaRpc } = await import("../src/lib/issuer/tx");
+    const revert = Object.assign(new Error("execution reverted: failed to fetch price"), { code: "CALL_EXCEPTION" });
+    await expect(viaRpc("wallet", () => Promise.reject(revert))).rejects.toBe(revert);
+    const rejected = Object.assign(new Error("user rejected action"), { code: "ACTION_REJECTED" });
+    await expect(viaRpc("wallet", () => Promise.reject(rejected))).rejects.toBe(rejected);
+  });
+});

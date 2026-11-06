@@ -10,7 +10,7 @@ import { MOCK_USD_ABI, type IssuerBuild } from "./build";
 import { checkHtsKyc, checkTopic } from "./opsSteps";
 import { atsBondDates, validateSchedule, type Schedule } from "./schedule";
 import { buildTerms } from "./terms";
-import { sendCall, sendDeploy, type Eip1193, type TxPhase } from "./tx";
+import { sendCall, sendDeploy, viaRpc, type Eip1193, type TxPhase } from "./tx";
 import { trusteeSignerProblem, type Outputs, type StepId, type WizardState } from "./wizard";
 
 export type StepContext = {
@@ -38,7 +38,7 @@ export function launchInputs(state: WizardState): { schedule: Schedule; termsHas
   return { schedule: s.value, termsHash: t.value.hash, terms: t };
 }
 
-const latestTs = async (p: JsonRpcProvider) => Number((await p.getBlock("latest"))!.timestamp);
+const latestTs = async (p: JsonRpcProvider) => Number((await viaRpc("dashboard", () => p.getBlock("latest")))!.timestamp);
 
 async function call(ctx: StepContext, label: string, address: string, abi: readonly (string | object)[], method: string, args: readonly unknown[]): Promise<string> {
   const r = await sendCall(ctx.eth, ctx.chainId, { address, abi: abi as never, method, args }, (p) => ctx.onPhase?.(label, p));
