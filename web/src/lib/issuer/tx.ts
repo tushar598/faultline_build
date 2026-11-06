@@ -42,6 +42,32 @@ async function afterSend<T>(hash: string, wait: () => Promise<T>): Promise<T> {
   }
 }
 
+const isEmptyRevert = (e: unknown) => {
+  const err = e as { code?: unknown; data?: unknown; message?: unknown };
+  return err?.code === "CALL_EXCEPTION" && (err.data === null || err.data === undefined || err.data === "0x") && /missing revert data/i.test(String(err.message ?? ""));
+};
+
+/**
+ * Simulation with retries for a failure WITHOUT revert data. Hedera relays sometimes fail a heavy eth_call (an ATS
+ * deployBond is about 8M gas) with no data, and the same call passes seconds later (2026-11-06: thirdweb, then both relays
+ * OK). Nothing is sent, so a retry is free. An HTS facade failure also reverts with empty data (spike S3): after the
+ * retries the message says both causes.
+ */
+export async function simulate<T>(run: () => Promise<T>, tries = 3, delayMs = 3000): Promise<T> {
+  for (let i = 1; ; i++) {
+    try {
+      return await viaRpc("wallet", run);
+    } catch (e) {
+      if (!isEmptyRevert(e)) throw e;
+      if (i >= tries)
+        throw new Error(
+          `The simulation failed ${tries} times without a reason (no revert data); nothing was sent. Usually the wallet's RPC: set it to https://testnet.hashio.io/api, check the connected account and its HBAR, then run the step again. If it repeats, a token rule may be failing (HTS reverts carry no data).`,
+        );
+      await new Promise((r) => setTimeout(r, delayMs));
+    }
+  }
+}
+
 async function signerOn(eth: Eip1193, chainId: number) {
   const have = Number(await eth.request({ method: "eth_chainId" }));
   if (have !== chainId) throw new Error(`The wallet is on chain ${have}, not ${chainId}. Switch the wallet to this dashboard's network.`);
@@ -53,7 +79,7 @@ export async function sendCall(eth: Eip1193, chainId: number, call: { address: s
   const signer = await signerOn(eth, chainId);
   const fn = new Contract(call.address, call.abi, signer).getFunction(call.method);
   onPhase?.("checking");
-  await viaRpc("wallet", () => fn.staticCall(...call.args));
+  await simulate(() => fn.staticCall(...call.args));
   const estimate = await viaRpc("wallet", () => fn.estimateGas(...call.args));
   const gasLimit = gasLimitFor(estimate);
   onPhase?.("signing");
@@ -70,7 +96,7 @@ export async function sendDeploy(eth: Eip1193, chainId: number, d: { abi: Interf
   const factory = new ContractFactory(d.abi, d.bytecode, signer);
   const req = await factory.getDeployTransaction(...d.args);
   onPhase?.("checking");
-  await viaRpc("wallet", () => signer.call(req));
+  await simulate(() => signer.call(req));
   const estimate = await viaRpc("wallet", () => signer.estimateGas(req));
   const gasLimit = gasLimitFor(estimate);
   onPhase?.("signing");

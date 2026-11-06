@@ -69,3 +69,25 @@ describe("viaRpc never hides a revert or a rejection", () => {
     await expect(viaRpc("wallet", () => Promise.reject(rejected))).rejects.toBe(rejected);
   });
 });
+
+describe("simulate retries a revert without data", () => {
+  const empty = () => Object.assign(new Error("missing revert data (action=\"call\", data=null)"), { code: "CALL_EXCEPTION", data: null });
+  it("passes when a later try succeeds", async () => {
+    const { simulate } = await import("../src/lib/issuer/tx");
+    let n = 0;
+    await expect(simulate(async () => (++n < 3 ? Promise.reject(empty()) : "ok"), 3, 1)).resolves.toBe("ok");
+    expect(n).toBe(3);
+  });
+  it("explains after the last try; nothing was sent", async () => {
+    const { simulate } = await import("../src/lib/issuer/tx");
+    const err = await simulate(() => Promise.reject(empty()), 2, 1).catch((e) => e);
+    expect(plainError(err)).toMatch(/failed 2 times without a reason.*nothing was sent/);
+  });
+  it("a revert with data is not retried", async () => {
+    const { simulate } = await import("../src/lib/issuer/tx");
+    let n = 0;
+    const revert = Object.assign(new Error("execution reverted"), { code: "CALL_EXCEPTION", data: "0x8bcdf5dc" });
+    await expect(simulate(() => (n++, Promise.reject(revert)), 3, 1)).rejects.toBe(revert);
+    expect(n).toBe(1);
+  });
+});
