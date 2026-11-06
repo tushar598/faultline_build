@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/smoke/smoke-4-subscribe.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Smoke phase 4 — subscription inside the pool's issuance window, all in ONE owner run (the keystore password is asked
 // once per process; hardhat-keystore caches the unlocked keystore):
 //   sponsor   fUSD.approve(pool, 1 USD) → pool.fundCoupons(1 USD)   (D6; >= requiredReserve(1,000 USD); the excess

@@ -373,10 +373,10 @@ approval, and the owner runs `EXECUTE=1` for every testnet transaction after a d
 
 ### RT-30 — First real run of the moved scripts from ops/
 
-> **This repo, 2026-11-05 (UTC): run from `ops/` on new FLH_* accounts and new deployments.** The smoke run is complete
+> **Status 2026-11-05 (UTC): run from `ops/` on the FLH_* accounts.** The smoke run is complete
 > (33/33 transactions SUCCESS), and the full demo ran phases 0–5 (Flow A vetoed, Flow B executed, L = 7000), on the D18
 > build (commit `a0b1dd5`). Settlement (phase 6), the dashboard step and Sourcify (phase 7) are still to run. Ids and
-> hashes: docs/DEPLOYMENTS.md and docs/TESTNET-EVIDENCE.md. The text below is the reference repo's plan.
+> hashes: docs/DEPLOYMENTS.md and docs/TESTNET-EVIDENCE.md. The text below is the original plan.
 
 - **Why it matters:** the scripts moved from the spikes repo on 2026-11-03. Their dry runs match the spikes copy, but no transaction
   has been sent from `ops/` (docs/TESTNET-EVIDENCE.md "Scripts moved to ops/").

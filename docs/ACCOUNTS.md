@@ -2,7 +2,7 @@
 
 The Hedera testnet accounts of this repo. The owner created them on 2026-11-06 and sets each key in the global
 Hardhat 3 keystore (`cd ops && npx hardhat keystore set <NAME>`). Keys are never in this repo, in a chat or in a log.
-Only public ids and addresses are recorded here. None of the reference repo's accounts (`FL_*`) is used.
+Only public ids and addresses are recorded here.
 
 All eight are ECDSA (secp256k1) accounts funded by an HBAR transfer to their EVM address, so they were **hollow** on
 2026-11-06 (mirror node: `key` null). An account is completed by its first signed transaction as payer. The scripts
@@ -23,13 +23,12 @@ match its on-chain public key.
 Ids and EVM addresses were checked against the public mirror node on 2026-11-06
 (`/api/v1/accounts/<id>`: `evm_address` matches, `max_automatic_token_associations` -1).
 
-Differences from the reference repo's account set: the oracle signer also has a funded Hedera account here (the
-reference's had none). No script pays from it; the preflights only report it.
+The oracle signer also has a funded Hedera account. No script pays from it; the preflights only report it.
 
-HBAR budget: the reference's deployer spent about 28.3 HBAR in the smoke run and 14.9 in the full demo (its
-docs/TESTNET-EVIDENCE.md). The owner topped the accounts up the same day; balances before the smoke run (mirror node,
+HBAR budget: the smoke preflight estimated about 31.5 HBAR for the deployer (the run used 32.3). The owner topped the
+accounts up the same day; balances before the smoke run (mirror node,
 2026-11-06): deployer 140, trustee 130, backup trustee 70, sponsor 120, investor A 15, investor B 75, oracle 40,
-relayer 150 HBAR. The smoke preflight estimates 31.5 HBAR for the deployer; the demo preflight (`ops:demo:0`) checks
+relayer 150 HBAR. The demo preflight (`ops:demo:0`) checks
 the budget per account and requires the deployer to keep at least 10 HBAR.
 
 All eight keystore names are set (`npx hardhat keystore list` in ops/, names only, 2026-11-06).

@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/smoke/smoke-1-token.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Smoke phase 1 — the HTS test stablecoin, the same way as spike S3 (faultline docs/LESSONS.md S3):
 //   create     SDK TokenCreate "Faultline Test USD" (fUSD), 6 decimals, FungibleCommon, treasury = deployer,
 //              admin/supply/KYC key = deployer, NO wipe/freeze/pause key, freezeDefault false. Payer = deployer, which

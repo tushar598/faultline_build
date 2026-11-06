@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/demo/demo-7-verify.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Full demo phase 7 — source verification of the demo's FaultlinePool and FaultlineTrigger for HashScan.
 //
 // HOW (researched 2026-10-27): HashScan's own verification form is disabled; Hedera verification goes through Sourcify,

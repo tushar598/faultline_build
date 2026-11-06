@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/demo/demo-1-bond-topic.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Full demo phase 1 — the demo's HCS topic and a fresh ATS v8 bond (no pool yet, so the schedule clock has not started):
 //   topic   TopicCreate memo "faultline-demo-testnet": submit key = oracle key, admin key = trustee key, payer and
 //           auto-renew account = relayer (D16, the layout spike S7 proved); signed by relayer + trustee; mirror-checked

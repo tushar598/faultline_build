@@ -1,4 +1,3 @@
-// Ported from the reference repo's ops/scripts/lib/common.ts (2026-11-06): FLH_* keystore names, no spike-era accounts.
 // Shared helpers for the Faultline testnet scripts (ops/).
 //
 // Safety model:
@@ -16,8 +15,7 @@ import { Contract, Interface, JsonRpcProvider, Wallet, formatUnits, type Provide
 export const ROOT = path.resolve(import.meta.dirname, "..", "..");
 const OUT = path.join(ROOT, "out");
 
-// ---- Testnet facts (sources: docs/reference/ats.md, mirror node 2026-10-25). Hashgraph's public ATS v8 infrastructure,
-// not part of any Faultline deployment. ----
+// ---- Testnet facts (sources: docs/reference/ats.md, mirror node 2026-10-25): Hashgraph's public ATS v8 infrastructure ----
 export const FACTORY = "0xd1F118A40f3b02883D35909eF2517e7EDd78379d"; // ATS v8 factory proxy 0.0.9213391
 export const BLR = "0xBA2D5FC2083A0b8f164c50e65d782087fBA18E0a"; // ATS v8 BLR proxy 0.0.9212226
 export const BOND_CONFIG_ID = "0x0000000000000000000000000000000000000000000000000000000000000002";

@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/smoke/smoke-2-bond.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Smoke phase 2 — a fresh ATS v8 bond through the factory, exactly the S1 shape (faultline docs/LESSONS.md S1), with the
 // deployer as bond admin, SSI issuer and KYC operator:
 //   deploy  Factory.deployBond: Luhn-valid ISIN (US + "FLS" + 6 clock digits + check digit), 6 decimals, nominal

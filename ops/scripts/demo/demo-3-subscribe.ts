@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/demo/demo-3-subscribe.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Full demo phase 3 — subscription inside the issuance window, in ONE owner run (the keystore is unlocked once):
 //   sponsor   fUSD.approve(pool, 1 USD) → pool.fundCoupons(1 USD)   (D6; >= requiredReserve(500 USD); the unused
 //             part returns to the sponsor through sweepExcess in phase 6)

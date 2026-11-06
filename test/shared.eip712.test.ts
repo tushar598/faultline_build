@@ -1,6 +1,6 @@
 // shared/ts/attestation.ts EIP-712 part, checked off chain: the digest ethers signs equals the digest rebuilt by hand
 // the way FaultlineTrigger (OpenZeppelin EIP712) computes it: keccak256(0x1901 ‖ domainSeparator ‖ structHash).
-// Extra to the reference repo; the on-chain check (trigger.hashAttestation) comes with FaultlineTrigger in Part 2.
+// The on-chain check (trigger.hashAttestation) is in the FaultlineTrigger tests.
 import { expect } from "chai";
 import { AbiCoder, Wallet, concat, keccak256, toUtf8Bytes, verifyTypedData } from "ethers";
 import spec from "../shared/attestation.eip712.json";

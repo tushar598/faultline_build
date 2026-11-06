@@ -1,24 +1,13 @@
 # ops/ — Hedera testnet operator scripts
 
-Ported from the reference repo's `ops/` on 2026-11-06 with the new `FLH_*` accounts (docs/ACCOUNTS.md). Nothing from the
-reference repo's old deployment is reused: no account, token, bond, pool, trigger or topic. Every id this folder
-creates is recorded in docs/DEPLOYMENTS.md as soon as it exists.
-
-Changes from the reference copy:
-
-- Keystore names `FLH_*_PRIVATE_KEY` and networks `flh*` (one per account); the spike-era `HEDERA_PRIVATE_KEY` /
-  `INVESTOR_PRIVATE_KEY` networks and their issuer/investor clients are gone, and every SDK step names its payer.
-- The account table (`scripts/smoke/lib.ts` `ACCOUNTS`; `scripts/s7/s7.ts` reads it) holds the new ids and addresses.
-- The dry-run stand-in bond: smoke phase 3 defers the pool simulation until phase 2 has deployed the bond, and demo
-  phase 2 reads this repo's smoke-run bond instead of the old spike S1 bond.
-- The demo's fUSD (`scripts/demo/lib.ts` `FUSD`) is the token this repo's smoke run creates; empty until then.
-- The preflights only report the oracle's Hedera account (this repo's oracle key has one; no script pays from it).
+Every id these scripts create on testnet is recorded in docs/DEPLOYMENTS.md as soon as it exists; the accounts and
+their keystore names are in docs/ACCOUNTS.md.
 
 | Path | What |
 | --- | --- |
 | `hardhat.config.ts` | Hardhat 3, the `testnetRead` network (no key) and one network per `FLH_*_PRIVATE_KEY` in the global keystore |
 | `scripts/lib/` | RPC choice, dry-run/EXECUTE `step()`, evidence log, SDK and mirror-node helpers, ATS bond arguments |
-| `scripts/smoke/` | Smoke run, phases 0 to 6: new fUSD, ATS bond, pool + trigger, invest, Bhuj event, settle; `smoke/lib.ts` is also the base of the demo library |
+| `scripts/smoke/` | Smoke run, phases 0 to 6: fUSD, ATS bond, pool + trigger, invest, Bhuj event, settle; `smoke/lib.ts` is also the base of the demo library |
 | `scripts/s7/` | Spike S7 (HCS topic keys); the demo reuses its key helpers |
 | `scripts/demo/` | Full testnet demo, phases 0 to 7, and `rt02-holder-burn.ts` (written, not run) |
 | `scripts/issuer/` | The two steps of the web issuer page a browser wallet cannot sign: `hcs-topic.ts` (TopicCreate, D16 keys) and `hts-kyc.ts` (TokenGrantKyc for the pool and investors) |

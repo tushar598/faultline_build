@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/s7/s7-hcs-keys.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Spike S7 — the HCS key layout for the oracle (D16). Dry run by default; EXECUTE=1 only by the owner.
 //   create   TopicCreate: submitKey = oracle key, adminKey = trustee key, payer + auto-renew = relayer
 //            (signed by the relayer as payer and by the trustee as admin key; the relayer is hollow and is completed)

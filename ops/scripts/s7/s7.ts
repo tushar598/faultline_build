@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/s7/s7.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Spike S7 — HCS topic keys for the oracle (faultline ARCHITECTURE D16):
 //   submit key = oracle signer key (the oracle signs only and pays nothing),
 //   admin key  = TRUSTEE key (can change the submit key and delete the topic),

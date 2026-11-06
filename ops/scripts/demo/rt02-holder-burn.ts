@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/demo/rt02-holder-burn.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // RT-02 (faultline docs/REMAINING-TESTS.md, SEC-15, D18): prove on the real ATS bond that a holder's own burn no longer
 // locks anyone. Written 2026-10-31, NOT RUN. It belongs to the NEXT demo deployment of a build with D18, between phase 3
 // (subscribe) and phase 6 (settle): it refuses a pre-D18 deployment, so the finished `e617570` evidence cannot be touched.

@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/demo/demo-0-preflight.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Full demo phase 0 — preflight. NO transaction, ever.
 //
 // 1. RPC: every candidate relay (FL_RPC_URL or Hashio, thirdweb) — chainId, latest block, latency, browser CORS; the
@@ -68,7 +67,7 @@ for (const r of DEMO_ROLES) {
   const a = ACCOUNTS[r];
   const m = await mirrorAccount(a.id ?? a.evm);
   if (r === "oracle") {
-    // The reference's oracle had no Hedera account; this repo's oracle key also has one. No script pays from it.
+    // The oracle signer pays nothing; its funded Hedera account (docs/ACCOUNTS.md) is only reported.
     if (m) console.log(`  oracle        ${a.evm}: Hedera account ${m.account} (${(m.balance.balance / 1e8).toFixed(4)} HBAR), never a payer (signs EIP-712 and is the HCS submit key) ✓`);
     else console.log(`  oracle        ${a.evm}: no Hedera account (signs EIP-712 and is the HCS submit key; pays nothing) ✓`);
     continue;
@@ -160,33 +159,33 @@ console.log(`  oracle CLI starts: ${cli.code === 2 && cli.out.includes("usage") 
 if (cli.code !== 2) fail("the oracle CLI does not start (npm ci in faultline/oracle?)");
 
 // ---------------------------------------------------------------- 7. HBAR budget
-// Measured fees (HBAR, mirror charged_tx_fee): smoke run 2026-10-26 and S7 2026-10-27 (the reference repo's docs/TESTNET-EVIDENCE.md);
-// "est." = a call not made on testnet before, from the local gas report at the smoke run's ~1.1e-6 HBAR/gas.
+// Measured fees (HBAR, mirror charged_tx_fee): the smoke run of 2026-11-05 (docs/DEPLOYMENTS.md); TopicCreate and the HCS
+// message from demo phases 1 and 4 of the same day. "est." = a call not made on testnet before, from the local gas report.
 const BUDGET: [Exclude<Role, "oracle">, string, number][] = [
-  ["deployer", "1 deployBond (smoke 7.9363)", 7.9363],
-  ["deployer", "1 addIssuer + grantKyc A, B (smoke 0.1397 + 0.3012 + 0.2823)", 0.7232],
-  ["deployer", "2 deploy pool + trigger (smoke 2.4765 + 2.2019; D17 adds a few hundred bytes)", 4.6784],
-  ["deployer", "2 initialize + TokenGrantKyc(pool) + applyRoles (smoke 0.8195 + 0.0130 + 0.3538)", 1.1863],
+  ["deployer", "1 deployBond (smoke 9.0185)", 9.0185],
+  ["deployer", "1 addIssuer + grantKyc A, B (smoke 0.1587 + 0.3422 + 0.3208)", 0.8217],
+  ["deployer", "2 deploy pool + trigger (smoke 2.8549 + 2.5351)", 5.39],
+  ["deployer", "2 initialize + TokenGrantKyc(pool) + applyRoles (smoke 0.9312 + 0.0148 + 0.4020)", 1.348],
   ["deployer", "4 unpause as admin (est. ~60k gas)", 0.07],
-  ["deployer", "6 sweepExcess + sweepDust (smoke 0.1400 + 0.0867)", 0.2267],
+  ["deployer", "6 sweepExcess + sweepDust (smoke 0.1578 + 0.0978)", 0.2556],
   ["trustee", "2 grantRole(TRUSTEE_ROLE, backup) — first tx, completes the hollow account (est. ~90k gas)", 0.1],
   ["trustee", "4 pause + veto (est. ~60k gas each)", 0.14],
-  ["relayer", "1 TopicCreate (S7 0.3935)", 0.3935],
-  ["relayer", "4+5 two HCS messages (S7 0.0088 each)", 0.0176],
-  ["relayer", "4+5 two submits (smoke 0.1514 each)", 0.3028],
-  ["relayer", "5 keeper execute (smoke 0.1570)", 0.157],
+  ["relayer", "1 TopicCreate (demo-1 0.4406)", 0.4406],
+  ["relayer", "4+5 two HCS messages (demo-4 0.0100 each)", 0.02],
+  ["relayer", "4+5 two submits (smoke 0.1707 each)", 0.3414],
+  ["relayer", "5 keeper execute (smoke 0.1770)", 0.177],
   ["relayer", "4 optional: the replay-rejection tx sent as on-chain evidence, reverts EventFinalised (est.)", 0.06],
-  ["sponsor", "3 approve + fundCoupons (smoke 0.7997 + 0.0809)", 0.8806],
-  ["sponsor", "6 claim ×2 (smoke 0.0511 each)", 0.1022],
-  ["investorA", "3 approve + invest (smoke 0.7997 + 0.5965)", 1.3962],
-  ["investorA", "6 redeem + claim (smoke 0.3600 + 0.0564)", 0.4164],
-  ["investorB", "3 approve + invest (smoke 0.7997 + 0.5213)", 1.321],
-  ["investorB", "6/8 redeem + claim, through the dashboard with MetaMask (smoke 0.2669 + 0.0564)", 0.3233],
+  ["sponsor", "3 approve + fundCoupons (smoke 0.9088 + 0.0920)", 1.0008],
+  ["sponsor", "6 claim ×2 (smoke 0.0599 each)", 0.1198],
+  ["investorA", "3 approve + invest (smoke 0.9088 + 0.6779)", 1.5867],
+  ["investorA", "6 redeem + claim (smoke 0.4058 + 0.0658)", 0.4716],
+  ["investorB", "3 approve + invest (smoke 0.9088 + 0.5924)", 1.5012],
+  ["investorB", "6/8 redeem + claim, through the dashboard with MetaMask (smoke 0.3009 + 0.0658)", 0.3667],
 ];
 const CONTINGENCY = 1.2;
-// EVM fees are gas used × gas price: the smoke run paid 1,100 gwei-equivalent (fee / gas used, every tx); SDK fees
+// EVM fees are gas used × gas price: the smoke run paid 1,250 gwei-equivalent (fee / gas used, every tx); SDK fees
 // (TokenGrantKyc, TopicCreate, HCS) are USD-priced and drift with HBAR/USD. Scale EVM items by today's gas price.
-const SMOKE_GWEI = 1100;
+const SMOKE_GWEI = 1250;
 const gwei = Number((await p.getFeeData()).gasPrice ?? 0n) / 1e9;
 const isSdk = (what: string) => /TopicCreate|HCS messages/.test(what);
 console.log(`\n7. HBAR budget (measured fees; EVM items × gas price ${gwei} / ${SMOKE_GWEI} gwei-equivalent; then ×${CONTINGENCY}; $${(await usdPerHbar()).toFixed(4)}/HBAR now)`);

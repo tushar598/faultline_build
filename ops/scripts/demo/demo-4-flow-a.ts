@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/demo/demo-4-flow-a.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Full demo phase 4 — Flow A: a SYNTHETIC event is attested by the REAL oracle, then paused and vetoed by the trustee
 // (faultline ARCHITECTURE §4, D2, D16, D17). One owner run; the keystore is unlocked once, BEFORE the oracle runs.
 // The window is 120 s (demo-only). Every EVM tx goes through the relay (owner 2026-10-27):

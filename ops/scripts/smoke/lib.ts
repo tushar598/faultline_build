@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/smoke/lib.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Shared bits for the Faultline testnet smoke run (faultline HANDOVER §10 step 5b): the fresh accounts, resumable
 // state (out/smoke-state.json), evidence (out/evidence.jsonl via common.ts), the MAIN repo's compiled artifacts and
 // attestation helpers (never copied here), pool invariants and HBAR accounting.
@@ -72,7 +71,7 @@ export function buildInfo() {
 // ---------------------------------------------------------------- accounts (docs/ACCOUNTS.md)
 
 // The new FLH_* testnet accounts (owner, 2026-11-06). Public ids and EVM addresses only; the keys live in the global
-// Hardhat 3 keystore. Nothing from the reference repo's old deployment is reused. All eight were hollow (funded by an
+// Hardhat 3 keystore. All eight were hollow (funded by an
 // HBAR transfer to the EVM address) on 2026-11-06; each one is completed by its first signed transaction.
 export type Role = "deployer" | "trustee" | "oracle" | "sponsor" | "investorA" | "investorB" | "relayer" | "trusteeBackup";
 export const ACCOUNTS: Record<Role, { network: SignerNetwork; keyName: string; id?: string; evm: string }> = {

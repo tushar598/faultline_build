@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/smoke/smoke-6-settle.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Smoke phase 6 — settlement after submissionDeadline() (faultline ARCHITECTURE §3.3, D2, D3):
 //   wait until latest block > submissionDeadline(), trigger not paused, pendingCount == 0 (abort with nothing sent if
 //   that is more than MAX_WAIT_SEC away)

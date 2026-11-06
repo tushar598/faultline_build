@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/smoke/smoke-3-deploy.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Smoke phase 3 — deploy and wire the REAL FaultlinePool + FaultlineTrigger (main repo artifacts) on the smoke token and
 // bond (faultline ARCHITECTURE §8, D4, D5, D11, D13 testnet demo profile, D14):
 //   pool       FaultlinePool({admin: deployer, stablecoin: fUSD, bond, sponsor, schedule, grace, couponBps 600,
@@ -19,7 +18,7 @@
 // TERMS: kutchTerms("replay", offset), offset chosen so Bhuj's replayed observedAt = riskStart + 60 s.
 //
 // DRY RUN without a smoke bond: the pool constructor needs bond.decimals(), so the pool simulation is deferred until
-// phase 2 has deployed the bond (this repo has no older bond to stand in, and none is reused), and the schedule is
+// phase 2 has deployed the bond, and the schedule is
 // shown for a bond deployed now with phase 2's rule. EXECUTE uses ONLY the bond in out/smoke-state.json.
 import { TokenGrantKycTransaction } from "@hashgraph/sdk";
 import { Contract } from "ethers";
@@ -270,7 +269,7 @@ if (pool && trigger && !standIn) {
 if (!loadSmoke().deployVerifiedAt) {
   const price = Number(await p.getFeeData().then((f) => f.gasPrice ?? 0n)) / 1e18;
   const items: [string, number, string][] = [
-    ["deploy FaultlinePool", 2_450_566, "reference repo's testnet simulation"],
+    ["deploy FaultlinePool", 2_450_566, "testnet simulation"],
     ["deploy FaultlineTrigger", 2_001_766, "local Hardhat gas"],
     ["initialize (HIP-719 associate)", 760_000, "S3 contract associate 733,941 + overhead"],
     ["applyRoles", 321_620, "S1 measured"],

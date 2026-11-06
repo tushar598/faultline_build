@@ -1,5 +1,3 @@
-// Ported from the reference repo's ops/scripts/lib/hedera.ts (2026-11-06): no spike-era issuer/investor clients; every
-// SDK step names its payer client.
 // Hedera SDK + mirror-node helpers for the SDK spikes (S3 HTS token, S5 HCS topic).
 //
 // Same safety model as common.ts:

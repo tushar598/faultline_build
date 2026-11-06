@@ -1,6 +1,5 @@
 // shared/ts/hcsMessage.ts: §6.5 message shapes, JCS bytes, the 1024-byte chunk limit and the in-payload signatures
-// (D16). Extra to the reference repo's root tests (the reference covers this in oracle/test/hcs.test.ts, which also
-// tests the oracle's publishers; those come with the oracle part).
+// (D16). oracle/test/hcs.test.ts also covers the oracle's publishers.
 import { expect } from "chai";
 import { Wallet, keccak256, toUtf8Bytes } from "ethers";
 import { buildAttestation, kutchTerms, signAttestation } from "../shared/ts/attestation";

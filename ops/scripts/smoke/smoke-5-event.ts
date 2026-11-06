@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/smoke/smoke-5-event.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Smoke phase 5 — the replayed Bhuj earthquake through the REAL FaultlineTrigger (faultline ARCHITECTURE §4, §6, D10, D14):
 //   1. abort with nothing sent if the trigger is paused or the latest block is past submissionDeadline()
 //   2. wait until the latest block >= observedAt (Bhuj replayed to riskStart + 60 s)

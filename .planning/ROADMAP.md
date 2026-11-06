@@ -40,7 +40,7 @@
 - Stop rule: if a spike fails twice for the same reason, stop and report
 
 **Notes:**
-- Spikes run in `~/Desktop/faultline-spikes/` (separate repo, Hardhat 3 + encrypted keystore) — reference repo history; in this repo the operator scripts live in `ops/`
+- Spikes run in `~/Desktop/faultline-spikes/` (separate repo, Hardhat 3 + encrypted keystore); the operator scripts now live in `ops/`
 - Every testnet transaction needs owner confirmation
 - Keys never in chat; only `read -s` in terminal
 

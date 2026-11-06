@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/smoke/smoke-0-preflight.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Smoke phase 0 — preflight. NO transaction, ever.
 //
 // 1. Keystore: the six FLH_* names exist (names only, no password). With CHECK_KEYS=1 (owner, types the keystore
@@ -46,8 +45,7 @@ for (const r of SMOKE_ROLES) {
   const a = ACCOUNTS[r];
   const m = await mirrorAccount(a.id ?? a.evm);
   if (r === "oracle") {
-    // The reference's oracle had no Hedera account; this repo's oracle key also has one (0.0.11329557). No script pays
-    // from it, so it is only reported.
+    // The oracle signer pays nothing; its funded Hedera account (0.0.11329557) is only reported.
     if (m) console.log(`  oracle    ${a.evm}: Hedera account ${m.account} (${(m.balance.balance / 1e8).toFixed(4)} HBAR), never a payer (signs EIP-712 only) ✓`);
     else console.log(`  oracle    ${a.evm}: no Hedera account (signs EIP-712 only) ✓`);
     continue;

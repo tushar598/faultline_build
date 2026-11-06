@@ -1,6 +1,6 @@
-// Hardhat 3 config for the Faultline testnet operator scripts (ops/). Ported from the reference repo's ops/ (2026-11-06)
-// with the new FLH_* keystore names (docs/ACCOUNTS.md). The repo root stays Hardhat 2; this folder has its own
-// node_modules and never compiles contracts (the scripts read the root build in ../artifacts).
+// Hardhat 3 config for the Faultline testnet operator scripts (ops/), with one network per FLH_* keystore name
+// (docs/ACCOUNTS.md). The repo root stays Hardhat 2; this folder has its own node_modules and never compiles contracts
+// (the scripts read the root build in ../artifacts).
 import type { HardhatUserConfig } from "hardhat/config";
 import { configVariable } from "hardhat/config";
 import hardhatEthers from "@nomicfoundation/hardhat-ethers";
@@ -8,7 +8,7 @@ import hardhatKeystore from "@nomicfoundation/hardhat-keystore";
 
 // Keys come only from the global Hardhat 3 keystore (~/Library/Preferences/hardhat-nodejs/keystore.json), never from a
 // file in this repo. A key is resolved (and the keystore password asked) only when a script runs with EXECUTE=1 or with
-// CHECK_KEYS=1 in a preflight. There are no spike-era accounts in this repo: every signer is one of the FLH_* accounts.
+// CHECK_KEYS=1 in a preflight. Every signer is one of the FLH_* accounts.
 const RPC = "https://testnet.hashio.io/api";
 
 const config: HardhatUserConfig = {

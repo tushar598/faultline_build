@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/demo/lib.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Shared bits for the Faultline FULL TESTNET DEMO (faultline HANDOVER §10 step 9): one deployment of the D17 build that
 // carries Flow A (a SYNTHETIC event: oracle attests, trustee pauses and vetoes, admin unpauses, the same signature is
 // rejected) and Flow B (the real Bhuj record usp000a8ds fetched live from USGS by the oracle, executed by its keeper).

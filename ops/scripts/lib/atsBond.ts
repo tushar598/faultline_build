@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/lib/atsBond.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // The ATS v8 bond shape both Faultline testnet runs deploy through the factory (S1 shape, faultline docs/LESSONS.md S1):
 // Luhn-valid ISIN (US + "FLS" + 6 clock digits + check digit), 6 decimals, nominal 1 USD (100 with 2 decimals),
 // maxSupply = the pool cap, controllable, internal KYC, single partition, Reg S / NONE. rbacs: DEFAULT_ADMIN,

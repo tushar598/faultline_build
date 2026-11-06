@@ -1,7 +1,6 @@
 # Testnet deployments
 
-Every public id this repo creates on Hedera testnet (chainId 296), recorded as soon as it exists. Everything here is new
-(Rule 1): no token, bond, pool, trigger or topic of the reference repo's old deployment is reused. Accounts:
+Every public id this repo creates on Hedera testnet (chainId 296), recorded as soon as it exists. Accounts:
 docs/ACCOUNTS.md. Transactions and fees: docs/TESTNET-EVIDENCE.md (written from `ops/out/evidence.jsonl`).
 
 Public infrastructure used, not deployed by this repo (docs/reference/ats.md): ATS v8 factory proxy `0.0.9213391`
@@ -100,9 +99,8 @@ every step.
 
 ### Smoke run result
 
-**Testnet-verified 2026-11-05 (UTC), all 33 transactions SUCCESS, no reverted or rejected send.** Same end state as
-the reference repo's smoke run (L 7000; A 180, B 120, sponsor 700 + unused reserve; total 1,001), on new accounts, a new
-token, bond, pool and trigger. HBAR fees (mirror `charged_tx_fee`, summed from `ops/out/evidence.jsonl`):
+**Testnet-verified 2026-11-05 (UTC), all 33 transactions SUCCESS, no reverted or rejected send.** End state: L 7000;
+A 180, B 120, sponsor 700 + unused reserve; total 1,001. HBAR fees (mirror `charged_tx_fee`, summed from `ops/out/evidence.jsonl`):
 deployer 32.2921, sponsor 2.0286, investor A 2.9664, investor B 2.7759,
 trustee 0 → **40.0630 HBAR**. Investor A's balance also rose by the owner's 100 HBAR top-up during phase 1.
 

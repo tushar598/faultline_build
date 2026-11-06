@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/demo/demo-2-deploy.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Full demo phase 2 — deploy and wire the CURRENT main-repo build (D17) on the phase-1 bond and the reused fUSD
 // (faultline ARCHITECTURE §8, D4, D5, D11, D13 testnet demo profile, D14, D17). THE SCHEDULE CLOCK STARTS HERE.
 //   pool       FaultlinePool({admin: deployer, stablecoin: fUSD, bond, sponsor, schedule, grace 180, couponBps 600,

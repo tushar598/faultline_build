@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/demo/demo-5-flow-b.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // Full demo phase 5 — Flow B: the REAL 2001 Bhuj record usp000a8ds, fetched LIVE from USGS by the oracle, replayed
 // into the risk period (replay terms, D10/D14), attested, executed by the oracle's keeper (faultline ARCHITECTURE §4, §6).
 //   1. hard stops: Flow A verified, trigger not paused, latest block <= submissionDeadline, >= Bhuj's replayed observedAt

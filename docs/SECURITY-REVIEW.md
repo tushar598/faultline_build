@@ -1,7 +1,5 @@
 # Security review (HANDOVER §10 step 8) — self-review, not an audit
 
-> Ported from the reference repo (`~/Desktop/faultline`) on 2026-11-06. The code it reviews is identical in this repo; the commits in §1 and the spikes repo are the reference repo's history, where the review was done.
-
 Date 2026-10-27 (owner decisions and fixes the same day, §3). Reviewer: Claude (the same model family that wrote the code; this is **not** an independent audit).
 No testnet transaction was sent. Contracts and interfaces were **not changed**; every contract finding below is
 **open — owner decision**. **Update 2026-10-31:** the later test assessment found one High this review missed, SEC-15 (a
@@ -12,7 +10,7 @@ holder's own ATS burn locked redemption), fixed by D18, and found SEC-19 to SEC-
 
 | Repo | Commit reviewed | What |
 | --- | --- | --- |
-| `~/Desktop/faultline` | `cc31319` | `contracts/` (FaultlinePool, FaultlineTrigger, interfaces; mocks only where they could hide a bug), `shared/ts`, `oracle/src`, `web/src`, `scripts/` |
+| `faultline` | `cc31319` | `contracts/` (FaultlinePool, FaultlineTrigger, interfaces; mocks only where they could hide a bug), `shared/ts`, `oracle/src`, `web/src`, `scripts/` |
 | `~/Desktop/faultline-spikes` | `786c431` | `scripts/lib`, `scripts/smoke`, `scripts/s7` (EXECUTE gating, key handling, what is written to `out/`) |
 
 Read first: HANDOVER §7, §9, §15; ARCHITECTURE §3–§6, §8, §9, §12 (D1–D16), §6.6; LESSONS; README trust notes;

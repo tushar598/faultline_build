@@ -1,4 +1,3 @@
-// Ported from the reference repo (ops/scripts/s7/00-preflight.ts) on 2026-11-06 with the new FLH_* accounts; nothing from the old deployment is reused.
 // S7 preflight (no transaction): keystore names; with CHECK_KEYS=1 the relayer, trustee and oracle keys must derive to
 // their documented addresses (only addresses printed); relayer/trustee account state; the sample message offline
 // (size, in-payload signature recovers to the oracle); fee estimates.

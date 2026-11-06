@@ -1,6 +1,5 @@
 // shared/ts/attestation.ts terms part: Kutch terms (D13), termsHash, replay chain guard (D14).
-// Extra to the reference repo: pins the termsHash literals so a change to the terms or to JCS is caught at once.
-// The values were computed with the reference repo's shared/ts and match it.
+// Pins the termsHash literals so a change to the terms or to JCS is caught at once.
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { REPLAY_CHAIN_IDS, assertReplayAllowed, kutchTerms, termsHash } from "../shared/ts/attestation";

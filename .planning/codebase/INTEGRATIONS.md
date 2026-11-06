@@ -115,4 +115,4 @@ Generated: 2026-10-25 · Source: codebase analysis of `faultline/`
 | Deployer (bond admin, fUSD KYC key) | `0.0.11329142` | `0xbF89BCE061513D4763047D5F5A16846F149Ca248` | Bond admin, KYC operator |
 | Investor A | `0.0.11329421` | `0xCE69d905EFc74B2fa4c93D6924EF5903DF8d9bda` | Completed by its first signed tx (smoke run) |
 
-**Note:** the full set of eight `FLH_*` accounts is in docs/ACCOUNTS.md. The reference repo's spike-era accounts are not used here.
+**Note:** the full set of eight `FLH_*` accounts is in docs/ACCOUNTS.md.
