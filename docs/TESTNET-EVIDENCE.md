@@ -135,6 +135,14 @@ the real 2001 Bhuj record `usp000a8ds`, fetched live from USGS by the oracle.
 | 5 | HCS message 2 on topic 0.0.11330395: the oracle's Bhuj usp000a8ds attestation, built from the LIVE USGS record (692 bytes, signature in the payload) | relayer (SDK, oracle co-signs as submit key) | | 0.0099 | [`0.0.11329581-1793916195-900235745`](https://hashscan.io/testnet/transaction/1793916201.234434551) | 2026-11-05 22:03 |
 | 5 | `trigger.submit` Bhuj usp000a8ds (7,000 bps, nonce 1), by the real oracle CLI | relayer | 137,626 | 0.1720 | [`0x3da26e2a…1e58d0ae`](https://hashscan.io/testnet/transaction/0x3da26e2aacb38f009b244dfebe34fddcde87924f749fa447203d80fd1e58d0ae) | 2026-11-05 22:03 |
 | 5 | `trigger.execute` by the oracle keeper after the 120 s window (L 0 → 7,000) | relayer | 142,746 | 0.1784 | [`0x010bf61d…e435ac5c`](https://hashscan.io/testnet/transaction/0x010bf61d17e0ae07b80e29d6d2fb71d4c0b96c462939713e249df40fe435ac5c) | 2026-11-05 22:05 |
+| 6a | investor A pool.redeem() — controllerRedeem of 300 units | investor A | 327,276 | 0.4058 | [`0x6d4816af…74f5a821`](https://hashscan.io/testnet/transaction/0x6d4816afcaea84c839e2ad70d8418909b3dd457d2a73233c591ce57474f5a821) | 2026-11-06 04:28 |
+| 6a | investor A pool.claim() [claims 90.000506 fUSD] | investor A | 53,072 | 0.0658 | [`0xc821525e…d19997cb`](https://hashscan.io/testnet/transaction/0xc821525ef858897af51851c43d2625745b9d34b80c5174cac7456290d19997cb) | 2026-11-06 04:28 |
+| 6a | sponsor pool.claim() — write-down collateral [claims 350.000000 fUSD] | sponsor | 48,272 | 0.0599 | [`0xf2e1df29…064b94d4`](https://hashscan.io/testnet/transaction/0xf2e1df297dad2b99b708fbe9e6fb44057e17d2de5bd1e1b9e6746671064b94d4) | 2026-11-06 04:28 |
+| 8 | investor B `pool.redeem()` through the dashboard with MetaMask (gas limit 405,177 = estimate × 1.3) | investor B | 259,729 | 0.3221 | [`0xd8e5bb2a…3a34098d`](https://hashscan.io/testnet/transaction/0xd8e5bb2aac4666140bebbefd368baeef7ed8e8da46b4067993a199923a34098d) | 2026-11-06 04:32 |
+| 8 | investor B `pool.claim()` through the dashboard with MetaMask (claims 60.000337 fUSD) | investor B | 48,272 | 0.0599 | [`0x33a4f50a…8e512347`](https://hashscan.io/testnet/transaction/0x33a4f50ab62ffc8bf3e010d043750d1cfa1491cfa514765d2d22af0f8e512347) | 2026-11-06 04:33 |
+| 6s | pool.sweepExcess() — anyone (D3) | deployer | 127,222 | 0.1578 | [`0xd3e08e1f…b2da8bde`](https://hashscan.io/testnet/transaction/0xd3e08e1f50022568119bff62d77c6d550a0de6fe1f0e739cf72e60a7b2da8bde) | 2026-11-06 04:34 |
+| 6s | pool.sweepDust() — anyone, bond supply 0 | deployer | 78,845 | 0.0978 | [`0x31f4ea41…3df2f52d`](https://hashscan.io/testnet/transaction/0x31f4ea41d38c9c288c3848197c5bfdcf7c42150bfacf59295b0300a13df2f52d) | 2026-11-06 04:35 |
+| 6s | sponsor pool.claim() — unused reserve + dust [claims 0.999157 fUSD] | sponsor | 48,272 | 0.0599 | [`0x40f0cba0…49c34857`](https://hashscan.io/testnet/transaction/0x40f0cba0dca7795e8585758a95966197165fdce38b8daaf43cbcc65149c34857) | 2026-11-06 04:35 |
 
 ### HCS messages
 
@@ -168,8 +176,26 @@ window. appliedLossBps 7000; Bhuj **Executed**, SYNTHETIC still **Vetoed**, pend
 claimable(sponsor) = 350 = floor(500 × 7000 / 10000); ATS balances unchanged (A 300, B 200); effective principal
 A 90, B 60; invariants hold. submissionDeadline 1793917550 (22:25:50 UTC, moved 45 s by the Flow A pause).
 
+### Settlement (phase 6 and the dashboard step, 2026-11-06)
+
+After `submissionDeadline()` (1793917550, 22:25:50 UTC, moved 45 s by the Flow A pause): `PART=a` redeemed and claimed
+for investor A (**90.000506** fUSD = 90 principal + 0.000506 coupon) and claimed the sponsor's write-down collateral
+(**350.000000**). Investor B redeemed and claimed **through the dashboard with MetaMask** (**60.000337**; both
+transactions SUCCESS on the first try, each with the explicit gas limit = estimate × 1.3). `PART=sweep` then ran
+`sweepExcess`, `sweepDust` and the sponsor's last claim (**0.999157** = unused reserve + dust).
+
+### Final books
+
+Paid out: A 90.000506 + B 60.000337 + sponsor 350.999157 = **501.000000 = 500 deposits + 1 reserve; the pool ends at 0
+fUSD.** On chain after the sweep: `unitsRedeemed` = `unitsIssued` = 500, `totalClaimable` 0, `isSolvent()` true,
+`appliedLossBps` 7000, `pendingCount` 0; event records SYNTHETIC **Vetoed**, Bhuj **Executed**.
+
+### HBAR
+
+Fees (mirror `charged_tx_fee`) of every demo transaction, script-sent, oracle (relayer) and dashboard: ≈ **22.92 HBAR**
+(phase 1 10.147, phase 2 6.748, phase 3 4.051, phases 4–5 0.906, phase 6 and the dashboard 1.229). `ops/out/evidence.jsonl`
+holds only what the scripts sent; the oracle's and MetaMask's transactions were added from the mirror node.
+
 ### Still to run
 
-Phase 6 (settlement after `submissionDeadline()` 1793917550: `PART=a`, investor B's redeem and claim through the
-dashboard with MetaMask, `PART=sweep`) and phase 7 (Sourcify verification). Expected: A 90 + coupon, B 60 + coupon,
-sponsor 350 + unused reserve, total 501 = 500 deposits + 1 reserve, pool ends at 0, both contracts `exact_match`.
+Phase 7: Sourcify verification of the pool and the trigger (no Hedera transaction).

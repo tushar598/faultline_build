@@ -81,6 +81,8 @@ export const TESTNET_EVIDENCE = {
     { label: "Same signature re-submitted: reverts EventFinalised", hash: "0x12b9c4f7ef45bf60225d3cfdb68b846ae5a1692dd470ce0942c7e1ac52cdf066" },
     { label: "Oracle submit, Bhuj usp000a8ds live record (7,000 bps)", hash: "0x3da26e2aacb38f009b244dfebe34fddcde87924f749fa447203d80fd1e58d0ae" },
     { label: "Oracle keeper execute (L 0 to 7,000 bps)", hash: "0x010bf61d17e0ae07b80e29d6d2fb71d4c0b96c462939713e249df40fe435ac5c" },
+    { label: "Investor B redeem through the dashboard (MetaMask)", hash: "0xd8e5bb2aac4666140bebbefd368baeef7ed8e8da46b4067993a199923a34098d" },
+    { label: "Investor B claim through the dashboard (60.000337 fUSD)", hash: "0x33a4f50ab62ffc8bf3e010d043750d1cfa1491cfa514765d2d22af0f8e512347" },
   ],
 } as const;
 
