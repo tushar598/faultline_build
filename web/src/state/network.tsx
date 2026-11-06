@@ -53,24 +53,33 @@ function storedBond(): string {
 
 type LocalConfig = { rpcUrl: string; chainId: number; trigger: string; topicId: string | null; fromBlock: number; terms: Terms | null };
 
-/** The first RPC (rpcUrl, then rpcFallbacks) that answers eth_chainId with the network's chain id within 8 s. */
+const PROBE_ROUNDS = 3;
+const PROBE_TIMEOUT_MS = 10_000;
+
+/** The first RPC (rpcUrl, then rpcFallbacks) that answers eth_chainId with the network's chain id within 10 s. Up to
+ *  three rounds over the list, 2 s apart: on a slow or changing network (2026-11-06: 0.5–3 s per call and
+ *  ERR_NETWORK_CHANGED) a single round left the whole page on "Cannot load this network". */
 async function healthyRpc(net: NetworkConfig, signal: AbortSignal): Promise<string> {
   const candidates = [...new Set([net.rpcUrl, ...(net.rpcFallbacks ?? [])])];
-  for (const url of candidates) {
-    try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_chainId", params: [] }),
-        signal: AbortSignal.any([signal, AbortSignal.timeout(8_000)]),
-      });
-      const body = (await res.json()) as { result?: string };
-      if (res.ok && body.result && BigInt(body.result) === BigInt(net.chainId)) return url;
-    } catch {
-      if (signal.aborted) throw new Error("aborted");
+  for (let round = 1; round <= PROBE_ROUNDS; round++) {
+    for (const url of candidates) {
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_chainId", params: [] }),
+          signal: AbortSignal.any([signal, AbortSignal.timeout(PROBE_TIMEOUT_MS)]),
+        });
+        const body = (await res.json()) as { result?: string };
+        if (res.ok && body.result && BigInt(body.result) === BigInt(net.chainId)) return url;
+      } catch {
+        if (signal.aborted) throw new Error("aborted");
+      }
     }
+    if (round < PROBE_ROUNDS) await new Promise((r) => setTimeout(r, 2_000));
+    if (signal.aborted) throw new Error("aborted");
   }
-  throw new Error(`No RPC answered for chain ${net.chainId} (tried ${candidates.join(", ")}).`);
+  throw new Error(`No RPC answered for chain ${net.chainId} after ${PROBE_ROUNDS} tries (${candidates.join(", ")}). Check your internet connection, then press Try again.`);
 }
 
 async function resolve(id: NetworkId, signal: AbortSignal): Promise<NetworkConfig> {

@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { BHUJ_ORIGIN_SEC, bhujReplayOffset, buildTerms, curvePoints, defaultTermsDraft, parseMagX100 } from "@/lib/issuer/terms";
+import { BHUJ_ORIGIN_SEC, bhujReplayOffset, buildTerms, curvePoints, defaultTermsDraft, followRiskStart, parseMagX100, testnetDemoTermsDraft } from "@/lib/issuer/terms";
 import { canonicalize, kutchTerms, termsHash } from "@/lib/shared";
 
 const draft = defaultTermsDraft();
@@ -84,5 +84,22 @@ describe("issuer terms builder", () => {
     expect(at(800)).toBe(10_000);
     expect(at(850)).toBe(10_000);
     expect(pts[0]!.magX100).toBe(650);
+  });
+});
+
+describe("testnet demo terms", () => {
+  const riskStart = 1_793_960_000;
+  it("start as replay with Bhuj 60 s after riskStart", () => {
+    const t = testnetDemoTermsDraft(riskStart);
+    expect(t.mode).toBe("replay");
+    expect(Number(t.timeOffsetSec) + BHUJ_ORIGIN_SEC).toBe(riskStart + 60);
+  });
+  it("a Bhuj placement follows riskStart; a hand-typed offset and live terms do not move", () => {
+    const t = testnetDemoTermsDraft(riskStart);
+    expect(Number(followRiskStart(t, riskStart, riskStart + 600).timeOffsetSec) + BHUJ_ORIGIN_SEC).toBe(riskStart + 660);
+    const typed = { ...t, timeOffsetSec: "123" };
+    expect(followRiskStart(typed, riskStart, riskStart + 600)).toBe(typed);
+    const live = defaultTermsDraft();
+    expect(followRiskStart(live, riskStart, riskStart + 600)).toBe(live);
   });
 });

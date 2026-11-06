@@ -100,4 +100,6 @@ export const TESTNET_ISSUER_DEFAULTS = {
   topicPayer: "0x2f9A68d7880c9052A7Dac59aFe5b8223CF2eD5Db",
   kycKeyHolder: "0xbF89BCE061513D4763047D5F5A16846F149Ca248",
   backupTrustee: "0xD66383855628a46A3E300ad889E9dF2eA9c5A0B0",
+  /** Investors A and B, KYC'd on the new bond by the launch (docs/BROWSER-LIFECYCLE.md). */
+  investors: ["0xCE69d905EFc74B2fa4c93D6924EF5903DF8d9bda", "0xF9786F3fc700F6ADE804DfC5c2A07c8CaB4C301F"],
 } as const;

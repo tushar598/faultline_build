@@ -49,17 +49,16 @@ Times are from the moment you fill in the form; this is a demo-only schedule.
 | T+75 min | maturity |
 | T+78 min | redemption opens (after 3 min grace) |
 
-Use a 25-minute lead instead of the page's default 10: the launch has about 12 wallet steps and 2 ops steps, and the ATS
-bond must exist before issuance opens.
+The page's testnet defaults are this schedule: a 25-minute lead, because the launch has about 12 wallet steps and 2 ops
+steps and the ATS bond must exist before issuance opens.
 
 ## Steps
 
 1. **Launch: `/issuer`, deployer wallet.**
-   1. Parties: keep the defaults. Under "Investors to KYC", add investor A and investor B.
-   2. Schedule: issuance start = now + 25 min, issuance end = start + 20 min, risk start = issuance end, maturity = risk
-      start + 30 min, grace 180 s, window 120 s.
-   3. Terms: mode "replay", then press **"Place Bhuj (usp000a8ds) 60 s after riskStart"**. Press it after the schedule is
-      final, because the offset depends on riskStart.
+   1. Parties: keep the defaults. Investors A and B are already filled in under "Investors to KYC".
+   2. Schedule: keep the defaults (above). If the page was open for a while, press "Restart from chain time" first.
+   3. Terms: check that mode is "replay". The Bhuj offset follows riskStart when you edit the schedule. A hand-typed
+      offset stays as typed; press "Place Bhuj (usp000a8ds) 60 s after riskStart" to reset it.
    4. Press "Start the launch", then each step's button in order.
       - **Topic step:** run the printed command from the repo root, first as a dry run, then with `EXECUTE=1`. Paste the
         topic id and press "Check".

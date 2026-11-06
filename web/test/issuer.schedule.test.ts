@@ -84,3 +84,11 @@ describe("issuer schedule validation", () => {
     expect(atsBondDates(r.value, Number(r.value.issuanceStart)).problems[0]).toMatch(/start after issuance/);
   });
 });
+
+describe("testnet default lead time", () => {
+  it("opens issuance 25 min after chain time, for 20 min, so the launch and the ops steps fit before it", () => {
+    const d = defaultScheduleDraft(NOW, "testnet");
+    expect(d.issuanceStart - NOW).toBe(25 * 60);
+    expect(d.issuanceEnd - d.issuanceStart).toBe(20 * 60);
+  });
+});

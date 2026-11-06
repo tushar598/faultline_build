@@ -47,6 +47,19 @@ export function defaultTermsDraft(): TermsDraft {
   };
 }
 
+/** Testnet starting terms: replay, with Bhuj (usp000a8ds) 60 s after riskStart. A live bond on the demo's 30-minute risk
+ *  period would almost surely see no qualifying quake, so the lifecycle could not be shown (owner's browser run,
+ *  2026-11-06). Replay is allowed on 296 (D14) and every view marks the bond REPLAY. */
+export function testnetDemoTermsDraft(riskStart: number): TermsDraft {
+  return { ...defaultTermsDraft(), mode: "replay", timeOffsetSec: String(bhujReplayOffset(riskStart)) };
+}
+
+/** When riskStart moves, a Bhuj placement moves with it; any other offset (typed by hand) stays as it is. */
+export function followRiskStart(terms: TermsDraft, oldRiskStart: number, newRiskStart: number): TermsDraft {
+  if (terms.mode !== "replay" || oldRiskStart === newRiskStart || terms.timeOffsetSec !== String(bhujReplayOffset(oldRiskStart))) return terms;
+  return { ...terms, timeOffsetSec: String(bhujReplayOffset(newRiskStart)) };
+}
+
 const DECIMAL = (places: number) => new RegExp(`^-?\\d{1,4}(?:\\.\\d{1,${places}})?$`);
 
 function parseCoord(v: string, min: number, max: number): number | string {

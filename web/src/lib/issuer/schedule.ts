@@ -54,10 +54,11 @@ export function defaultScheduleDraft(nowSec: number, mode: "local" | "testnet"):
     const issuanceEnd = issuanceStart + DAY;
     return { issuanceStart, issuanceEnd, riskStart: issuanceEnd, maturity: issuanceEnd + YEAR, graceSec: 30 * DAY, challengeWindowSec: 2 * DAY, couponBps: "600", cap: "10000", minTicket: "100" };
   }
-  // Testnet: issuance opens 10 min from now so the bond, the pool and the wiring land first (each wallet step takes a
-  // minute or two through the relay); 15 min issuance, 30 min risk period, 3 min grace, 120 s window. Demo-only.
-  const issuanceStart = nowSec + 10 * 60;
-  const issuanceEnd = issuanceStart + 15 * 60;
+  // Testnet: issuance opens 25 min from now so the bond, the pool, the wiring and the two ops/ steps land first (about 12
+  // wallet steps of a minute or two each through the relay; 10 min was too tight in the owner's browser run,
+  // 2026-11-06); 20 min issuance, 30 min risk period, 3 min grace, 120 s window. Demo-only.
+  const issuanceStart = nowSec + 25 * 60;
+  const issuanceEnd = issuanceStart + 20 * 60;
   return { issuanceStart, issuanceEnd, riskStart: issuanceEnd, maturity: issuanceEnd + 30 * 60, graceSec: 180, challengeWindowSec: 120, couponBps: "600", cap: "10000", minTicket: "100" };
 }
 

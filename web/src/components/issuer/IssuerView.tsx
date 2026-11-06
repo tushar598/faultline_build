@@ -17,7 +17,7 @@ import { loadBuild, type IssuerBuild } from "@/lib/issuer/build";
 import { configEntry, deploymentId, loadDeployments, removeDeployment, saveDeployment, selectBond, type Deployment } from "@/lib/issuer/deployments";
 import { defaultScheduleDraft, validateSchedule, type ScheduleDraft } from "@/lib/issuer/schedule";
 import { launchInputs, runStep } from "@/lib/issuer/steps";
-import { buildTerms, defaultTermsDraft, type TermsDraft } from "@/lib/issuer/terms";
+import { buildTerms, defaultTermsDraft, followRiskStart, testnetDemoTermsDraft, type TermsDraft } from "@/lib/issuer/terms";
 import type { TxPhase } from "@/lib/issuer/tx";
 import { clearWizard, completeStep, createWizard, isFinished, isLocked, loadWizard, modeForChain, recordOutputs, saveWizard, skipStep, validateParties, type IssuerMode, type StepId, type WizardState } from "@/lib/issuer/wizard";
 import { browserStore } from "@/lib/walletSession";
@@ -39,7 +39,9 @@ async function defaults(provider: import("ethers").JsonRpcProvider, chainId: num
   const chainNow = Number((await provider.getBlock("latest"))!.timestamp);
   const base = { bondName: "Faultline Kutch Bond", bondSymbol: "FLKB", topicPayer: "", kycKeyHolder: "", backupTrustee: "" };
   if (mode === "testnet") {
-    return { chainId, chainNow, terms: defaultTermsDraft(), schedule: defaultScheduleDraft(chainNow, "testnet"), parties: { ...base, ...TESTNET_ISSUER_DEFAULTS, investorsText: "" } };
+    const schedule = defaultScheduleDraft(chainNow, "testnet");
+    const { investors, ...parties } = TESTNET_ISSUER_DEFAULTS;
+    return { chainId, chainNow, terms: testnetDemoTermsDraft(schedule.riskStart), schedule, parties: { ...base, ...parties, investorsText: investors.join("\n") } };
   }
   const accounts = ((await provider.send("eth_accounts", []).catch(() => [])) as string[]).map((a) => getAddress(a));
   let stablecoin = "";
@@ -238,7 +240,7 @@ export function IssuerView() {
           <>
             <PartiesSection parties={formParties} onChange={(p) => formHere && setForm({ ...formHere, parties: p })} wallet={wizard ? wizard.inputs.parties.admin : address} mode={mode} locked={Boolean(wizard)} problems={partyProblems} />
             <TermsSection draft={terms} onChange={(t) => formHere && setForm({ ...formHere, terms: t })} chainId={chainId} riskStart={schedule.riskStart} locked={Boolean(wizard)} />
-            <ScheduleSection draft={schedule} onChange={(s) => formHere && setForm({ ...formHere, schedule: s })} chainNow={formHere?.chainNow ?? Math.floor(Date.now() / 1000)} mode={mode} locked={Boolean(wizard)} onReset={() => setReloadForm((x) => x + 1)} />
+            <ScheduleSection draft={schedule} onChange={(s) => formHere && setForm({ ...formHere, schedule: s, terms: followRiskStart(formHere.terms, formHere.schedule.riskStart, s.riskStart) })} chainNow={formHere?.chainNow ?? Math.floor(Date.now() / 1000)} mode={mode} locked={Boolean(wizard)} onReset={() => setReloadForm((x) => x + 1)} />
 
             <Card title="Build to deploy" subtitle="Creation code bundled from the repo's artifacts/ when this dashboard was built (run npm run compile first). After each deployment the page reads the transaction back and compares.">
               {build ? (
