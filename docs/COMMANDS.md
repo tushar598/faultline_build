@@ -327,6 +327,11 @@ aside first); oracle config, terms and ledger: `ops/out/demo/`; evidence: `ops/o
 script-sent transactions only (use the mirror node for the whole run). Accounts: docs/ACCOUNTS.md; ids and hashes:
 docs/DEPLOYMENTS.md. The relay is `FL_RPC_URL` (comma list), else Hashio then thirdweb.
 
+**A second run** (e.g. the demo video): put `DEMO_RUN=<name>` in front of every command. The run gets its own state file
+`ops/out/demo-<name>-state.json`, its own folder `ops/out/demo-<name>/`, the bond symbol `FL` + the first three letters
+of the name, and its own topic memo. The first run's files are never touched. `BOND_SYMBOL` and `BOND_NAME` override the
+symbol and name. Example: `DEMO_RUN=video npm run ops:demo:1` deploys FLVID.
+
 ```bash
 cd ~/Desktop/faultline-hedera/faultline && git status --short && npm run compile   # clean tree: the build recorded by the preflight
 npm run ops:setup && cd ops                                      # or from the root: npm run ops:demo:N
