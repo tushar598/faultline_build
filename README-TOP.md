@@ -24,8 +24,9 @@ Cat bonds exist today, mostly as large Rule 144A deals arranged by a few special
 **$65.5 billion outstanding at the end of Q3 2026**
 ([Artemis, Q3 2026 report](https://www.artemis.bm/wp-content/uploads/2026/10/catastrophe-bond-ils-market-report-q3-2026-1.pdf)).
 Setting one up and running it costs a lot: the special purpose vehicle, the trustee, the calculation agent, the paying
-agent and the reporting. Small private deals are rarely worth that cost. **India has no sovereign cat bond or sovereign
-parametric cover** ([OECD, 2024](https://doi.org/10.1787/ab1e49ef-en)), even though it has active fault zones such as
+agent and the reporting. For small and private deals the market already uses a "cat bond lite", which skips
+cost-intensive steps such as a full prospectus and a catastrophe model report
+([OECD, 2024](https://doi.org/10.1787/ab1e49ef-en)). **India has no sovereign cat bond or sovereign parametric cover** ([OECD, 2024](https://doi.org/10.1787/ab1e49ef-en)), even though it has active fault zones such as
 Kutch, where the 2001 Bhuj earthquake (M7.7) struck. Sources and dates: [`docs/research/MARKET.md`](docs/research/MARKET.md).
 
 ### What Faultline does
