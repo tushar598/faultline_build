@@ -156,11 +156,11 @@ export async function oracleKeys(which: { oracle: boolean; relayer: boolean } = 
 
 /**
  * Runs `npx tsx src/cli.ts <args> --config out/demo/oracle.testnet.json` in faultline/oracle with ORACLE_RPC_URL = the
- * relay this process uses. With `keys`, ORACLE_PRIVATE_KEY / RELAYER_PRIVATE_KEY are set in the CHILD's environment
+ * relay this process uses (`configFile` picks another config, e.g. an issuer-page bond's). With `keys`, ORACLE_PRIVATE_KEY / RELAYER_PRIVATE_KEY are set in the CHILD's environment
  * only (never in a file, never printed); without, both are removed from the child's environment. Output is streamed
  * and returned.
  */
-export async function runOracle(args: string[], keys?: OracleKeys, onOutput?: (all: string) => void): Promise<{ code: number; out: string }> {
+export async function runOracle(args: string[], keys?: OracleKeys, onOutput?: (all: string) => void, configFile: string = ORACLE_CONFIG): Promise<{ code: number; out: string }> {
   const env: NodeJS.ProcessEnv = { ...process.env, ORACLE_RPC_URL: rpcUrl() };
   delete env.ORACLE_PRIVATE_KEY;
   delete env.RELAYER_PRIVATE_KEY;
@@ -169,7 +169,7 @@ export async function runOracle(args: string[], keys?: OracleKeys, onOutput?: (a
   if (keys?.oracle) env.ORACLE_PRIVATE_KEY = keys.oracle;
   if (keys?.relayer) env.RELAYER_PRIVATE_KEY = keys.relayer;
   const held = [keys?.oracle && "oracle", keys?.relayer && "relayer"].filter(Boolean);
-  const full = ["tsx", "src/cli.ts", ...args, "--config", ORACLE_CONFIG];
+  const full = ["tsx", "src/cli.ts", ...args, "--config", configFile];
   console.log(`\n  oracle$ npx ${full.join(" ")}   (${held.length ? `${held.join(" + ")} key(s) in the child's environment only` : "no keys"})`);
   return new Promise((resolve, reject) => {
     const child = spawn("npx", full, { cwd: path.join(FAULTLINE, "oracle"), env, stdio: ["ignore", "pipe", "pipe"] });
@@ -193,8 +193,8 @@ export async function runOracle(args: string[], keys?: OracleKeys, onOutput?: (a
 type LedgerPublication = { nonce: number; att: Record<string, string>; signature: string; hcs?: { topicId: string; sequenceNumber: string }; tx?: { hash: string; status: string } };
 type LedgerEntry = { eventId: string; lastPreferredId: string; chainStatus: string; publications: LedgerPublication[] };
 /** The oracle's D8 ledger entry for `eventId` (public data: attestation, signature, HCS ref, tx hash). */
-export function ledgerEntry(trigger: string, eventId: string): LedgerEntry | undefined {
-  const file = path.join(ORACLE_STATE_DIR, `ledger-296-${trigger.toLowerCase()}.json`);
+export function ledgerEntry(trigger: string, eventId: string, stateDir: string = ORACLE_STATE_DIR): LedgerEntry | undefined {
+  const file = path.join(stateDir, `ledger-296-${trigger.toLowerCase()}.json`);
   if (!fs.existsSync(file)) return undefined;
   return (JSON.parse(fs.readFileSync(file, "utf8")) as { events: Record<string, LedgerEntry> }).events[eventId];
 }

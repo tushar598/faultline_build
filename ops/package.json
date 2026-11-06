@@ -17,7 +17,8 @@
     "demo:7": "hardhat run --network testnetRead scripts/demo/demo-7-verify.ts",
     "demo:rt02": "hardhat run --network testnetRead scripts/demo/rt02-holder-burn.ts",
     "issuer:topic": "hardhat run --network testnetRead scripts/issuer/hcs-topic.ts",
-    "issuer:kyc": "hardhat run --network testnetRead scripts/issuer/hts-kyc.ts"
+    "issuer:kyc": "hardhat run --network testnetRead scripts/issuer/hts-kyc.ts",
+    "issuer:oracle": "hardhat run --network testnetRead scripts/issuer/oracle-replay.ts"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-ethers": "4.2.1",

@@ -40,7 +40,8 @@
     "ops:demo:7": "npm --prefix ops run demo:7",
     "ops:demo:rt02": "npm --prefix ops run demo:rt02",
     "ops:issuer:topic": "npm --prefix ops run issuer:topic",
-    "ops:issuer:kyc": "npm --prefix ops run issuer:kyc"
+    "ops:issuer:kyc": "npm --prefix ops run issuer:kyc",
+    "ops:issuer:oracle": "npm --prefix ops run issuer:oracle"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "2.1.2",
