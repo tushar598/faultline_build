@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "description": "Hedera testnet operator scripts for Faultline. Hardhat 3 + global keystore; the repo root stays Hardhat 2.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "typecheck": "tsc --noEmit",
     "demo:0": "hardhat run --network testnetRead scripts/demo/demo-0-preflight.ts",

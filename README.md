@@ -482,3 +482,10 @@ trigger is the source of truth. The topic's admin key is the trustee's: it can c
 replay mode the oracle's 6 h cooling period is measured on the **real** USGS origin time (D14); the event is decades
 old, so **the demo does not exercise the cooling period**. Replay terms are refused off-chain on any chain other than
 Hardhat (31337) and Hedera testnet (296); on chain the mode is visible only through `termsHash`.
+
+---
+
+## License
+
+MIT, see [`LICENSE`](LICENSE). Third-party code and data keep their own licenses: see [`NOTICE.md`](NOTICE.md).
+The MIT License covers the code only; it does not make Faultline a licensed insurance or securities product (§8).

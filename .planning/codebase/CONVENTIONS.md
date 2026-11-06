@@ -9,7 +9,7 @@ Generated: 2026-10-25 · Source: codebase analysis of `faultline/`
 ### Compiler Settings
 - Solidity 0.8.28, EVM target `cancun`
 - Optimizer enabled, 200 runs
-- SPDX License: `MIT` (contracts) / `UNLICENSED` (project)
+- SPDX License: `MIT` (contracts and the whole project, `LICENSE`; third-party notices in `NOTICE.md`)
 
 ### Contract Patterns (from design docs)
 - **NatSpec on every contract and public function** (`@title`, `@notice`, `@param`, `@return`)

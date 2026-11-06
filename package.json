@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Parametric earthquake catastrophe bond on Hedera (ATS bond + HTS stablecoin + USGS oracle)",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "engines": {
     "node": ">=22"
   },

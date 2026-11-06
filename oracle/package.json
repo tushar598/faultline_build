@@ -4,7 +4,7 @@
   "private": true,
   "description": "Faultline calculation agent: USGS reader, trigger rule, EIP-712 signer, HCS publisher, replay CLI",
   "type": "module",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "engines": {
     "node": ">=22"
   },
